@@ -1,7 +1,16 @@
 package com.project.harmonie_e_commerce.controller;
 
+import com.github.javafaker.Faker;
+import com.project.harmonie_e_commerce.dto.*;
+import com.project.harmonie_e_commerce.response.ProductResponse;
+import com.project.harmonie_e_commerce.model.Product;
+import com.project.harmonie_e_commerce.model.ProductImage;
+import com.project.harmonie_e_commerce.service.IProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +24,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("${api.prefix}/products")
@@ -91,15 +98,19 @@ public class ProductController {
 
     // http://localhost:9090/api/v1/products?page=1&limit=10
     @GetMapping("")
-    public ResponseEntity<ProductListResponse> getProducts(
+    public ResponseEntity<Map<String, Object>> getProducts(
             @RequestParam("page") int page,
             @RequestParam("limit") int limit
-    ){
+    ) {
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by("createdAt").descending());
         Page<ProductResponse> productPage = productService.getAllProducts(pageRequest);
         int totalPages = productPage.getTotalPages();
-        return ResponseEntity.ok(new ProductListResponse(productPage.getContent(), totalPages));
 
+        Map<String, Object> response = new HashMap<>();
+        response.put("products", productPage.getContent());
+        response.put("totalPages", totalPages);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
@@ -142,8 +153,7 @@ public class ProductController {
             ProductDTO productDTO = ProductDTO.builder()
                     .name(productName)
                     .price((float)faker.number().numberBetween(50_000, 50_000_000))
-                    .thumbnail("")
-                    .description(faker.lorem().sentence())
+                    .description(faker  .lorem().sentence())
                     .build();
             try {
                 productService.createProduct(productDTO);

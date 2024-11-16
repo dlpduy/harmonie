@@ -1,6 +1,16 @@
 package com.project.harmonie_e_commerce.service;
 
 
+import com.project.harmonie_e_commerce.dto.ProductDTO;
+import com.project.harmonie_e_commerce.dto.ProductImageDTO;
+import com.project.harmonie_e_commerce.exception.DataNotFoundException;
+import com.project.harmonie_e_commerce.model.Category;
+import com.project.harmonie_e_commerce.model.Product;
+import com.project.harmonie_e_commerce.model.ProductImage;
+import com.project.harmonie_e_commerce.repository.CategoryRepository;
+import com.project.harmonie_e_commerce.repository.ProductImageRepository;
+import com.project.harmonie_e_commerce.repository.ProductRepository;
+import com.project.harmonie_e_commerce.response.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,10 +36,7 @@ public class ProductService implements IProductService {
         Product newProduct = Product.builder()
                 .name(productDTO.getName())
                 .brand(productDTO.getBrand())
-                .color(productDTO.getColor())
                 .price(productDTO.getPrice())
-                .importPrice(productDTO.getImportPrice())
-                .thumbnail(productDTO.getThumbnail())
                 .category(existingCategory)
                 .build();
         return productRepository.save(newProduct);
@@ -49,14 +56,9 @@ public class ProductService implements IProductService {
                     .id(product.getId())
                     .name(product.getName())
                     .brand(product.getBrand())
-                    .color(product.getColor())
                     .price(product.getPrice())
-                    .importPrice(product.getImportPrice())
-                    .thumbnail(product.getThumbnail())
                     .categoryId(product.getCategory().getId())
                     .build();
-            productResponse.setCreatedAt(product.getCreatedAt());
-            productResponse.setUpdatedAt(product.getUpdatedAt());
             return productResponse;
         });
     }
@@ -78,7 +80,6 @@ public class ProductService implements IProductService {
             existingProduct.setCategory(existingCategory);
             existingProduct.setPrice(productDTO.getPrice());
             existingProduct.setDescription(productDTO.getDescription());
-            existingProduct.setThumbnail(productDTO.getThumbnail());
             return productRepository.save(existingProduct);
         }
         return null;
@@ -103,7 +104,7 @@ public class ProductService implements IProductService {
                         "Cannot find product with id: " + productImageDTO.getProductId()));
         ProductImage newProductImage = ProductImage.builder()
                 .product(existingProduct)
-                .imageUrl(productImageDTO.getImageUrl())
+//                .imageUrl(productImageDTO.getImageUrl())
                 .build();
         return productImageRepository.save(newProductImage);
     }
