@@ -6,7 +6,18 @@ import LoginPage from './pages/login'
 import Header from './components/layout/header'
 import RegisterPage from './pages/register'
 import ForgotPassWordPage from './pages/forgotpassword'
+import HomePage from './pages/home'
+import ProductDetailPage from './pages/detailProduct'
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <>
+      <Header
+        isLogin={true}
+      />
+      <HomePage />
+    </>
+  },
   {
     path: "/login",
     element:
@@ -36,6 +47,15 @@ const router = createBrowserRouter([
       <ForgotPassWordPage />
     </>
   },
+  {
+    path: "/product/:id",
+    element: <>
+      <Header
+        isLogin={true}
+      />
+      <ProductDetailPage />
+    </>
+  }
 ])
 
 createRoot(document.getElementById('root')!).render(
