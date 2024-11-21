@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS Users (
 	email           VARCHAR(255)    UNIQUE                      NOT NULL,
 	creation_date   TIMESTAMP       DEFAULT CURRENT_TIMESTAMP   NOT NULL
 );
+ALTER TABLE Users ADD COLUMN password VARCHAR(65) NOT NULL;
 
 
 DROP TABLE IF EXISTS SocialAccounts;
