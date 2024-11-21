@@ -5,36 +5,45 @@
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    align-items: stretch; /* Đảm bảo các phần tử con có chiều cao bằng nhau */
+    align-items: stretch;
+    /* Đảm bảo các phần tử con có chiều cao bằng nhau */
     background-color: #f9f9f9;
     margin: 50px 80px 0 80px;
     flex-wrap: wrap;
-    overflow: hidden; /* Ẩn nội dung vượt ra ngoài */
+    overflow: hidden;
+    /* Ẩn nội dung vượt ra ngoài */
+
 }
 
 .product-detail-page1 img {
     max-width: 300px;
     border-radius: 8px;
-    margin: 10px 30px 20px 0px; 
+    margin: 10px 30px 20px 0px;
     display: block;
     flex: 1 1 auto;
     object-fit: cover;
     height: 400px;
 }
+
 .product-details {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
     flex: 1 1 auto;
+
     white-space: nowrap; 
 }
+
 .product-container {
     display: flex;
     width: 100%;
     align-items: stretch;
-    overflow: hidden; /* Ẩn nội dung vượt ra ngoài */
+
+    overflow: hidden;
+    /* Ẩn nội dung vượt ra ngoài */
 }
+
 .product-detail-page1 p {
     margin: 10px 0;
     font-size: 30px;
@@ -54,7 +63,9 @@
 .variant-buttons {
     display: flex;
     flex-wrap: wrap;
+
     gap: 10px; /* Thêm khoảng cách giữa các button */
+
 }
 
 .variant-button {
@@ -66,16 +77,18 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
-    
+
 }
 
 .variant-button:hover {
     background-color: #0056b3;
 }
+
 .variant-button.selected {
     background-color: #0056b3;
     color: #ffffff;
 }
+
 .quantity {
     margin-top: 20px;
 }
@@ -93,6 +106,7 @@
     border: 1px solid #ddd;
     border-radius: 4px;
 }
+
 .action-buttons {
     margin-top: 20px;
     display: flex;
@@ -100,6 +114,7 @@
 }
 
 .add-to-cart-button, .buy-now-button {
+
     padding: 10px 20px;
     font-size: 16px;
     color: #fff;
@@ -110,7 +125,10 @@
 }
 
 .add-to-cart-button {
-    background-color: #28a745; /* Màu xanh lá cây */
+
+    background-color: #28a745;
+    /* Màu xanh lá cây */
+
 }
 
 .add-to-cart-button:hover {
@@ -118,7 +136,9 @@
 }
 
 .buy-now-button {
+
     background-color: #dc3545; /* Màu đỏ */
+
 }
 
 .buy-now-button:hover {
