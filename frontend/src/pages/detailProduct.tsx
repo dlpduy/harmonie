@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import '../styles/ProductDetailPage.css';
 
 
+
 const ProductDetailPage = ({ }) => {
+
     interface Product {
         id: number;
         name: string;
@@ -31,6 +33,7 @@ const ProductDetailPage = ({ }) => {
             price: 99.99,
             imageUrl: "https://via.placeholder.com/300",
             variants: ["Variant 1", "Variant 2", "Variant 3", " Variant 4", "Variant 5", "Variant 6", "Variant 7", "Variant 8", "Variant 9", " Variant 10", "Variant 11", "Variant 12"]
+
         };
 
         // Simulate fetching data
@@ -95,7 +98,9 @@ const ProductDetailPage = ({ }) => {
                         <button className="add-to-cart-button" onClick={handleAddToCart}>Thêm vào giỏ hàng</button>
                         <button className="buy-now-button" onClick={handleBuyNow}>Mua ngay</button>
                     </div>
+
                 </div>
+
             </div>
         </div>
     );
