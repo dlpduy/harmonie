@@ -1,4 +1,4 @@
-package com.example.harmonie_e_commerce;
+package com.project.harmonie_e_commerce;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

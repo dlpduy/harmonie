@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import '../styles/ProductDetailPage.css';
 
 
+<<<<<<< HEAD
 const ProductDetailPage = ({  }) => {
+=======
+const ProductDetailPage = ({ }) => {
+>>>>>>> 6e2ba8266659779c1180d89f1cad8c3648326116
     interface Product {
         id: number;
         name: string;
@@ -29,8 +33,13 @@ const ProductDetailPage = ({  }) => {
             name: "Sample Product",
             description: "This is a sample product description.",
             price: 99.99,
+<<<<<<< HEAD
             imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/d0a4c26d3f40498a9c015e5e47dfc682ac9012ec741392368e9965c12108e532?placeholderIfAbsent=true&apiKey=e5378003e02141e69ac883f589108e36",
             variants: ["Variant 1", "Variant 2", "Variant 3"," Variant 4", "Variant 5", "Variant 6", "Variant 7", "Variant 8", "Variant 9"," Variant 10", "Variant 11", "Variant 12"]
+=======
+            imageUrl: "https://via.placeholder.com/300",
+            variants: ["Variant 1", "Variant 2", "Variant 3", " Variant 4", "Variant 5", "Variant 6", "Variant 7", "Variant 8", "Variant 9", " Variant 10", "Variant 11", "Variant 12"]
+>>>>>>> 6e2ba8266659779c1180d89f1cad8c3648326116
         };
 
         // Simulate fetching data
@@ -59,12 +68,21 @@ const ProductDetailPage = ({  }) => {
     return (
         <div className="product-detail-page1">
             <div className='product-container'>
+<<<<<<< HEAD
             <img src={imageUrl} alt={name} />
             <div className="product-details">
             <p className='name'>{name}</p>
             <p >{description}</p>
             <p>Price: ${price}</p>
             {variants && variants.length > 0 && (
+=======
+                <img src={imageUrl} alt={name} />
+                <div className="product-details">
+                    <p className='name'>{name}</p>
+                    <p >{description}</p>
+                    <p>Price: ${price}</p>
+                    {variants && variants.length > 0 && (
+>>>>>>> 6e2ba8266659779c1180d89f1cad8c3648326116
                         <div className="product-variants">
                             <h3>Mẫu mã:</h3>
                             <div className="variant-buttons">
@@ -95,7 +113,11 @@ const ProductDetailPage = ({  }) => {
                         <button className="add-to-cart-button" onClick={handleAddToCart}>Thêm vào giỏ hàng</button>
                         <button className="buy-now-button" onClick={handleBuyNow}>Mua ngay</button>
                     </div>
+<<<<<<< HEAD
             </div>
+=======
+                </div>
+>>>>>>> 6e2ba8266659779c1180d89f1cad8c3648326116
             </div>
         </div>
     );
