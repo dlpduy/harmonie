@@ -10,8 +10,8 @@ import RegisterPage from './pages/register'
 import ForgotPassWordPage from './pages/forgotpassword'
 import HomePage from './pages/home'
 import ProductDetailPage from './pages/detailProduct'
-
-
+import PaymentPage from './pages/payment'
+import ShoppingCart from './pages/shoppingcart'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -59,6 +59,24 @@ const router = createBrowserRouter([
         isLogin={true}
       />
       <ProductDetailPage />
+    </>
+  },
+  {
+    path: "/cart",
+    element: <>
+      <Header
+        isLogin={true}
+      />
+      <ShoppingCart />
+    </>
+  },
+  {
+    path: "/payment",
+    element: <>
+      <Header
+        isLogin={true}
+      />
+      <PaymentPage />
     </>
   }
 
