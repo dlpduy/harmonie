@@ -1,6 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+
+
 import './styles/global.css'
 import LoginPage from './pages/login'
 import Header from './components/layout/header'
@@ -24,6 +26,7 @@ const router = createBrowserRouter([
     </>
   },
   {
+
     path: "/login",
     element:
       <>
