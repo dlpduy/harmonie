@@ -4,7 +4,7 @@ import Sidebar from '../components/account/Sidebar';
 import { Information } from '../components/account/Detail';
 
 const AccountManagement: React.FC = () => {
-    const [activeIndex, setActiveIndex] = useState<Number>(4);
+    const [activeIndex, setActiveIndex] = useState<Number>(3);
     return (
         <div className={styles.storeManagement}>
             <main className={styles.mainContent}>
