@@ -47,7 +47,7 @@ public class UserService {
     }
 
     // Get user by ID
-    public User getUser(Integer id) {
+    public User getUser(Long id) {
         return userRepository.findById(id)
                              .orElseThrow(() -> new RuntimeException("User not found"));
     }
@@ -72,7 +72,7 @@ public class UserService {
     }
 
 
-    public User updateUser(Integer id, UserUpdateRequest request) {
+    public User updateUser(Long id, UserUpdateRequest request) {
         User user = getUser(id);
 
         user.setFname(request.getFname());
@@ -90,7 +90,7 @@ public class UserService {
     // Transactional annotation is used to rollback the transaction if any exception occurs // 
     
     @Transactional
-    public void deleteUser(Integer id) {
+    public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 
