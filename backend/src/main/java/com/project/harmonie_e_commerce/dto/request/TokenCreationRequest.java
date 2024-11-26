@@ -14,7 +14,7 @@ public class TokenCreationRequest {
     @NotNull(message = "Token is required")
     private String token;
     @NotNull(message = "User ID is required")
-    private Integer userID;
+    private Long user_id;
     private TokenType type;
     private Timestamp expiryDate;
 
@@ -28,12 +28,12 @@ public class TokenCreationRequest {
     }
 
     public User getUser(UserRepository userRepository) {
-        return userRepository.findById(userID)
+        return userRepository.findById(user_id)
                              .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    public void setUserID(Integer userID) {
-        this.userID = userID;
+    public void setUserID(Long user_id) {
+        this.user_id = user_id;
     }
 
     public TokenType getType() {

@@ -31,7 +31,7 @@ public class User {
     private LocalDate dob;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "sex", nullable = false)
     private Sex sex;
 
     @Column(name = "phone", length = 10, unique = true, nullable = false)
