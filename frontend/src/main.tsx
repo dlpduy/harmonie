@@ -12,6 +12,7 @@ import HomePage from './pages/home'
 import ProductDetailPage from './pages/detailProduct'
 import PaymentPage from './pages/payment'
 import ShoppingCart from './pages/shoppingcart'
+import AdminPage from './pages/admin'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -106,7 +107,15 @@ const router = createBrowserRouter([
       <StoreDeletion />
     </>
   },
-
+  {
+    path: "/admin",
+    element: <>
+      <Header
+        isLogin={true}
+      />
+      <AdminPage />
+    </>
+  },
 ])
 
 createRoot(document.getElementById('root')!).render(
