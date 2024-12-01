@@ -6,19 +6,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//Xác định nó là thực thể
-@Entity
-@Table(name="categories")
-@Data //toString
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 @Builder
-public class Category {
-
+@Table(name = "shipping_discounts")
+public class ShippingDiscount{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "name", nullable = false)
-    private String name;
-}
 
+    @Column(name = "max_amount", columnDefinition = "DECIMAL(10,2)",nullable = false)
+    private Float max_amount;
+
+    @OneToOne
+    @JoinColumn(name = "discount_id")
+    private Discount discount;
+}
