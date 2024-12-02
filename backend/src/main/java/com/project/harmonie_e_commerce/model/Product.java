@@ -14,26 +14,39 @@ import lombok.*;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
+
     @Column(name = "name", nullable = false)
     private String name;
+    @Column(name = "brand", length = 20)
     private String brand;
+    @Column(name = "price", nullable = false, columnDefinition = "DECIMAL(10,2)")
     private Float price;
-    private Long quantity;
-    private Long views;
-    @Column(name = "buying_count")
-    private Long buyingCount;
-    @Column(name = "description")
+    @Column(name = "quantity")
+    private Integer quantity;
+    @Column(name = "buying_count", columnDefinition = "BIGINT DEFAULT 0")
+    private Integer buyingCount;
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-    @Column(name = "rating_count")
-    private Long ratingCount;
-    @Column(name = "avg_rating")
+    @Column(name = "rating_count", columnDefinition = "BIGINT DEFAULT 0")
+    private Integer ratingCount;
+    @Column(name = "avg_rating", columnDefinition = "DECIMAL(5,2) DEFAULT 0.0")
     private Float AvgRating;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private ProductStatus productStatus;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    public enum ProductStatus{
+        enable,
+        disable
+    }
 }
