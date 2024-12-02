@@ -13,6 +13,9 @@ import ProductDetailPage from './pages/detailProduct'
 import PaymentPage from './pages/payment'
 import ShoppingCart from './pages/shoppingcart'
 import AdminPage from './pages/admin'
+import StoreManagement from './pages/managerStore'
+import CreateStore from './pages/createStore'
+import StoreDeletion from './pages/deleteStore'
 const router = createBrowserRouter([
   {
     path: "/",
