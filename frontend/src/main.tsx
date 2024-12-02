@@ -17,24 +17,65 @@ import PaymentPage from './pages/payment'
 import ShoppingCart from './pages/shoppingcart'
 import AdminPage from './pages/admin'
 import AccountManagement from './pages/managerAccount'
+import StorePage from './pages/store'
+import App from './App'
+import ErrorPage from './pages/error'
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <>
-      <Header
-        isLogin={true}
-      />
-      <HomePage />
-    </>
+    element: <App />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <HomePage />
+      },
+      {
+        path: "/product/:id",
+        element: <ProductDetailPage />
+      },
+      {
+        path: "/cart",
+        element: <ShoppingCart />
+      },
+      {
+        path: "/payment",
+        element: <PaymentPage />
+      }
+      , {
+        path: "/store/create",
+        element: <CreateStore />
+      },
+      {
+        path: "/store/manage",
+        element: <StoreManagement />
+      },
+      {
+        path: "/store/delete",
+        element: <StoreDeletion />
+      },
+      {
+        path: "/admin",
+        element: <AdminPage />
+      },
+      {
+        path: "/account",
+        element: <AccountManagement />
+      },
+      {
+        path: "/store",
+        element: <StorePage />
+      }
+    ]
   },
   {
 
     path: "/login",
     element:
       <>
-        <Header
+        {/* <Header
           isLogin={false}
-        />
+        /> */}
         <LoginPage />
       </>
   },
@@ -57,78 +98,7 @@ const router = createBrowserRouter([
       <ForgotPassWordPage />
     </>
   },
-  {
-    path: "/product/:id",
-    element: <>
-      <Header
-        isLogin={true}
-      />
-      <ProductDetailPage />
-    </>
-  },
-  {
-    path: "/cart",
-    element: <>
-      <Header
-        isLogin={true}
-      />
-      <ShoppingCart />
-    </>
-  },
-  {
-    path: "/payment",
-    element: <>
-      <Header
-        isLogin={true}
-      />
-      <PaymentPage />
-    </>
-  }
-  , {
-    path: "/store/create",
-    element: <>
-      <Header
-        isLogin={true}
-      />
-      <CreateStore />
-    </>
-  },
-  {
-    path: "/store/manage",
-    element: <>
-      <Header
-        isLogin={true}
-      />
-      <StoreManagement />
-    </>
-  },
-  {
-    path: "/store/delete",
-    element: <>
-      <Header
-        isLogin={true}
-      />
-      <StoreDeletion />
-    </>
-  },
-  {
-    path: "/admin",
-    element: <>
-      <Header
-        isLogin={true}
-      />
-      <AdminPage />
-    </>
-  },
-  {
-    path: "/account",
-    element: <>
-      <Header
-        isLogin={true}
-      />
-      <AccountManagement />
-    </>
-  }
+
 ])
 
 createRoot(document.getElementById('root')!).render(
