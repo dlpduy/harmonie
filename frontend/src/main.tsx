@@ -67,7 +67,7 @@ const router = createBrowserRouter([
     </>
   },
   {
-    path: "/account",
+    path: "/cart",
     element: <>
       <Header
         isLogin={true}
