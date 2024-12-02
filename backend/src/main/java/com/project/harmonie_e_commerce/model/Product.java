@@ -6,8 +6,7 @@ import lombok.*;
 
 @Entity
 @Table(name = "products")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -28,14 +27,14 @@ public class Product {
     private Float price;
     @Column(name = "quantity")
     private Integer quantity;
-    @Column(name = "buying_count", columnDefinition = "BIGINT DEFAULT 0")
+    @Column(name = "buying_count", columnDefinition = "INT DEFAULT 0")
     private Integer buyingCount;
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-    @Column(name = "rating_count", columnDefinition = "BIGINT DEFAULT 0")
+    @Column(name = "rating_count", columnDefinition = "INT DEFAULT 0")
     private Integer ratingCount;
     @Column(name = "avg_rating", columnDefinition = "DECIMAL(5,2) DEFAULT 0.0")
-    private Float AvgRating;
+    private Float avgRating;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

@@ -22,7 +22,7 @@ public class DeliveryInformation {
     private User user;
 
     @Column(name = "consignee_name", length = 50,nullable = false)
-    private String consignee_name;
+    private String consigneeName;
 
     @Column(name = "phone_number", length = 20, nullable = false)
     private String phoneNumber;

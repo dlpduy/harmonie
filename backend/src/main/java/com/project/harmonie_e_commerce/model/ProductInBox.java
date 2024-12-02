@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class ProductInBox {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "box_id")
@@ -28,8 +28,8 @@ public class ProductInBox {
     private Product product;
 
     @Column(name = "quantity", nullable = false)
-    private Long quantity;
+    private Integer quantity;
 
     @Column(name = "total_price", columnDefinition = "DECIMAL(10,2)")
-    private Float total_price;
+    private Float totalPrice;
 }

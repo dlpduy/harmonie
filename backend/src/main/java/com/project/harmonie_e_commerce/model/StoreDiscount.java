@@ -22,7 +22,7 @@ public class StoreDiscount{
     private Discount discount;
 
     @Column(name = "amount",nullable = false, columnDefinition = "DECIMAL(10,2)")
-    private Double amount;
+    private Float amount;
 
     @ManyToOne
     @JoinColumn(name = "store_id")

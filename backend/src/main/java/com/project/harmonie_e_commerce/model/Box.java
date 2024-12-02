@@ -1,13 +1,14 @@
 package com.project.harmonie_e_commerce.model;
 
 import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDate;
+// import java.sql.Time;
 import java.sql.Timestamp;
 
 @Data
@@ -40,25 +41,25 @@ public class Box {
     private Order order;
 
     @Column(name = "shipper_name", length = 50,nullable = false)
-    private String shipper_name;
+    private String shipperName;
 
     @Column(name = "shipper_phone", length = 10,nullable = false)
-    private String shipper_phone;
+    private String shipperPhone;
 
     @Column(name = "total_price", columnDefinition = "DECIMAL(10,2)", nullable = false)
-    private Float total_price;
+    private Float totalPrice;
     
     @Column(name = "fee_ship", columnDefinition = "DECIMAL(10,2)", nullable = false)
-    private Float fee_ship;
+    private Float feeShip;
 
     @Column(name = "predicted_delivery_date")
-    private Date predicted_delivery_date;
+    private LocalDate predictedDeliveryDate;
 
     @Column(name = "caution", columnDefinition = "TEXT")
     private String caution;
 
     @Column(name = "packing_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp packing_date;
+    private Timestamp packingDate;
 
     @Column(name = "status", columnDefinition = "ENUM('Pending', 'Shipped', 'Delivered') DEFAULT 'Pending'")
     @Enumerated(EnumType.STRING)
