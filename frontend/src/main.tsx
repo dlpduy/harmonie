@@ -10,10 +10,8 @@ import RegisterPage from './pages/register'
 import ForgotPassWordPage from './pages/forgotpassword'
 import HomePage from './pages/home'
 import ProductDetailPage from './pages/detailProduct'
-import AccountManagement from './pages/managerAccount'
-import StorePage from './pages/store'
-import CreateStore from './pages/createStore'
 import StoreManagement from './pages/managerStore'
+import CreateStore from './pages/createStore'
 import StoreDeletion from './pages/deleteStore'
 import PaymentPage from './pages/payment'
 import ShoppingCart from './pages/shoppingcart'
@@ -68,7 +66,7 @@ const router = createBrowserRouter([
     </>
   },
   {
-    path: "/cart",
+    path: "/account",
     element: <>
       <Header
         isLogin={true}
@@ -83,24 +81,6 @@ const router = createBrowserRouter([
         isLogin={true}
       />
       <PaymentPage />
-    </>
-  },
-  {
-    path: "/account",
-    element: <>
-      <Header
-        isLogin={false}
-      />
-      <AccountManagement />
-    </>
-  },
-  {
-    path: "/store",
-    element: <>
-      <Header
-        isLogin={true}
-      />
-      <StorePage />
     </>
   }
   , {
