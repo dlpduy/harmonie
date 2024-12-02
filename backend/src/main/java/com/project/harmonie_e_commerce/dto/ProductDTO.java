@@ -20,9 +20,9 @@ public class ProductDTO {
     private Float price;
     private String description;
     private String brand;
-    private Long quantity;
+    private Integer quantity;
     @JsonProperty("store_id")
-    private Long storeId;
+    private Integer storeId;
     @JsonProperty("category_id")
-    private Long categoryId;
+    private Integer categoryId;
 }

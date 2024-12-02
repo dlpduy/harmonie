@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
 @Data
@@ -22,12 +21,12 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "creation_date",columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp creation_date;
+    private Timestamp creationDate;
     @Column(name = "total_price", columnDefinition = "DECIMAL(10,2)")
-    private Float total_price;
+    private Float totalPrice;
     @Column(name = "pay_method",nullable = false)
     @Enumerated(EnumType.STRING)
-    private PayMethod pay_method;
+    private PayMethod payMethod;
 
     @ManyToOne
     @JoinColumn(name = "consignee_information_id")

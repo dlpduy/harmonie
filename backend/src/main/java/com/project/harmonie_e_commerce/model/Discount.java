@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,9 +28,9 @@ public class Discount {
     private Integer quantity;
     @Column(name = "release_date",nullable = false)
     @CreationTimestamp
-    private Timestamp release_date;
+    private Timestamp releaseDate;
     @Column(name = "start_date",nullable = false)
-    private Date start_date;
+    private Date startDate;
     @Column(name = "expiration_date",nullable = false)
-    private Date expiration_date;
+    private Date expirationDate;
 }

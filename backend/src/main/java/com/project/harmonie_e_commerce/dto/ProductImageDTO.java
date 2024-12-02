@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProductImageDTO {
     @JsonProperty("product_id")
-    private Long productId;
+    private Integer productId;
 
     @JsonProperty("image_url")
     private String imageUrl;

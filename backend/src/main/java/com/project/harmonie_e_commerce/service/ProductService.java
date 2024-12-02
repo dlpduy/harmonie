@@ -43,7 +43,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Product getProductById(long productId) throws Exception {
+    public Product getProductById(Integer productId) throws Exception {
         return productRepository.findById(productId).orElseThrow(() -> new DataNotFoundException(
                 "Cannot find product with id =" + productId));
     }
@@ -65,7 +65,7 @@ public class ProductService implements IProductService {
 
     @Override
     public Product updateProduct(
-            long id,
+            Integer id,
             ProductDTO productDTO)
             throws Exception {
         Product existingProduct = getProductById(id);
@@ -86,7 +86,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void deleteProduct(long id) {
+    public void deleteProduct(Integer id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         optionalProduct.ifPresent(productRepository::delete);
     }
@@ -110,7 +110,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<ProductImage> getProductImagesByProductId(long productId) {
+    public List<ProductImage> getProductImagesByProductId(Integer productId) {
         return productImageRepository.findByProductId(productId);
     }
 }

@@ -1,12 +1,10 @@
 package com.project.harmonie_e_commerce.controller;
 
-import com.project.harmonie_e_commerce.model.Cart;
 import com.project.harmonie_e_commerce.model.ProductInCart;
 import com.project.harmonie_e_commerce.response.CartResponse;
 import com.project.harmonie_e_commerce.response.ProductInCartResponse;
 import com.project.harmonie_e_commerce.service.CartService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -18,7 +18,7 @@ public class ShippingDiscount{
     private Integer id;
 
     @Column(name = "max_amount", columnDefinition = "DECIMAL(10,2)",nullable = false)
-    private Float max_amount;
+    private Float maxAmount;
 
     @OneToOne
     @JoinColumn(name = "discount_id")

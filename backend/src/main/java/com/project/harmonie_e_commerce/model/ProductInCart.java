@@ -1,6 +1,6 @@
 package com.project.harmonie_e_commerce.model;
 
-import com.project.harmonie_e_commerce.model.CompositeKey.ProductInCartKey;
+// import com.project.harmonie_e_commerce.model.CompositeKey.ProductInCartKey;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

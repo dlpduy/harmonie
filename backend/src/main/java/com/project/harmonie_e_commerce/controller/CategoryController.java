@@ -28,6 +28,7 @@ public class CategoryController {
                     .stream()
                     .map(FieldError::getDefaultMessage)
                     .toList();
+            return ResponseEntity.badRequest().body(errorMessages);
         }
         Category newCategory = categoryService.createCategory(categoryDTO);
         return ResponseEntity.ok(newCategory);
@@ -36,7 +37,7 @@ public class CategoryController {
     @GetMapping("")
     public ResponseEntity<?> getAllCategories() {
         try {
-            List<Category> categories =  categories = categoryService.getAllCategories();
+            List<Category> categories = categoryService.getAllCategories();
             return ResponseEntity.ok(categories);
         } catch (DataNotFoundException e) {
             throw new RuntimeException(e);
