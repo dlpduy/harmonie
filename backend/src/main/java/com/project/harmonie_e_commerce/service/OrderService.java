@@ -13,7 +13,7 @@ import com.project.harmonie_e_commerce.model.ShippingDiscount;
 
 import com.project.harmonie_e_commerce.repository.*;
 import com.project.harmonie_e_commerce.response.OrderResponse;
-import com.project.harmonie_e_commerce.dto.OrderRequestDTO;
+import com.project.harmonie_e_commerce.dto.OrderDTO;
 import com.project.harmonie_e_commerce.dto.OrderProductDTO;
 import com.project.harmonie_e_commerce.dto.OrderBoxDTO;
 
@@ -33,18 +33,18 @@ import lombok.*;
 @AllArgsConstructor
 public class OrderService {
 
-    OrderRepository orderRepository;
-    ProductRepository productRepository;
-    DeliveryInformationRepository deliveryInformationRepository;
-    SystemDiscountRepository systemDiscountRepository;
-    StoreDiscountRepository storeDiscountRepository;
-    ShippingDiscountRepository shippingDiscountRepository;
+    private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
+    private final DeliveryInformationRepository deliveryInformationRepository;
+    private final SystemDiscountRepository systemDiscountRepository;
+    private final StoreDiscountRepository storeDiscountRepository;
+    private final ShippingDiscountRepository shippingDiscountRepository;
 
-    BoxService boxService;
+    private final BoxService boxService;
 
 
     @Transactional
-    public OrderResponse createOrder(HttpServletRequest request, OrderRequestDTO orderRequest) {
+    public OrderResponse createOrder(HttpServletRequest request, OrderDTO orderRequest) {
         Order order = new Order();
 
         // Set the delivery information

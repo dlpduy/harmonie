@@ -19,7 +19,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ProductInBoxService {
 
-    ProductInBoxRepository productInBoxRepository;
+    private final ProductInBoxRepository productInBoxRepository;
 
     @Transactional
     public void createProductInBox(HttpServletRequest request, OrderProductInBoxDTO orderProductInBoxRequest){

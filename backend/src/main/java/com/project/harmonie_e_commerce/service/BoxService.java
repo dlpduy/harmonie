@@ -24,8 +24,8 @@ import com.project.harmonie_e_commerce._lib.Pair;
 @AllArgsConstructor
 public class BoxService {
 
-    BoxRepository boxRepository;
-    ProductInBoxService productInBoxService;
+    private final BoxRepository boxRepository;
+    private final ProductInBoxService productInBoxService;
 
     @Transactional
     public void createBox(HttpServletRequest request, OrderBoxDTO orderBoxRequest){

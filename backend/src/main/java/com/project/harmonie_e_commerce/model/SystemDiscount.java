@@ -25,7 +25,7 @@ public class SystemDiscount{
 
     @Column(name = "max_amount", columnDefinition = "DECIMAL(10,2)", nullable = false)
     private Float maxAmount;
-    @Column(name = "percentage", columnDefinition = "DECIMAL(5,2)", nullable = false)
+    @Column(name = "percentage", nullable = false)
     private Integer percentage;
     @Column(name = "min_bill_amt", columnDefinition = "DECIMAL(10,2) DEFAULT 0", nullable = false)
     private Float minBillAmount;
