@@ -8,7 +8,7 @@
 
     align-items: stretch; /* Đảm bảo các phần tử con có chiều cao bằng nhau */
     background-color: #f9f9f9;
-    margin: 50px 80px 0 80px;
+    
     flex-wrap: wrap;
     overflow: hidden; /* Ẩn nội dung vượt ra ngoài */
 
@@ -38,7 +38,7 @@
     display: flex;
     width: 100%;
     align-items: stretch;
-
+    margin-top: 50px;
     overflow: hidden;
     /* Ẩn nội dung vượt ra ngoài */
 }

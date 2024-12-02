@@ -10,10 +10,11 @@ import RegisterPage from './pages/register'
 import ForgotPassWordPage from './pages/forgotpassword'
 import HomePage from './pages/home'
 import ProductDetailPage from './pages/detailProduct'
-import AccountManagement from './pages/managerAccount'
-import StorePage from './pages/store'
-import CreateStore from './pages/createStore'
+import PaymentPage from './pages/payment'
+import ShoppingCart from './pages/shoppingcart'
+import AdminPage from './pages/admin'
 import StoreManagement from './pages/managerStore'
+import CreateStore from './pages/createStore'
 import StoreDeletion from './pages/deleteStore'
 const router = createBrowserRouter([
   {
@@ -65,21 +66,21 @@ const router = createBrowserRouter([
     </>
   },
   {
-    path: "/account",
-    element: <>
-      <Header
-        isLogin={false}
-      />
-      <AccountManagement />
-    </>
-  },
-  {
-    path: "/store",
+    path: "/cart",
     element: <>
       <Header
         isLogin={true}
       />
-      <StorePage />
+      <ShoppingCart />
+    </>
+  },
+  {
+    path: "/payment",
+    element: <>
+      <Header
+        isLogin={true}
+      />
+      <PaymentPage />
     </>
   }
   , {
@@ -109,7 +110,15 @@ const router = createBrowserRouter([
       <StoreDeletion />
     </>
   },
-
+  {
+    path: "/admin",
+    element: <>
+      <Header
+        isLogin={true}
+      />
+      <AdminPage />
+    </>
+  },
 ])
 
 createRoot(document.getElementById('root')!).render(
