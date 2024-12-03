@@ -21,6 +21,6 @@ public interface BoxRepository extends JpaRepository<Box, Integer> {
 
     List<Box> findAllByStore(Store store);
 
-    Float sumPriceByOrder(Order order);
+//    Float sumPriceByOrder(Order order);
 }
 
