@@ -15,5 +15,5 @@ public class ProductImageDTO {
     private Integer productId;
 
     @JsonProperty("image_url")
-    private String imageUrl;
+    private String url;
 }
