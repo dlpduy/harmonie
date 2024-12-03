@@ -11,5 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProductInCartResponse {
     private Integer quantity;
-    private ProductResponse productResponse;
+    private String name;
+    private String brand;
+    private Float price;
+    private String categoryName;
 }
