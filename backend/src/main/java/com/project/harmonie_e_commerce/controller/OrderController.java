@@ -1,6 +1,6 @@
 package com.project.harmonie_e_commerce.controller;
 
-import com.project.harmonie_e_commerce.service.OrderService;
+//import com.project.harmonie_e_commerce.service.OrderService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -40,25 +40,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 
-@RestController
-@AllArgsConstructor
-@RequestMapping("{api.prefix}/order")
-public class OrderController {
-    
-    private final OrderService orderService;
-
-    @PostMapping("")
-    public ResponseEntity<?> createOrder(HttpServletRequest request,
-    @Valid @RequestBody OrderDTO orderRequest){
-        try {
-            OrderResponse orderResponse = orderService.createOrder(request, orderRequest);
-            return ResponseEntity.ok(orderResponse);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-}
-
-
-
-  
+//@RestController
+//@AllArgsConstructor
+//@RequestMapping("{api.prefix}/order")
+//public class OrderController {
+//
+//    private final OrderService orderService;
+//
+//    @PostMapping("")
+//    public ResponseEntity<?> createOrder(HttpServletRequest request,
+//    @Valid @RequestBody OrderDTO orderRequest){
+//        try {
+//            OrderResponse orderResponse = orderService.createOrder(request, orderRequest);
+//            return ResponseEntity.ok(orderResponse);
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
+//}
+//
+//
+//
+//
