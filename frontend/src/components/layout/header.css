@@ -14,3 +14,14 @@
 .ant-menu-item::after {
     border: none !important;
 }
+/* Header với vị trí cố định */
+.ant-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    color: white;
+    padding: 0 20px;
+    z-index: 1000;
+}
