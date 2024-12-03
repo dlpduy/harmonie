@@ -21,18 +21,25 @@ public class Product {
 
     @Column(name = "name", nullable = false)
     private String name;
+
     @Column(name = "brand", length = 20)
     private String brand;
+
     @Column(name = "price", nullable = false, columnDefinition = "DECIMAL(10,2)")
     private Float price;
+
     @Column(name = "quantity")
     private Integer quantity;
+
     @Column(name = "buying_count", columnDefinition = "INT DEFAULT 0")
     private Integer buyingCount;
+
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
+
     @Column(name = "rating_count", columnDefinition = "INT DEFAULT 0")
     private Integer ratingCount;
+
     @Column(name = "avg_rating", columnDefinition = "DECIMAL(5,2) DEFAULT 0.0")
     private Float avgRating;
 
