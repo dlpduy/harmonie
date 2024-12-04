@@ -34,15 +34,18 @@ public class StoreService implements IStoreService {
                 () -> new DataNotFoundException("User not found")
         );
 
+        System.out.println(userId);
+
+//        return new Store();
+
         return storeRepository.save(
                 Store.builder()
                         .id(userId)
-                        .user(user)
+//                        .user(user)
                         .address(storeDTO.getAddress())
                         .name(storeDTO.getName())
                         .description(storeDTO.getDescription())
                         .tax_id(storeDTO.getTax_id())
-//                        .creation_date(store.getCreation_date())
                         .build()
         );
     }
@@ -56,8 +59,10 @@ public class StoreService implements IStoreService {
         List<Product> productList = productRepository.findAllByStore(store);
 
         for (Product product: productList){
-            ProductResponse productResponse = ProductResponse.fromProduct(product);
-            productResponseList.add(productResponse);
+            if (product.getProductStatus().equals(Product.ProductStatus.enable)){
+                ProductResponse productResponse = ProductResponse.fromProduct(product);
+                productResponseList.add(productResponse);
+            }
         }
 
         return productResponseList;
