@@ -1,6 +1,6 @@
 package com.project.harmonie_e_commerce.controller;
 
-//import com.project.harmonie_e_commerce.service.OrderService;
+import com.project.harmonie_e_commerce.service.OrderService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -16,6 +16,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -40,25 +44,52 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 
-//@RestController
-//@AllArgsConstructor
-//@RequestMapping("{api.prefix}/order")
-//public class OrderController {
-//
-//    private final OrderService orderService;
-//
-//    @PostMapping("")
-//    public ResponseEntity<?> createOrder(HttpServletRequest request,
-//    @Valid @RequestBody OrderDTO orderRequest){
-//        try {
-//            OrderResponse orderResponse = orderService.createOrder(request, orderRequest);
-//            return ResponseEntity.ok(orderResponse);
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
-//}
-//
-//
-//
-//
+@RestController
+@AllArgsConstructor
+@RequestMapping("${api.prefix}/order")
+public class OrderController {
+
+   private final OrderService orderService;
+
+   @PostMapping("")
+   public ResponseEntity<?> createOrder(HttpServletRequest request,
+   @Valid @RequestBody OrderDTO orderRequest){
+       try {
+           String respone = orderService.createOrder(request, orderRequest);
+           return ResponseEntity.ok(respone);
+       } catch (Exception e) {
+           return ResponseEntity.badRequest().body(e.getMessage());
+       }
+   }
+
+   @GetMapping("/user/{user_id}")
+    public ResponseEntity<?> getOrdersByUserId(HttpServletRequest request, @PathVariable Integer user_id){
+        try {
+            return ResponseEntity.ok(orderService.getOrdersByUserId(request, user_id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+   @GetMapping("/{id}")
+   public ResponseEntity<?> getOrder(HttpServletRequest request, @PathVariable Integer id){
+       try {
+           OrderResponse orderResponse = orderService.getOrderById(request, id);
+           return ResponseEntity.ok(orderResponse);
+       } catch (Exception e) {
+           return ResponseEntity.badRequest().body(e.getMessage());
+       }
+   }
+
+   @GetMapping("/all")
+    public ResponseEntity<?> getAllOrders(HttpServletRequest request){
+        try {
+            return ResponseEntity.ok(orderService.getAll(request));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    
+}
+

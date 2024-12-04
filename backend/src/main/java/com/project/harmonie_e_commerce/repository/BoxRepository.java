@@ -6,7 +6,8 @@ import com.project.harmonie_e_commerce.model.Order;
 
 import com.project.harmonie_e_commerce.model.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -21,6 +22,7 @@ public interface BoxRepository extends JpaRepository<Box, Integer> {
 
     List<Box> findAllByStore(Store store);
 
-//    Float sumPriceByOrder(Order order);
+    @Query("SELECT SUM(B.totalPrice) FROM Box B WHERE B.order = :order")
+    Float findSumPriceByOrder(@Param("order") Order order);
 }
 

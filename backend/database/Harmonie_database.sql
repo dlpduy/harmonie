@@ -1,8 +1,9 @@
 DROP DATABASE IF EXISTS Harmonie;
 
-CREATE DATABASE IF NOT EXISTS Harmonie;
+CREATE DATABASE IF NOT EXISTS Harmonie CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 USE Harmonie;
+
 
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
@@ -35,6 +36,9 @@ CREATE TABLE IF NOT EXISTS categories (
 	id              INT             AUTO_INCREMENT              PRIMARY KEY,
 	name            VARCHAR(20)                                 NOT NULL
 );
+ALTER TABLE categories
+	MODIFY COLUMN name VARCHAR(20) UNIQUE NOT NULL;
+
 
 DROP TABLE IF EXISTS products;
 CREATE TABLE IF NOT EXISTS products (
@@ -71,7 +75,7 @@ CREATE TABLE IF NOT EXISTS product_images (
 DROP TABLE IF EXISTS delivery_informations;
 CREATE TABLE IF NOT EXISTS delivery_informations (
 	id				INT             AUTO_INCREMENT              PRIMARY KEY,
-    user_id        INT                                          NOT NULL,
+    user_id         INT                                         NOT NULL,
     consignee_name  VARCHAR(50)                                 NOT NULL,
     phone_number	VARCHAR(10)                                 NOT NULL,
 	road_number     VARCHAR(20)                                 NOT NULL,
@@ -137,7 +141,7 @@ CREATE TABLE IF NOT EXISTS store_discounts (
 
 DROP TABLE IF EXISTS system_discounts;
 CREATE TABLE IF NOT EXISTS system_discounts (
-	id			  INT             								PRIMARY KEY,
+	id			  INT             	AUTO_INCREMENT				PRIMARY KEY,
     discount_id	  INT 											NOT NULL,
 	max_amount    DECIMAL(10,2)                               	NOT NULL,
 	percentage    INT		                                	NOT NULL,
@@ -151,7 +155,7 @@ CREATE TABLE IF NOT EXISTS system_discounts (
 
 DROP TABLE IF EXISTS shipping_discounts;
 CREATE TABLE IF NOT EXISTS shipping_discounts (
-	id			  INT             								PRIMARY KEY,
+	id			  INT             	AUTO_INCREMENT      		PRIMARY KEY,
     discount_id	  INT											NOT NULL,
 	max_amount    DECIMAL(10,2)                               	NOT NULL,
 
@@ -163,8 +167,8 @@ CREATE TABLE IF NOT EXISTS shipping_discounts (
 DROP TABLE IF EXISTS orders;
 CREATE TABLE IF NOT EXISTS orders (
 	id               		INT             AUTO_INCREMENT              PRIMARY KEY,
-	consignee_information_id  	INT                                 		NOT NULL,
-	creation_date    		TIMESTAMP       DEFAULT CURRENT_TIMESTAMP,
+	consignee_information_id  	INT                                 	NOT NULL,
+	creation_date    		TIMESTAMP       DEFAULT CURRENT_TIMESTAMP	NOT NULL,
 	total_price     	 	DECIMAL(10,2)                               NOT NULL,
 	system_discount_id		INT             DEFAULT NULL,
 	pay_method       		ENUM('Cash', 'Credit', 'Debit')             NOT NULL,
@@ -173,8 +177,6 @@ CREATE TABLE IF NOT EXISTS orders (
 	FOREIGN KEY (consignee_information_id) REFERENCES delivery_informations(id),
 	FOREIGN KEY (system_discount_id) REFERENCES system_discounts(id)
 );
-
-
 
 DROP TABLE IF EXISTS boxes;
 CREATE TABLE IF NOT EXISTS boxes ( -- each store in one order has a box of their products
@@ -200,9 +202,8 @@ CREATE TABLE IF NOT EXISTS boxes ( -- each store in one order has a box of their
 
 
 DROP TABLE IF EXISTS products_in_boxes;
-CREATE TABLE IF NOT EXISTS products_in_boxes ( -- ternary relationship between products, boxes and orders
+CREATE TABLE IF NOT EXISTS products_in_boxes (
 	id				INT             AUTO_INCREMENT              PRIMARY KEY,
-	
 	box_id          INT                                         NOT NULL,
 	product_id      INT                                         NOT NULL,
 	quantity        INT                                         NOT NULL,
@@ -212,58 +213,3 @@ CREATE TABLE IF NOT EXISTS products_in_boxes ( -- ternary relationship between p
 	FOREIGN KEY (box_id) REFERENCES boxes(id) ON DELETE CASCADE,
 	FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
-
-
-SELECT COLUMN_NAME
-FROM INFORMATION_SCHEMA.COLUMNS
-WHERE TABLE_NAME = 'users' AND TABLE_SCHEMA = 'Harmonie';
-
-
-INSERT INTO users (fname, lname, dob, sex, phone, email, password) VALUES ('Le Minh', 'The1', '2000-01-01', 'M', '0123456789', 'abc1@gmail.com', '123456');
-INSERT INTO users (fname, lname, dob, sex, phone, email, password) VALUES ('Le Minh', 'The2', '2000-01-01', 'F', '0123456790', 'abc2@gmail.com', '123456');
-INSERT INTO users (fname, lname, dob, sex, phone, email, password) VALUES ('Le Minh', 'The3', '2000-01-01', 'M', '0123456791', 'abc3@gmail.com', '123456');
-
-SELECT * FROM users;
-
-SELECT COLUMN_NAME
-FROM INFORMATION_SCHEMA.COLUMNS
-WHERE TABLE_NAME = 'stores' AND TABLE_SCHEMA = 'Harmonie';
-
-
-INSERT INTO stores (id, name, address, tax_id, description) VALUES (6, 'Store1', '123 ABC', '123456789', 'Store1 description');
-INSERT INTO stores (id, name, address, tax_id, description) VALUES (7, 'Store2', '124 ABC', '123456790', 'Store2 description');
-INSERT INTO stores (id, name, address, tax_id, description) VALUES (8, 'Store3', '125 ABC', '123456791', 'Store3 description');
-
-SELECT * FROM stores;
-
-INSERT INTO categories (name) VALUES ('Electronics');
-INSERT INTO categories (name) VALUES ('Foods');
-INSERT INTO categories (name) VALUES ('Comestics');
-
-
-SELECT COLUMN_NAME
-FROM INFORMATION_SCHEMA.COLUMNS
-WHERE TABLE_NAME = 'products' AND TABLE_SCHEMA = 'Harmonie';
-
-
-INSERT INTO products (store_id, name, brand, price, quantity, description, category_id) VALUES (6, 'Product11', 'Brand1', 100, 10, 'Product11 description', 1);
-INSERT INTO products (store_id, name, brand, price, quantity, description, category_id) VALUES (6, 'Product12', 'Brand2', 100, 10, 'Product12 description', 2);
-INSERT INTO products (store_id, name, brand, price, quantity, description, category_id) VALUES (7, 'Product21', 'Brand3', 100, 10, 'Product21 description', 3);
-INSERT INTO products (store_id, name, brand, price, quantity, description, category_id) VALUES (7, 'Product22', 'Brand4', 100, 10, 'Product22 description', 3);
-INSERT INTO products (store_id, name, brand, price, quantity, description, category_id) VALUES (6, 'Product31', 'Brand1', 100, 10, 'Product31 description', 2);
-INSERT INTO products (store_id, name, brand, price, quantity, description, category_id) VALUES (6, 'Product32', 'Brand2', 100, 10, NULL, 1);
-
-SELECT * FROM products;
-
-
-SELECT COLUMN_NAME
-FROM INFORMATION_SCHEMA.COLUMNS
-WHERE TABLE_NAME = 'delivery_informations' AND TABLE_SCHEMA = 'Harmonie';
-
-
-INSERT INTO delivery_informations (user_id, consignee_name, phone_number, road_number, ward, district, city) VALUES (6, 'Le Minh The1', '0123456789', '123', 'ABC', 'DEF', 'GHI');
-INSERT INTO delivery_informations (user_id, consignee_name, phone_number, road_number, ward, district, city) VALUES (6, 'Le Minh The2', '0123456789', '123', 'ABC', 'DEF', 'GHK');
-INSERT INTO delivery_informations (user_id, consignee_name, phone_number, road_number, ward, district, city) VALUES (7, 'Le Minh The3', '0123456790', '124', 'ABD', 'DEF', 'GHI');
-INSERT INTO delivery_informations (user_id, consignee_name, phone_number, road_number, ward, district, city) VALUES (8, 'Le Minh The4', '0123456791', '125', 'ABC', 'DEG', 'GHI');
-
-

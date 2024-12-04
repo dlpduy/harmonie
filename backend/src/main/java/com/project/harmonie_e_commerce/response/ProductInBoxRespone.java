@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ProductInBoxRespone {
+    @JsonProperty("buy_quantity")
     private Integer quantity;
     @JsonProperty("product_response")
     private ProductResponse productResponse;
