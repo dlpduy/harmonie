@@ -141,8 +141,10 @@ CREATE TABLE IF NOT EXISTS store_discounts (
 
 DROP TABLE IF EXISTS system_discounts;
 CREATE TABLE IF NOT EXISTS system_discounts (
+
 	id			  INT             	AUTO_INCREMENT				PRIMARY KEY,
-    discount_id	  INT 											NOT NULL,
+
+  discount_id	  INT 											NOT NULL,
 	max_amount    DECIMAL(10,2)                               	NOT NULL,
 	percentage    INT		                                	NOT NULL,
 	min_bill_amt  DECIMAL(10,2)		DEFAULT 0                  	NOT NULL,
@@ -155,8 +157,9 @@ CREATE TABLE IF NOT EXISTS system_discounts (
 
 DROP TABLE IF EXISTS shipping_discounts;
 CREATE TABLE IF NOT EXISTS shipping_discounts (
-	id			  INT             	AUTO_INCREMENT      		PRIMARY KEY,
-    discount_id	  INT											NOT NULL,
+
+	id			  INT             		AUTO_INCREMENT						PRIMARY KEY,
+  discount_id	  INT											NOT NULL,
 	max_amount    DECIMAL(10,2)                               	NOT NULL,
 
 	FOREIGN KEY (discount_id) REFERENCES discounts(id) ON DELETE CASCADE
