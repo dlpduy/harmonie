@@ -66,6 +66,8 @@ public class DiscountService implements IDiscountService{
                 shippingDiscountDTO.getExpiration_date()
         );
 
+        System.out.println(discount.getId());
+
         ShippingDiscount shippingDiscount = ShippingDiscount.builder()
                 .discount(discount)
                 .maxAmount(shippingDiscountDTO.getMax_amount())
@@ -86,6 +88,7 @@ public class DiscountService implements IDiscountService{
         );
 
         SystemDiscount systemDiscount = SystemDiscount.builder()
+                .id(discount.getId())
                 .discount(discount)
                 .maxAmount(systemDiscountDTO.getMax_amount())
                 .percentage(systemDiscountDTO.getPercentage())

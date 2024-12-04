@@ -16,6 +16,6 @@ public interface ProductInBoxRepository extends JpaRepository<ProductInBox, Inte
 
     Optional<ProductInBox> findById(Integer id);
     List<ProductInBox> findByBox(Box box);
-    Float sumPriceByBox(Box box);
+//    Float sumPriceByBox(Box box);
 }
 

@@ -1,6 +1,7 @@
 package com.project.harmonie_e_commerce.model;
 
 // import com.project.harmonie_e_commerce.model.CompositeKey.ProductInCartKey;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,10 +26,12 @@ public class ProductInCart {
     @Column(name = "quantity",nullable = false)
     private Integer quantity;
 
+    @JsonIgnore
     @ManyToOne //TODO: check kiểu CASCADE
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonIgnore
     @ManyToOne //TODO: check kiểu CASCADE
     @JoinColumn(name = "product_id")
     private Product product;
