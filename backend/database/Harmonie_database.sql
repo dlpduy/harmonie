@@ -212,3 +212,58 @@ CREATE TABLE IF NOT EXISTS products_in_boxes ( -- ternary relationship between p
 	FOREIGN KEY (box_id) REFERENCES boxes(id) ON DELETE CASCADE,
 	FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
+
+
+SELECT COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'users' AND TABLE_SCHEMA = 'Harmonie';
+
+
+INSERT INTO users (fname, lname, dob, sex, phone, email, password) VALUES ('Le Minh', 'The1', '2000-01-01', 'M', '0123456789', 'abc1@gmail.com', '123456');
+INSERT INTO users (fname, lname, dob, sex, phone, email, password) VALUES ('Le Minh', 'The2', '2000-01-01', 'F', '0123456790', 'abc2@gmail.com', '123456');
+INSERT INTO users (fname, lname, dob, sex, phone, email, password) VALUES ('Le Minh', 'The3', '2000-01-01', 'M', '0123456791', 'abc3@gmail.com', '123456');
+
+SELECT * FROM users;
+
+SELECT COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'stores' AND TABLE_SCHEMA = 'Harmonie';
+
+
+INSERT INTO stores (id, name, address, tax_id, description) VALUES (6, 'Store1', '123 ABC', '123456789', 'Store1 description');
+INSERT INTO stores (id, name, address, tax_id, description) VALUES (7, 'Store2', '124 ABC', '123456790', 'Store2 description');
+INSERT INTO stores (id, name, address, tax_id, description) VALUES (8, 'Store3', '125 ABC', '123456791', 'Store3 description');
+
+SELECT * FROM stores;
+
+INSERT INTO categories (name) VALUES ('Electronics');
+INSERT INTO categories (name) VALUES ('Foods');
+INSERT INTO categories (name) VALUES ('Comestics');
+
+
+SELECT COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'products' AND TABLE_SCHEMA = 'Harmonie';
+
+
+INSERT INTO products (store_id, name, brand, price, quantity, description, category_id) VALUES (6, 'Product11', 'Brand1', 100, 10, 'Product11 description', 1);
+INSERT INTO products (store_id, name, brand, price, quantity, description, category_id) VALUES (6, 'Product12', 'Brand2', 100, 10, 'Product12 description', 2);
+INSERT INTO products (store_id, name, brand, price, quantity, description, category_id) VALUES (7, 'Product21', 'Brand3', 100, 10, 'Product21 description', 3);
+INSERT INTO products (store_id, name, brand, price, quantity, description, category_id) VALUES (7, 'Product22', 'Brand4', 100, 10, 'Product22 description', 3);
+INSERT INTO products (store_id, name, brand, price, quantity, description, category_id) VALUES (6, 'Product31', 'Brand1', 100, 10, 'Product31 description', 2);
+INSERT INTO products (store_id, name, brand, price, quantity, description, category_id) VALUES (6, 'Product32', 'Brand2', 100, 10, NULL, 1);
+
+SELECT * FROM products;
+
+
+SELECT COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'delivery_informations' AND TABLE_SCHEMA = 'Harmonie';
+
+
+INSERT INTO delivery_informations (user_id, consignee_name, phone_number, road_number, ward, district, city) VALUES (6, 'Le Minh The1', '0123456789', '123', 'ABC', 'DEF', 'GHI');
+INSERT INTO delivery_informations (user_id, consignee_name, phone_number, road_number, ward, district, city) VALUES (6, 'Le Minh The2', '0123456789', '123', 'ABC', 'DEF', 'GHK');
+INSERT INTO delivery_informations (user_id, consignee_name, phone_number, road_number, ward, district, city) VALUES (7, 'Le Minh The3', '0123456790', '124', 'ABD', 'DEF', 'GHI');
+INSERT INTO delivery_informations (user_id, consignee_name, phone_number, road_number, ward, district, city) VALUES (8, 'Le Minh The4', '0123456791', '125', 'ABC', 'DEG', 'GHI');
+
+
