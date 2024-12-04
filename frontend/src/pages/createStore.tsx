@@ -71,49 +71,6 @@ const StoreInfoForm: React.FC = () => {
     )
 };
 
-interface ShippingOptionProps {
-    label: string;
-    id: string;
-}
-
-const ShippingOption: React.FC<ShippingOptionProps> = ({ label, id }) => (
-    <div className={styles.shippingOption}>
-        <label htmlFor={id} className={styles.shippingOptionLabel}>{label}</label>
-        <input type="checkbox" id={id} className={styles.checkbox} />
-    </div>
-);
-
-const ShippingForm: React.FC = () => {
-    return (
-        <>
-            <div className={styles.formGroup}>
-                <h2 className={styles.sectionTitle}>Cài đặt vận chuyển</h2>
-            </div>
-            <form style={{
-                position: 'relative',
-                left: '30%',
-                top: '-130px',
-            }}>
-                <div className={styles.infoRow}>
-                    <label htmlFor="nameStore" className={styles.infoLabel}>Phương thức vận chuyển:</label>
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '1rem',
-                        position: 'relative',
-                        top: '100px',
-
-                    }}>
-                        <ShippingOption label="Giao hàng tiết kiệm:" id="economical" />
-                        <ShippingOption label=" Giao hàng nhanh:" id="express" />
-                        <ShippingOption label=" Giao hàng hỏa tốc:" id="veryexpress" />
-                    </div>
-                </div>
-            </form>
-        </>
-
-    );
-};
 
 interface InputFieldProps {
     label: string;
@@ -129,19 +86,9 @@ const TaxInfoForm: React.FC = () => {
             </div>
             <form style={{
                 position: 'relative',
-                left: '40%',
+                left: '42.7%',
                 top: '-60px',
             }}>
-                <div className={styles.infoRow}>
-                    <label htmlFor="typeOfBussiness" className={styles.infoLabel}>Loại hình:</label>
-                    <input
-                        type="text"
-                        name="typeOfBussiness"
-                        className={styles.infoValue}
-                        placeholder="Loại hình cửa hàng"
-                        style={{ outline: 'none' }}
-                    />
-                </div>
                 <div className={styles.infoRow}>
                     <label htmlFor="tax" className={styles.infoLabel}>Mã số thuế:</label>
                     <input
@@ -159,52 +106,6 @@ const TaxInfoForm: React.FC = () => {
 };
 
 
-const IdentityInfoForm: React.FC = () => {
-    return (
-        <>
-            <div className={styles.formGroup}>
-                <h2 className={styles.sectionTitle}>Thông tin định danh</h2>
-            </div>
-            <form style={{
-                position: 'relative',
-                left: '40%',
-                top: '-60px',
-            }}>
-                <div className={styles.infoRow}>
-                    <label htmlFor="identificationNumber" className={styles.infoLabel}>Số định danh:</label>
-                    <input
-                        type="text"
-                        name="identificationNumber"
-                        className={styles.infoValue}
-                        placeholder="Số CCCD/CMND"
-                        style={{ outline: 'none' }}
-                    />
-                </div>
-                <div className={styles.infoRow}
-                    style={{
-                        display: 'flex',
-                        gap: '1rem',
-                        position: 'relative',
-                        left: '-67%'
-                    }}
-                >
-                    <label htmlFor="imageOfIDNumber" className={styles.infoLabel}>Ảnh CCCD:</label>
-                    <input
-                        style={{
-                            cursor: 'pointer',
-                        }}
-
-                        type="file" id="file" name="imageOfIDNumber" accept="image/*"
-
-                    />
-
-
-                </div>
-
-            </form>
-        </>
-    );
-};
 
 const CreateStore: React.FC = () => {
     return (
@@ -229,9 +130,7 @@ const CreateStore: React.FC = () => {
                 </div>
                 <section className={styles.formContainer}>
                     <StoreInfoForm />
-                    <ShippingForm />
                     <TaxInfoForm />
-                    <IdentityInfoForm />
                     <button type="submit" className={styles.submitButton}>Hoàn tất</button>
                 </section>
             </main>
