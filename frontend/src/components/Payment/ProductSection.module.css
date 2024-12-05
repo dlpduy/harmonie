@@ -80,7 +80,7 @@
 
 .productTotal {
   font-weight: bold;
-  color: #ff5722;
+  color: #4260fc;
 }
 
 /* Hàng voucher */
@@ -92,7 +92,7 @@
 }
 
 .voucherButton {
-  background-color: #ff5722;
+  background-color: #4260fc ;
   color: #fff;
   border: none;
   padding: 8px 12px;
@@ -103,7 +103,7 @@
 .voucherDiscount {
   font-size: 14px;
   font-weight: bold;
-  color: #ff5722;
+  color: #4260fc;
 }
 
 /* Hàng phí vận chuyển */
@@ -130,7 +130,7 @@
 
 .totalAmount {
   font-size: 18px;
-  color: #ff5722;
+  color: #4260fc;
 }
 /* Hàng tổng chi phí giỏ hàng */
 .totalCostRow {
@@ -150,7 +150,7 @@
 
 .totalCostAmount {
   font-size: 20px;
-  color: #ff5722;
+  color: #4260fc;
 }
 .modal {
   position: fixed;
@@ -182,7 +182,7 @@
 }
 
 .voucherOption {
-  background-color: #2e5ffd;
+  background-color: #4260fc;
   border: 1px solid #ddd;
   padding: 10px;
   cursor: pointer;

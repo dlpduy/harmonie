@@ -83,7 +83,7 @@
 
 .productTotal {
   font-weight: bold;
-  color: #ff5722;
+  color: #4260fc;
 }
 
 /* Container tổng tiền */
@@ -112,13 +112,13 @@
   justify-content: space-between;
   font-size: 18px;
   font-weight: bold;
-  color: #ff5722;
+  color: #4260fc;
 }
 
 .checkoutButton {
   width: 100%;
   padding: 10px;
-  background-color: #ff5722;
+  background-color: #4260fc;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -145,8 +145,8 @@
 }
 
 .productCheckbox:checked {
-  background-color: #ff5722; /* Màu nền khi checkbox được chọn */
-  border-color: #ff5722; /* Màu viền khi checkbox được chọn */
+  background-color: #4260fc; /* Màu nền khi checkbox được chọn */
+  border-color: #4260fc; /* Màu viền khi checkbox được chọn */
 }
 
 .productCheckbox:checked::after {
@@ -164,7 +164,7 @@ transform: translate(-50%, -50%) rotate(-45deg);
   
 }
 .deleteButton {
-  background-color: #ff4d4d;
+  background-color: #4260fc;
   color: white;
   border: none;
   border-radius: 4px;
@@ -175,5 +175,5 @@ transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .deleteButton:hover {
-  background-color: #ff1a1a;
+  background-color: #4260fc;
 }
