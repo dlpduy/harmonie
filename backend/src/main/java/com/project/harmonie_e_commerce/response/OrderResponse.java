@@ -2,6 +2,7 @@ package com.project.harmonie_e_commerce.response;
 
 import com.project.harmonie_e_commerce.model.Order.PayMethod;
 import com.project.harmonie_e_commerce.repository.BoxRepository;
+import com.project.harmonie_e_commerce.repository.ProductInBoxRepository;
 import com.project.harmonie_e_commerce.model.Order;
 
 import lombok.AllArgsConstructor;
@@ -20,6 +21,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Builder
 public class OrderResponse {
     @JsonProperty("order_id")
+    private Integer orderId;
+    @JsonProperty("created_date")
     private Timestamp createdDate;
     @JsonProperty("total_price")
     private Float totalPrice;
@@ -29,20 +32,20 @@ public class OrderResponse {
     private DeliveryInformationResponse deliveryInformation;
     @JsonProperty("system_discount")
     private SystemDiscountResponse systemDiscount;
-    @JsonProperty("box_list")
+    @JsonProperty("boxes")
     private List<BoxResponse> boxList;
 
-    static BoxRepository boxRepository;
 
-    public static OrderResponse fromOrder(Order order){
+    public static OrderResponse fromOrder(Order order, BoxRepository boxRepository, ProductInBoxRepository productInBoxRepository) {
 
         return OrderResponse.builder()
+            .orderId(order.getId())
             .createdDate(order.getCreationDate())
             .totalPrice(order.getTotalPrice())
             .payMethod(order.getPayMethod())
             .deliveryInformation(DeliveryInformationResponse.fromDeliveryInformation(order.getDeliveryInformation()))
             .systemDiscount(SystemDiscountResponse.fromSystemDiscount(order.getSystemDiscount()))
-            .boxList(BoxResponse.fromBoxList(boxRepository.findByOrder(order)))
+            .boxList(BoxResponse.fromBoxList(boxRepository.findByOrder(order), productInBoxRepository))
             .build();
     }
 }

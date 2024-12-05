@@ -1,8 +1,9 @@
 DROP DATABASE IF EXISTS Harmonie;
 
-CREATE DATABASE IF NOT EXISTS Harmonie;
+CREATE DATABASE IF NOT EXISTS Harmonie CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 USE Harmonie;
+
 
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
@@ -35,6 +36,9 @@ CREATE TABLE IF NOT EXISTS categories (
 	id              INT             AUTO_INCREMENT              PRIMARY KEY,
 	name            VARCHAR(20)                                 NOT NULL
 );
+ALTER TABLE categories
+	MODIFY COLUMN name VARCHAR(20) UNIQUE NOT NULL;
+
 
 DROP TABLE IF EXISTS products;
 CREATE TABLE IF NOT EXISTS products (
@@ -71,7 +75,7 @@ CREATE TABLE IF NOT EXISTS product_images (
 DROP TABLE IF EXISTS delivery_informations;
 CREATE TABLE IF NOT EXISTS delivery_informations (
 	id				INT             AUTO_INCREMENT              PRIMARY KEY,
-    user_id        INT                                          NOT NULL,
+    user_id         INT                                         NOT NULL,
     consignee_name  VARCHAR(50)                                 NOT NULL,
     phone_number	VARCHAR(10)                                 NOT NULL,
 	road_number     VARCHAR(20)                                 NOT NULL,
@@ -137,8 +141,10 @@ CREATE TABLE IF NOT EXISTS store_discounts (
 
 DROP TABLE IF EXISTS system_discounts;
 CREATE TABLE IF NOT EXISTS system_discounts (
-	id			  INT             		AUTO_INCREMENT						PRIMARY KEY,
-    discount_id	  INT 											NOT NULL,
+
+	id			  INT             	AUTO_INCREMENT				PRIMARY KEY,
+
+  discount_id	  INT 											NOT NULL,
 	max_amount    DECIMAL(10,2)                               	NOT NULL,
 	percentage    INT		                                	NOT NULL,
 	min_bill_amt  DECIMAL(10,2)		DEFAULT 0                  	NOT NULL,
@@ -151,8 +157,9 @@ CREATE TABLE IF NOT EXISTS system_discounts (
 
 DROP TABLE IF EXISTS shipping_discounts;
 CREATE TABLE IF NOT EXISTS shipping_discounts (
+
 	id			  INT             		AUTO_INCREMENT						PRIMARY KEY,
-    discount_id	  INT											NOT NULL,
+  discount_id	  INT											NOT NULL,
 	max_amount    DECIMAL(10,2)                               	NOT NULL,
 
 	FOREIGN KEY (discount_id) REFERENCES discounts(id) ON DELETE CASCADE
@@ -163,8 +170,8 @@ CREATE TABLE IF NOT EXISTS shipping_discounts (
 DROP TABLE IF EXISTS orders;
 CREATE TABLE IF NOT EXISTS orders (
 	id               		INT             AUTO_INCREMENT              PRIMARY KEY,
-	consignee_information_id  	INT                                 		NOT NULL,
-	creation_date    		TIMESTAMP       DEFAULT CURRENT_TIMESTAMP,
+	consignee_information_id  	INT                                 	NOT NULL,
+	creation_date    		TIMESTAMP       DEFAULT CURRENT_TIMESTAMP	NOT NULL,
 	total_price     	 	DECIMAL(10,2)                               NOT NULL,
 	system_discount_id		INT             DEFAULT NULL,
 	pay_method       		ENUM('Cash', 'Credit', 'Debit')             NOT NULL,
@@ -173,8 +180,6 @@ CREATE TABLE IF NOT EXISTS orders (
 	FOREIGN KEY (consignee_information_id) REFERENCES delivery_informations(id),
 	FOREIGN KEY (system_discount_id) REFERENCES system_discounts(id)
 );
-
-
 
 DROP TABLE IF EXISTS boxes;
 CREATE TABLE IF NOT EXISTS boxes ( -- each store in one order has a box of their products
@@ -200,9 +205,8 @@ CREATE TABLE IF NOT EXISTS boxes ( -- each store in one order has a box of their
 
 
 DROP TABLE IF EXISTS products_in_boxes;
-CREATE TABLE IF NOT EXISTS products_in_boxes ( -- ternary relationship between products, boxes and orders
+CREATE TABLE IF NOT EXISTS products_in_boxes (
 	id				INT             AUTO_INCREMENT              PRIMARY KEY,
-	
 	box_id          INT                                         NOT NULL,
 	product_id      INT                                         NOT NULL,
 	quantity        INT                                         NOT NULL,

@@ -19,14 +19,11 @@ import java.util.List;
 public class StoreService implements IStoreService {
 
     private final StoreRepository storeRepository;
-
     private final UserRepository userRepository;
-
     private final ProductRepository productRepository;
-
     private final BoxRepository boxRepository;
-
     private final StoreDiscountRepository storeDiscountRepository;
+    private final ProductInBoxRepository productInBoxRepository;
 
     @Override
     public Store addNewStore(StoreDTO storeDTO, Integer userId) throws Exception {
@@ -79,7 +76,7 @@ public class StoreService implements IStoreService {
         List<Box> boxList = boxRepository.findAllByStore(store);
 
         for(Box box:boxList){
-            BoxResponse boxResponse = BoxResponse.fromBox(box);
+            BoxResponse boxResponse = BoxResponse.fromBox(box, productInBoxRepository);
             boxResponseList.add(boxResponse);
         }
 

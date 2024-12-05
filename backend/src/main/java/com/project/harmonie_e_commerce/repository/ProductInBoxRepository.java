@@ -5,7 +5,8 @@ import com.project.harmonie_e_commerce.model.ProductInBox;
 import com.project.harmonie_e_commerce.model.Box;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -16,6 +17,8 @@ public interface ProductInBoxRepository extends JpaRepository<ProductInBox, Inte
 
     Optional<ProductInBox> findById(Integer id);
     List<ProductInBox> findByBox(Box box);
-//    Float sumPriceByBox(Box box);
+  
+    @Query("SELECT SUM(P.totalPrice) FROM ProductInBox P WHERE P.box = :box")
+    Float findSumPriceByBox(@Param("box") Box box);
 }
 
