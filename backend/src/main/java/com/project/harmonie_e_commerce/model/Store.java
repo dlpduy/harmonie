@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,6 +33,4 @@ public class Store {
     private String description;
     @Column(name = "tax_id",unique = true)
     private String tax_id;
-
-
 }

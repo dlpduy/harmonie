@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 // import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @Builder
@@ -65,6 +66,9 @@ public class Box {
     @Enumerated(EnumType.STRING)
     private BoxStatus status;
 
+
+    @OneToMany(mappedBy = "box", cascade = CascadeType.ALL)
+    private List<ProductInBox> products;
 
     public enum BoxStatus{
         Pending, Shipped, Delivered

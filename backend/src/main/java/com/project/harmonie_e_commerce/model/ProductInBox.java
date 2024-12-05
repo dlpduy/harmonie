@@ -20,7 +20,7 @@ public class ProductInBox {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "box_id")
+    @JoinColumn(name = "box_id", nullable = false)
     private Box box;
 
     @ManyToOne

@@ -3,8 +3,10 @@
  import com.project.harmonie_e_commerce.exception.DataNotFoundException;
  import com.project.harmonie_e_commerce.model.CompositeKey.ProductInCartKey;
  import com.project.harmonie_e_commerce.model.Product;
+ import com.project.harmonie_e_commerce.model.ProductImage;
  import com.project.harmonie_e_commerce.model.ProductInCart;
  import com.project.harmonie_e_commerce.model.User;
+ import com.project.harmonie_e_commerce.repository.ProductImageRepository;
  import com.project.harmonie_e_commerce.repository.ProductInCartRepository;
  import com.project.harmonie_e_commerce.repository.ProductRepository;
  import com.project.harmonie_e_commerce.repository.UserRepository;
@@ -31,6 +33,8 @@
 
      private final UserRepository userRepository;
 
+     private final ProductImageRepository productImageRepository;
+
      @Override
      public List<ProductInCartResponse> getAllProductsInCart(Integer userId) throws Exception {
 
@@ -44,12 +48,25 @@
                  //lấy product gốc
                  Product product = productRepository.findById(p.getProduct().getId()).get();
 
+                 List<ProductImage> images = productImageRepository.findByProductId(product.getId());
+
+                 String url = "";
+                 if (images.isEmpty()){
+                     url = "No image";
+                 } else {
+                     url = images.get(0).getUrl();
+                 }
+
                  ProductInCartResponse productInCartResponse = ProductInCartResponse.builder()
+                         .id(p.getId())
                          .name(product.getName())
                          .brand(product.getBrand())
                          .price(product.getPrice() * p.getQuantity())
                          .categoryName(product.getCategory().getName())
                          .quantity(p.getQuantity()) //lấy số lượng của từng sản phẩm
+                         .store_id(product.getStore().getId())
+                         .store_name(product.getStore().getName())
+                         .productUrl(url)
                          .build();
                  return productInCartResponse;
              } catch (Exception e) {

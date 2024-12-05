@@ -28,24 +28,22 @@ public class BoxResponse {
     @JsonProperty("products")
     private List<ProductInBoxRespone> productInBoxList;
 
+    @JsonProperty("fee_ship")
+    private Float feeShip;
+    @JsonProperty("total_price")
+    private Float totalPrice;
+    @JsonProperty("predicted_delivery_date")
+    private LocalDate predictedDeliveryDate;
     @JsonProperty("shipper_name")
     private String shipperName;
     @JsonProperty("shipper_phone")
     private String shipperPhone;
-    @JsonProperty("total_price")
-    private Float totalPrice;
-    @JsonProperty("fee_ship")
-    private Float feeShip;
-    @JsonProperty("predicted_delivery_date")
-    private LocalDate predictedDeliveryDate;
     private String caution;
     @JsonProperty("packing_date")
     private Timestamp packingDate;
     private BoxStatus status;
 
-    static ProductInBoxRepository productInBoxRepository;
-
-    public static BoxResponse fromBox(Box box) {
+    public static BoxResponse fromBox(Box box, ProductInBoxRepository productInBoxRepository) {
 
         return BoxResponse.builder()
                 .storeDiscount(StoreDiscountRespone.fromStoreDiscount(box.getStoreDiscount()))
@@ -63,11 +61,11 @@ public class BoxResponse {
                 .build();
     }
 
-    public static List<BoxResponse> fromBoxList(List<Box> boxList) {
+    public static List<BoxResponse> fromBoxList(List<Box> boxList, ProductInBoxRepository productInBoxRepository) {
         List<BoxResponse> boxResponseList = new ArrayList<>();
 
         for(Box box : boxList) {
-            boxResponseList.add(BoxResponse.fromBox(box));
+            boxResponseList.add(BoxResponse.fromBox(box, productInBoxRepository));
         }
 
         return boxResponseList;

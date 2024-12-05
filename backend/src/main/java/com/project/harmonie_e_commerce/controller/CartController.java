@@ -11,13 +11,13 @@
  import java.util.List;
 
  @RestController
-// @RequestMapping("${api.prefix}/cart/{user_id}/")
+ @RequestMapping("${api.prefix}/")
  @AllArgsConstructor
  public class CartController {
 
      private CartService cartService;
 
-     @GetMapping("/all")
+     @GetMapping("/productincart/{user_id}")
      public ResponseEntity<List<ProductInCartResponse>> getAllProductsInCart(
              @PathVariable Integer user_id
      ){
@@ -28,7 +28,7 @@
          }
      }
 
-     @DeleteMapping("/delete/{product_id}")
+     @DeleteMapping("/delete/{user_id}/{product_id}")
      public ResponseEntity<String> deleteItemInCart(
              @PathVariable Integer product_id,
              @PathVariable Integer user_id
@@ -41,7 +41,7 @@
          }
      }
 
-     @PostMapping("/add/{product_id}")
+     @PostMapping("/add/{user_id}/{product_id}")
      public ResponseEntity<ProductInCart> addProductToCart(
              @PathVariable Integer product_id,
              @PathVariable Integer user_id
@@ -53,7 +53,7 @@
          }
      }
 
-     @PutMapping("/update_quantity/{product_id}")
+     @PutMapping("/update_quantity/{user_id}/{product_id}")
      public ResponseEntity<ProductInCart> updateQuantityProductInCart(
              @PathVariable Integer product_id,
              @PathVariable Integer user_id,
