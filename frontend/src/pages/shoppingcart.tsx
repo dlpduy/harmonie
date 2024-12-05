@@ -1,41 +1,42 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../styles/ShoppingCart.module.css';
 
 interface CartItem {
     id: number;
     name: string;
+    brand: string;
+    catogoryName: string;
     price: number;
     quantity: number;
-    image: string;
-    variant?: string;
+    productURL: string;
     storeID: number;
+    storeName: string;
 }
 
-const initialCartItems: CartItem[] = [
-    {
-        id: 1,
-        name: 'Dầu gội The Original Hair Shampoo',
-        image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4b5b1dc11ace265e82cba697b6945861f502226766f239a22091c596707b1afe?apiKey=1030477bbfe341728a648dc69cf63b1d&',
-        price: 299000,
-        quantity: 1,
-        storeID: 1,
-    },
-    {
-        id: 2,
-        name: 'Dầu gội The Original Hair Shampoo',
-        image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4b5b1dc11ace265e82cba697b6945861f502226766f239a22091c596707b1afe?apiKey=1030477bbfe341728a648dc69cf63b1d&',
-        price: 299000,
-        quantity: 2,
-        storeID: 2,
-    },
-];
-
 const ShoppingCart: React.FC = () => {
-    const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
     const navigate = useNavigate();
+    const [error, setError] = useState<string | null>(null);
 
+    useEffect(() => {
+        const fetchCartItems = async () => {
+            try {
+                const response = await fetch('https://d6e8b34e-4542-4f45-a933-74baa1d4d783.mock.pstmn.io/productincart');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                setCartItems(data.data);
+            } catch (error) {
+                setError('Error fetching cart items. Please try again later.');
+                console.error('Error fetching cart items:', error);
+            }
+        };
+
+        fetchCartItems();
+    }, []);
 
     const handleCheckboxChange = (id: number) => {
         setSelectedItems(prevSelectedItems =>
@@ -44,10 +45,12 @@ const ShoppingCart: React.FC = () => {
                 : [...prevSelectedItems, id]
         );
     };
+
     const handleDelete = (id: number) => {
         setCartItems(prevCartItems => prevCartItems.filter(item => item.id !== id));
         setSelectedItems(prevSelectedItems => prevSelectedItems.filter(item => item !== id));
     };
+
     const handleCheckout = () => {
         const selectedProducts = cartItems.filter(item => selectedItems.includes(item.id));
         navigate('/payment', { state: { selectedProducts } });
@@ -65,6 +68,10 @@ const ShoppingCart: React.FC = () => {
         return totalAmount;
     }, [totalAmount]);
 
+    if (error) {
+        return <div>{error}</div>;
+    }
+
     return (
         <div className={styles.shoppingCart}>
             <h1 className={styles.sectionTitle}>Giỏ Hàng</h1>
@@ -79,10 +86,13 @@ const ShoppingCart: React.FC = () => {
                                 className={styles.productCheckbox}
                             />
                             <div className={styles.productInfo}>
-                                <img src={item.image} alt={item.name} className={styles.productImage} />
+                                <img src={item.productURL} alt={item.name} className={styles.productImage} />
                                 <div className={styles.productDetails}>
                                     <p className={styles.productName}>{item.name}</p>
-                                    {item.variant && <p className={styles.productVariant}>{item.variant}</p>}
+                                    <p className={styles.productBrand}>{item.brand}</p>
+                                    <p className={styles.productCategory}>{item.catogoryName}</p>
+                                    <p className={styles.storeName}>{item.storeName}</p>
+                                    
                                 </div>
                             </div>
                             <div className={styles.productPricing}>
@@ -96,7 +106,7 @@ const ShoppingCart: React.FC = () => {
                 ))}
             </div>
             <div className={styles.container}>
-                <div >
+                <div>
                     <h4 className={styles.finalTotal}>Tổng thanh toán: <span>{finalTotal.toLocaleString()} VNĐ</span></h4>
                 </div>
                 <button

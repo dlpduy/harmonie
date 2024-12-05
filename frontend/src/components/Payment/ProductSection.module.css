@@ -182,7 +182,7 @@
 }
 
 .voucherOption {
-  background-color: #f0f0f0;
+  background-color: #2e5ffd;
   border: 1px solid #ddd;
   padding: 10px;
   cursor: pointer;
@@ -194,7 +194,7 @@
 
 .voucherOption:hover {
   background-color: #007bff;
-  color: white;
+  color: rgb(255, 255, 255);
 }
 
 .selectedVoucher {
@@ -225,4 +225,23 @@
   font-weight: bold;
   margin-bottom: 15px;
   color: #333;
+}
+
+.paymentButton {
+  margin-top: 20px;
+  background-color: #4CAF50; /* Green */
+  color: white;
+  border: none;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.paymentButton:hover {
+  background-color: #45a049;
 }
