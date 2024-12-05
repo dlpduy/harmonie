@@ -1,10 +1,13 @@
 import { Menu, MenuProps } from "antd";
-import { AppstoreOutlined, BellOutlined, HomeOutlined, LoginOutlined, MailOutlined, MenuOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
+import { AppstoreOutlined, BellOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, MenuOutlined, SettingOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import './header.css'
 import { Link } from "react-router-dom";
-const Header = (props: any) => {
+import { useState } from "react";
+const Header = () => {
     type MenuItem = Required<MenuProps>['items'][number];
-    const { isLogin } = props;
+    //const { isLogin } = props;
+    const [isLogin, setIsLogin] = useState(true);
+
     const items: MenuItem[] = [
         {
             label: 'logo',
@@ -24,15 +27,57 @@ const Header = (props: any) => {
             key: 'notification',
             icon: <BellOutlined />,
         },
-        {
+        isLogin === false ? {
+            label: (
+                <Link to="/login" style={{ color: "black" }}>Đăng nhập</Link>
+            ),
             key: 'login',
-            label: isLogin === false ? (<Link to="/login">Đăng nhập</Link>) : ("Xin chào"),
-            icon: isLogin === false ? <LoginOutlined /> : <UserOutlined />,
+            icon: <LoginOutlined />,
             style: {
-                right: 0,
+                right: 10,
                 position: 'absolute',
+                color: 'black'
             },
-        }
+        } :
+            {
+                key: 'login',
+                label: "Xin chào Đinh Lê Phúc Duy",
+                icon: <UserOutlined />,
+                style: {
+                    right: 10,
+                    position: 'absolute',
+                    color: 'black',
+                    textDecoration: 'none',
+                },
+                children: [
+                    {
+                        label: <Link to="/account">Thông tin cá nhân</Link>,
+                        key: 'setting:1',
+                        icon: <SettingOutlined />,
+                        style: {
+                            color: 'black'
+                        },
+
+                    },
+                    {
+                        label: <Link to="/store">Trở thành người bán hàng</Link>,
+                        key: 'setting:2',
+                        icon: <AppstoreOutlined />
+                    },
+                    {
+                        label: <Link to="/cart">Giỏ hàng</Link>,
+                        key: 'contact',
+                        icon: <ShoppingCartOutlined />,
+                    },
+                    {
+                        label: "Đăng xuất",
+                        key: 'setting:3',
+                        icon: <LogoutOutlined />,
+                        onClick: () => setIsLogin(false)
+                    }
+                ]
+            }
+
     ];
     return (
         <Menu

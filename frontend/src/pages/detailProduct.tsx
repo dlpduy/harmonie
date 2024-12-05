@@ -54,13 +54,7 @@
                 buying_count: 350,
                 reviews: [
                     { user: "John Doe", rating: 4.5, comment: "Great product, I love it!", date: "2024-11-28" },
-                    { user: "Jane Smith", rating: 3.8, comment: "Good quality but a bit pricey.", date: "2024-11-20" },
-                    { user: "Mark Wilson", rating: 4.2, comment: "Exactly as described, worth the price.", date: "2024-11-15" },
-                    { user: "Anna Lee", rating: 5, comment: "Perfect! Exceeded my expectations.", date: "2024-11-10" },
-                    { user: "Tom Brown", rating: 4.0, comment: "Good, but a bit large for me.", date: "2024-11-05" },
-                    { user: "Sarah White", rating: 3.5, comment: "Not bad, could be improved.", date: "2024-11-01" },
-                    { user: "Jessica Green", rating: 4.7, comment: "Loved it, great value for money.", date: "2024-10-28" },
-                    { user: "David Blue", rating: 2.5, comment: "Not worth the price, poor quality.", date: "2024-10-15" }
+                    
                 ]
             };
 
