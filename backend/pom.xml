@@ -67,7 +67,7 @@
 		</dependency>
 
 
-		<!-- User implementation needs this dependency for encode/decode password -->
+<!--		 User implementation needs this dependency for encode/decode password-->
 <!--		<dependency>-->
 <!--			<groupId>org.springframework.boot</groupId>-->
 <!--			<artifactId>spring-boot-starter-security</artifactId>-->

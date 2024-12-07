@@ -18,6 +18,7 @@
  import org.springframework.data.domain.PageRequest;
  import org.springframework.stereotype.Service;
 
+ import java.io.File;
  import java.util.List;
  import java.util.Optional;
 
@@ -57,8 +58,26 @@
 
      @Override
      public Product getProductById(int productId) throws Exception {
-         return productRepository.findById(productId).orElseThrow(() -> new DataNotFoundException(
+         Product existingProduct = productRepository.findById(productId).orElseThrow(() -> new DataNotFoundException(
                  "Cannot find product with id =" + productId));
+         String folderPath = "./src/main/resources/public/images/"+(productId+'0'); // Thay bằng đường dẫn tới folder của bạn
+         File folder = new File(folderPath);
+         if (!folder.isDirectory()) {
+             existingProduct.setNumImage(0);
+         }else {
+             File[] imageFiles = folder.listFiles(file -> {
+                 String fileName = file.getName().toLowerCase();
+                 return file.isFile() && (fileName.endsWith(".jpg") || fileName.endsWith(".png") || fileName.endsWith(".jpeg"));
+             });
+             if(imageFiles!=null){
+                 existingProduct.setNumImage(imageFiles.length);
+             }
+             else{
+                 existingProduct.setNumImage(0);
+             }
+         }
+         productRepository.save(existingProduct);
+         return existingProduct;
      }
 
      @Override
