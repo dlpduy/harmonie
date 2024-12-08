@@ -48,5 +48,19 @@ public class StoreController {
         }
     }
 
+    @GetMapping("/{store_id}/statistic")
+    public ResponseEntity<?> getStatistic(
+            @PathVariable Integer store_id,
+            @RequestParam Integer day,
+            @RequestParam Integer month,
+            @RequestParam Integer year
+    ){
+        try {
+            return new ResponseEntity<>(storeService.getStatisticOfStore(store_id,day, month, year), HttpStatus.OK);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 
 }

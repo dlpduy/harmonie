@@ -26,11 +26,11 @@ public class Box {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "storeDiscount_id")
+    @JoinColumn(name = "store_discount_id")
     private StoreDiscount storeDiscount;
 
     @ManyToOne
-    @JoinColumn(name = "shippingDiscount_id")
+    @JoinColumn(name = "shipping_discount_id")
     private ShippingDiscount shippingDiscount;
 
     @ManyToOne
