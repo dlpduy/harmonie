@@ -55,10 +55,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             }
-            filterChain.doFilter(request, response);
-        } else {
-            throw new RuntimeException("Token is missing");
+
         }
+        filterChain.doFilter(request, response);
     }
     private boolean isBypassToken(@NotNull HttpServletRequest request){
         //These are the endpoints that don't need authentication(token)
