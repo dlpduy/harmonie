@@ -47,6 +47,14 @@ public class User {
     @CreationTimestamp
     private Timestamp creation_date;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
+
+    public enum Role {
+        ADMIN,
+        USER
+    }
     public enum Sex {
         M, F, OTHER
     }
