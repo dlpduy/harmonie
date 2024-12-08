@@ -8,6 +8,7 @@ import com.project.harmonie_e_commerce.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,12 @@ public class UserService implements IUserService {
         User newUser = User.builder()
                 .fName(userDTO.getFName())
                 .lName(userDTO.getLName())
-                .password(userDTO.getPassword())
+                .email(userDTO.getEmail())
+                .phone(userDTO.getPhone())
+                .sex(userDTO.getSex().name())
+                .role(User.Role.USER)
+                .password(encodedPassword)
+                .dob(userDTO.getDob())
                 .build();
         return userRepository.save(newUser);
 
@@ -43,7 +49,7 @@ public class UserService implements IUserService {
 
         //TODO: CHECK PASSWORD BY ENCODER
         if (!passwordEncoder.matches(password, existingUser.getPassword())) {
-            throw new DataNotFoundException("Email or password is incorrect");
+            throw new BadCredentialsException("Email or password is incorrect");
         }
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(

@@ -59,12 +59,18 @@ public class User implements UserDetails {
     @CreationTimestamp
     private Timestamp creation_date;
 
-    @Column(name = "role_id", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
 
+    public enum Role {
+        ADMIN,
+        USER
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority("ROLE_"+role.getName()));
+        authorityList.add(new SimpleGrantedAuthority("ROLE_"+role.name()));
         return authorityList;
     }
 

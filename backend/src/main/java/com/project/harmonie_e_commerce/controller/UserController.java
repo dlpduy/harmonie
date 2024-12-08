@@ -1,6 +1,7 @@
 package com.project.harmonie_e_commerce.controller;
 
 import com.project.harmonie_e_commerce.dto.UserDTO;
+import com.project.harmonie_e_commerce.dto.UserLoginDTO;
 import com.project.harmonie_e_commerce.exception.DataNotFoundException;
 import com.project.harmonie_e_commerce.model.User;
 import com.project.harmonie_e_commerce.service.IUserService;
@@ -35,7 +36,7 @@ public class UserController {
                 return ResponseEntity.badRequest().body(errorMessages);
             }
             User user = userService.createUser(userDTO);
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok("User created successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -43,14 +44,14 @@ public class UserController {
 
     //No need to validate because u can input everything, if phone number and password are wrong
     // it will alert an error (500)
-//    @PostMapping("/login")
-//    public ResponseEntity<String> login(@Valid @RequestBody UserLoginDTO userLoginDTO) {
-//        try {
-//            String token = userService.login(userLoginDTO.getPhoneNumber(), userLoginDTO.getPassword());
-//            return ResponseEntity.ok(token);
-//        } catch (DataNotFoundException e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//
-//    }
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@Valid @RequestBody UserLoginDTO userLoginDTO) {
+        try {
+            String token = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
+            return ResponseEntity.ok(token);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
 }
