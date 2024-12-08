@@ -56,6 +56,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 }
             }
             filterChain.doFilter(request, response);
+        } else {
+            throw new RuntimeException("Token is missing");
         }
     }
     private boolean isBypassToken(@NotNull HttpServletRequest request){

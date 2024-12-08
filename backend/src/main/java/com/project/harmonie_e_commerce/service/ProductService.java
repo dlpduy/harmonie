@@ -56,7 +56,7 @@
      }
 
      @Override
-     public Product getProductById(int productId) throws Exception {
+     public Product getProductById(int productId) {
          return productRepository.findById(productId).orElseThrow(() -> new DataNotFoundException(
                  "Cannot find product with id =" + productId));
      }
