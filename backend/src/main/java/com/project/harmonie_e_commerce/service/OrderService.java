@@ -53,14 +53,14 @@ public class OrderService {
        // Set the delivery information
        Integer deliveryInformationId = orderRequest.getConsigneeInformationId();
        DeliveryInformation deliveryInformation = deliveryInformationRepository.findById(deliveryInformationId)
-                                                                              .orElseThrow(() -> new RuntimeException("Delivery information not found"));
+            .orElseThrow(() -> new RuntimeException("Delivery information id=" + deliveryInformationId + " not found"));
        order.setDeliveryInformation(deliveryInformation);
 
        // Set the system discount - optional
        Integer systemDiscountId = orderRequest.getSystemDiscountId();
        if (systemDiscountId != null){
            SystemDiscount systemDiscount = systemDiscountRepository.findById(systemDiscountId)
-                                                                   .orElseThrow(() -> new RuntimeException("System discount not found"));
+                .orElseThrow(() -> new RuntimeException("System discount id=" + systemDiscountId + " not found"));
            
            if(systemDiscount.getDiscount().getQuantity() == 0)
                throw new RuntimeException("System discount id=" + systemDiscountId + " is out of stock");
@@ -72,6 +72,8 @@ public class OrderService {
 
        // Set the pay method
        PayMethod payMethod = orderRequest.getPayMethod();
+       if (payMethod == null)
+           throw new RuntimeException("Pay method is required");
        order.setPayMethod(payMethod);
 
        // save order temporarily to exist Order entity for creating Box entities
@@ -97,11 +99,11 @@ public class OrderService {
            Integer remainingQuantity = product.getQuantity();
 
            if (remainingQuantity < buyQuantity)
-               throw new RuntimeException("Not enough product " + product.getName() + " in stock");
+               throw new RuntimeException("Not enough product id=" + productId + " in stock");
 
 
            Store store = productRepository.findStoreByProductId(productId)
-                        .orElseThrow(() -> new RuntimeException("Product id=" + productId + " not in any store"));
+                    .orElseThrow(() -> new RuntimeException("Product id=" + productId + " not in any store"));
 
            // handle case this is the first time this store appears
            productInStores.putIfAbsent(store, new Pair<>(new ArrayList<>(), null)); // storeDiscount is null for now
@@ -119,9 +121,9 @@ public class OrderService {
        if (storeDiscountIds != null) {
             for (Integer storeDiscountId : storeDiscountIds){
                 StoreDiscount storeDiscount = storeDiscountRepository.findById(storeDiscountId)
-                            .orElseThrow(() -> new RuntimeException("Store discount id=" + storeDiscountId + " not found"));
+                        .orElseThrow(() -> new RuntimeException("Store discount id=" + storeDiscountId + " not found"));
                 
-                    Store store = storeDiscount.getStore();
+                Store store = storeDiscount.getStore();
                 if(!productInStores.containsKey(store))
                     throw new RuntimeException("Store discount id=" + storeDiscountId +  " does not match any store");
                 
