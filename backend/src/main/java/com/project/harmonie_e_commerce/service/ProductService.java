@@ -4,6 +4,8 @@
  import com.project.harmonie_e_commerce.dto.ProductDTO;
  import com.project.harmonie_e_commerce.dto.ProductImageDTO;
  import com.project.harmonie_e_commerce.exception.DataNotFoundException;
+ import com.project.harmonie_e_commerce.exception.FileTooLargeException;
+ import com.project.harmonie_e_commerce.exception.UnsupportMediaException;
  import com.project.harmonie_e_commerce.model.Category;
  import com.project.harmonie_e_commerce.model.Product;
  import com.project.harmonie_e_commerce.model.ProductImage;
@@ -17,8 +19,14 @@
  import org.springframework.data.domain.Page;
  import org.springframework.data.domain.PageRequest;
  import org.springframework.stereotype.Service;
+ import org.springframework.util.StringUtils;
+ import org.springframework.web.multipart.MultipartFile;
 
  import java.io.File;
+ import java.io.IOException;
+ import java.nio.file.Files;
+ import java.nio.file.Paths;
+ import java.nio.file.StandardCopyOption;
  import java.util.List;
  import java.util.Optional;
 
@@ -60,7 +68,7 @@
      public Product getProductById(int productId) throws Exception {
          Product existingProduct = productRepository.findById(productId).orElseThrow(() -> new DataNotFoundException(
                  "Cannot find product with id =" + productId));
-         String folderPath = "./src/main/resources/public/images/"+(productId+'0'); // Thay bằng đường dẫn tới folder của bạn
+         String folderPath = "./src/main/resources/public/images/"+String.valueOf(productId); // Thay bằng đường dẫn tới folder của bạn
          File folder = new File(folderPath);
          if (!folder.isDirectory()) {
              existingProduct.setNumImage(0);
@@ -85,6 +93,40 @@
          // Lấy danh sách sản phẩm theo trang(page) và giới hạn(limit)
          return productRepository.findAll(pageRequest)
                  .map(ProductResponse::fromProduct);
+     }
+
+     @Override
+     public String uploadImage(Integer id, List<MultipartFile> files) throws Exception {
+         for (MultipartFile file : files) {
+             if (file.getSize() == 0)
+                 continue;
+             // check the size and format of file
+             if (file.getSize() > 10 * 1024 * 1024) {
+                 throw new FileTooLargeException("File is too large! Max size is 10MB");
+             }
+             // Get the format of file
+             String contentType = file.getContentType();
+             if (contentType == null || !contentType.startsWith("image/")) {
+                 throw new UnsupportMediaException("File must be an image");
+             }
+             String filename = storeFile(file, id);
+         }
+         return "Upload successfully!";
+     }
+     // store file to public/images/{product id} folder
+     private String storeFile(MultipartFile file, long productId) throws IOException {
+         String filename = StringUtils.cleanPath(file.getOriginalFilename());
+         // Add UUID in forward of file name to make it unique
+         // Path to folder storing file
+         java.nio.file.Path uploadDir = Paths.get("./src/main/resources/public/images/" + String.valueOf(productId));
+         // Check and create folder if it doesnt exist
+         if (!Files.exists(uploadDir)) {
+             Files.createDirectories(uploadDir);
+         }
+         // path to destination file
+         java.nio.file.Path destination = Paths.get(uploadDir.toString(), filename);
+         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+         return filename;
      }
 
      @Override

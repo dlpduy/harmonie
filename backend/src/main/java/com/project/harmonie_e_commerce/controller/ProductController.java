@@ -55,50 +55,17 @@ public class ProductController {
     }
 
     @PostMapping(value = "uploads/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadImages(@PathVariable int id,
+    public ResponseEntity<?> uploadImages(@PathVariable Integer id,
                                           @RequestParam("files") List<MultipartFile> files) {
         try {
             List<ProductImage> productImages = new ArrayList<>();
-            for (MultipartFile file : files) {
-                if (file.getSize() == 0)
-                    continue;
-                // check the size and format of file
-                if (file.getSize() > 10 * 1024 * 1024) {
-                    return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
-                            .body("File is too large! Max size is 10MB");
-                }
-                // Get the format of file
-                String contentType = file.getContentType();
-                if (contentType == null || !contentType.startsWith("image/")) {
-                    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("File must be an image");
-                }
-
-                 String filename = storeFile(file,id);
-//                 productImages.add(productService.createProductImage(ProductImageDTO.builder()
-//                         .productId(id)
-//                         .url(filename)
-//                         .build()));
-            }
+            productService.uploadImages(id, files);
             return ResponseEntity.ok("Images uploaded successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    // store file to public/images/{product id} folder
-    private String storeFile(MultipartFile file, long productId) throws IOException {
-        String filename = StringUtils.cleanPath(file.getOriginalFilename());
-        // Add UUID in forward of file name to make it unique
-        // Path to folder storing file
-        java.nio.file.Path uploadDir = Paths.get("./src/main/resources/public/images/" + (char)(productId+'0'));
-        // Check and create folder if it doesnt exist
-        if (!Files.exists(uploadDir)) {
-            Files.createDirectories(uploadDir);
-        }
-        // path to destination file
-        java.nio.file.Path destination = Paths.get(uploadDir.toString(), filename);
-        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
-        return filename;
-    }
+
 
 
 //     private String storeFile(MultipartFile file) throws IOException {
