@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface IProductService {
     ProductResponse createProduct(ProductDTO productDTO) throws Exception;
-    Product getProductById(int id) throws Exception;
+    Product getProductById(int id);
     Page<ProductResponse> getAllProducts(PageRequest pageRequest);
     ProductResponse updateProduct(int id, ProductDTO productDTO) throws Exception;
     void deleteProduct(int id);
