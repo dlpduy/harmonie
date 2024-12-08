@@ -35,7 +35,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         //Allow all requests without authentication
-        //filterChain.doFilter(request, response);
 
         if (isBypassToken(request)) {
             //Allow requests without authentication
@@ -81,6 +80,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 return true;
             }
         }
+        //Temporary bypass for testing
         return false;
     }
 }

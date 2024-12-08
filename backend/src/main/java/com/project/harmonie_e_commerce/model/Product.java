@@ -50,10 +50,6 @@ public class Product {
     @Column(name = "status")
     private ProductStatus productStatus;
 
-//    num_image 		INT 			DEFAULT 0,
-    @Column(name = "num_image")
-    private Integer numImage;
-
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

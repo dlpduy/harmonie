@@ -63,28 +63,30 @@
          productRepository.save(newProduct);
          return ProductResponse.fromProduct(newProduct);
      }
-
+    private void updateNumImage(Product existingProduct){
+        String folderPath = "./src/main/resources/public/images/"+String.valueOf(existingProduct.getId()); // Thay bằng đường dẫn tới folder của bạn
+        File folder = new File(folderPath);
+        if (!folder.isDirectory()) {
+            existingProduct.setNumImage(0);
+        }else {
+            File[] imageFiles = folder.listFiles(file -> {
+                String fileName = file.getName().toLowerCase();
+                return file.isFile() && (fileName.endsWith(".jpg") || fileName.endsWith(".png") || fileName.endsWith(".jpeg"));
+            });
+            if(imageFiles!=null){
+                existingProduct.setNumImage(imageFiles.length);
+            }
+            else{
+                existingProduct.setNumImage(0);
+            }
+        }
+        productRepository.save(existingProduct);
+    }
      @Override
-     public Product getProductById(int productId) throws Exception {
+     public Product getProductById(int productId)  {
          Product existingProduct = productRepository.findById(productId).orElseThrow(() -> new DataNotFoundException(
                  "Cannot find product with id =" + productId));
-         String folderPath = "./src/main/resources/public/images/"+String.valueOf(productId); // Thay bằng đường dẫn tới folder của bạn
-         File folder = new File(folderPath);
-         if (!folder.isDirectory()) {
-             existingProduct.setNumImage(0);
-         }else {
-             File[] imageFiles = folder.listFiles(file -> {
-                 String fileName = file.getName().toLowerCase();
-                 return file.isFile() && (fileName.endsWith(".jpg") || fileName.endsWith(".png") || fileName.endsWith(".jpeg"));
-             });
-             if(imageFiles!=null){
-                 existingProduct.setNumImage(imageFiles.length);
-             }
-             else{
-                 existingProduct.setNumImage(0);
-             }
-         }
-         productRepository.save(existingProduct);
+         updateNumImage(existingProduct);
          return existingProduct;
      }
 
@@ -96,7 +98,7 @@
      }
 
      @Override
-     public String uploadImage(Integer id, List<MultipartFile> files) throws Exception {
+     public String uploadImages(Integer id, List<MultipartFile> files) throws Exception {
          for (MultipartFile file : files) {
              if (file.getSize() == 0)
                  continue;
@@ -111,6 +113,7 @@
              }
              String filename = storeFile(file, id);
          }
+         updateNumImage(getProductById(id));
          return "Upload successfully!";
      }
      // store file to public/images/{product id} folder
@@ -135,24 +138,13 @@
              ProductDTO productDTO)
              throws Exception {
          Product existingProduct = getProductById(id);
-         if (existingProduct != null) {
              // copy các thuộc tính từ DTO -> Product
              // Có thể sử dụng ModelMapper
              Category existingCategory = categoryRepository
                      .findById(productDTO.getCategoryId())
                      .orElseThrow(() -> new DataNotFoundException(
                              "Cannot find category with id: " + productDTO.getCategoryId()));
-//    .store(existingStore)
-//                     .name(productDTO.getName())
-//                     .brand(productDTO.getBrand())
-//                     .price(productDTO.getPrice())
-//                     .quantity(productDTO.getQuantity())
-//                     .description(productDTO.getDescription())
-//                     .buyingCount(0)
-//                     .ratingCount(0)
-//                     .avgRating(0f)
-//                     .category(existingCategory)
-//                     .productStatus(Product.ProductStatus.enable)
+
                 existingProduct.setStore(existingProduct.getStore());
                 existingProduct.setCategory(existingCategory);
                 existingProduct.setName(productDTO.getName());
@@ -164,11 +156,7 @@
                 existingProduct.setBuyingCount(productDTO.getBuyingCount());
                 existingProduct.setRatingCount(productDTO.getRatingCount());
                 existingProduct.setAvgRating(productDTO.getAvgRating());
-
-
              return ProductResponse.fromProduct(productRepository.save(existingProduct));
-         }
-         return null;
      }
 
      @Override

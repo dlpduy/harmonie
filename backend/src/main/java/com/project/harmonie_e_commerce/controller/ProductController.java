@@ -59,8 +59,8 @@ public class ProductController {
                                           @RequestParam("files") List<MultipartFile> files) {
         try {
             List<ProductImage> productImages = new ArrayList<>();
-            productService.uploadImages(id, files);
-            return ResponseEntity.ok("Images uploaded successfully");
+
+            return ResponseEntity.ok(productService.uploadImages(id, files));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

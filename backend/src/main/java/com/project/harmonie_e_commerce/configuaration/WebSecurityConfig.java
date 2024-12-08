@@ -20,7 +20,7 @@ public class WebSecurityConfig {
 //         Tắt tính năng CSRF (Cross-Site Request Forgery) trong Spring Security.
         http.csrf(AbstractHttpConfigurer::disable)
                 //add a filter before the UsernamePasswordAuthenticationFilter
-                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 //config rules for authorize requests
                 .authorizeHttpRequests(requests -> {
                     requests.requestMatchers("**")

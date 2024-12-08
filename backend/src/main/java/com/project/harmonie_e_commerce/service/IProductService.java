@@ -15,7 +15,7 @@ public interface IProductService {
     ProductResponse createProduct(ProductDTO productDTO) throws Exception;
     Product getProductById(int id);
     Page<ProductResponse> getAllProducts(PageRequest pageRequest);
-    String uploadImage(Integer productId, List<MultipartFile> files) throws Exception;
+    String uploadImages(Integer productId, List<MultipartFile> files) throws Exception;
     ProductResponse updateProduct(int id, ProductDTO productDTO) throws Exception;
     void deleteProduct(int id);
     boolean existsByName(String name);
