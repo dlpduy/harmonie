@@ -19,6 +19,6 @@ public interface IStoreService{
 
     List<StoreDiscountRespone> showAllStoreDiscountInStore(Integer storeId) throws Exception;
 
-    StatisticResponse getStatisticOfStore(Integer storeId) throws Exception;
+    StatisticResponse getStatisticOfStore(Integer storeId, Integer day, Integer month, Integer year) throws Exception;
 
 }
