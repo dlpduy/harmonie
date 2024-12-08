@@ -48,17 +48,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             final String email = jwtTokenUtil.extractEmail(token);
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-                if(jwtTokenUtil.validateToken(token, userDetails)){
+                if (jwtTokenUtil.validateToken(token, userDetails)) {
                     UsernamePasswordAuthenticationToken authenticationToken =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             }
-            filterChain.doFilter(request, response);
-        } else {
-            throw new RuntimeException("Token is missing");
+
         }
+        filterChain.doFilter(request, response);
     }
     private boolean isBypassToken(@NotNull HttpServletRequest request){
         //These are the endpoints that don't need authentication(token)
