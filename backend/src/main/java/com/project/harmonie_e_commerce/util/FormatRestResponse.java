@@ -53,7 +53,7 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
         
 
 
-    // If the body is a string (string from error message exception)
+    // If the body is a string (string from error message exception or inserted noitification,...)
     // needs to handle it differently
     if (body instanceof String) {
         res.setMessage(body);
