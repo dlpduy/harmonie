@@ -119,12 +119,13 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable("id") int productId) {
-        try {
+//        try {
+            Product product = productService.getProductById(productId);
             return ResponseEntity.ok(ProductResponse
-                    .fromProduct(productService.getProductById(productId)));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+                    .fromProduct(product));
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
 
     }
 

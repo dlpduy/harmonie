@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS users (
 	phone           VARCHAR(10)     UNIQUE                      NOT NULL,
 	email           VARCHAR(50)    	UNIQUE                      NOT NULL,
 	creation_date   TIMESTAMP       DEFAULT CURRENT_TIMESTAMP   NOT NULL,
-	password 		VARCHAR(65) 								NOT NULL
+	password 		VARCHAR(65) 								NOT NULL,
+    role			ENUM ('ADMIN','USER') 	default				'USER'
 );
 
 
@@ -53,7 +54,9 @@ CREATE TABLE IF NOT EXISTS products (
 	rating_count    INT             DEFAULT 0,
     avg_rating      DECIMAL(5,2)    DEFAULT 0.0,
 	category_id     INT 			DEFAULT NULL,
+    num_image 		INT 			DEFAULT 0,
     status			ENUM ('enable','disable')	default 'enable',
+    
 	FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE CASCADE,
 	FOREIGN KEY (category_id) REFERENCES categories(id)
 );
@@ -159,7 +162,7 @@ DROP TABLE IF EXISTS shipping_discounts;
 CREATE TABLE IF NOT EXISTS shipping_discounts (
 
 	id			  INT             		AUTO_INCREMENT						PRIMARY KEY,
-  discount_id	  INT											NOT NULL,
+    discount_id	  INT											NOT NULL,
 	max_amount    DECIMAL(10,2)                               	NOT NULL,
 
 	FOREIGN KEY (discount_id) REFERENCES discounts(id) ON DELETE CASCADE
@@ -186,8 +189,8 @@ CREATE TABLE IF NOT EXISTS boxes ( -- each store in one order has a box of their
 	id               		INT             AUTO_INCREMENT              PRIMARY KEY,
 	store_id				int				NOT NULL,
     order_id		INT                                         NOT NULL,
-	storeDiscount_id 		INT             DEFAULT NULL,
-	shippingDiscount_id 	INT             DEFAULT NULL,
+	store_discount_id 		INT             DEFAULT NULL,
+	shipping_discount_id 	INT             DEFAULT NULL,
 	shipper_name	 		VARCHAR(50)                                 NOT NULL,
 	shipper_phone	 		VARCHAR(10)                                 NOT NULL,
 	total_price      		DECIMAL(10,2)                               NOT NULL,
@@ -198,9 +201,9 @@ CREATE TABLE IF NOT EXISTS boxes ( -- each store in one order has a box of their
 	status           		ENUM('Pending', 'Shipped', 'Delivered')     DEFAULT 'Pending',
 
 	foreign key (store_id) references stores(id),
-	FOREIGN KEY (storeDiscount_id) REFERENCES store_discounts(id),
+	FOREIGN KEY (store_discount_id) REFERENCES store_discounts(id),
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
-	FOREIGN KEY (shippingDiscount_id) REFERENCES shipping_discounts(id)
+	FOREIGN KEY (shipping_discount_id) REFERENCES shipping_discounts(id)
 );
 
 
@@ -216,3 +219,6 @@ CREATE TABLE IF NOT EXISTS products_in_boxes (
 	FOREIGN KEY (box_id) REFERENCES boxes(id) ON DELETE CASCADE,
 	FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
+
+
+
