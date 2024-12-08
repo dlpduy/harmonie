@@ -43,6 +43,9 @@ public class Product {
     @Column(name = "avg_rating", columnDefinition = "DECIMAL(5,2) DEFAULT 0.0")
     private Float avgRating;
 
+    @Column(name = "num_image")
+    private Integer numImage;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private ProductStatus productStatus;

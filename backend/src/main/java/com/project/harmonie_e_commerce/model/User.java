@@ -67,6 +67,7 @@ public class User implements UserDetails {
         ADMIN,
         USER
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();

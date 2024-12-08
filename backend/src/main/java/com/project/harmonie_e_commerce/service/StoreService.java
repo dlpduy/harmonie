@@ -11,6 +11,10 @@ import com.project.harmonie_e_commerce.response.StoreDiscountRespone;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,7 +105,7 @@ public class StoreService implements IStoreService {
     }
 
     @Override
-    public StatisticResponse getStatisticOfStore(Integer storeId) throws Exception {
+    public StatisticResponse getStatisticOfStore(Integer storeId, Integer day, Integer month, Integer year) throws Exception {
 
         Store store = storeRepository.findById(storeId).orElseThrow(
                 () -> new DataNotFoundException("Store not found")
@@ -109,14 +113,25 @@ public class StoreService implements IStoreService {
 
         List<Box> boxList = boxRepository.findAllByStore(store);
 
+        LocalDate date = LocalDate.of(year,month,day);
+
         Float sumPrice = 0F;
+        Integer numBox = 0;
 
         for(Box box:boxList){
-            sumPrice += box.getTotalPrice();
+            Timestamp timestamp = box.getPackingDate();
+            LocalDate dateFromTimestamp = timestamp.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            if (date.equals(dateFromTimestamp)) {
+                sumPrice += box.getTotalPrice();
+                numBox++;
+            }
         }
 
         return StatisticResponse.builder()
-                .nb_of_boxes(boxList.size())
+                .date(date)
+                .nb_of_boxes(numBox)
                 .totalPrice(sumPrice)
                 .build();
     }
