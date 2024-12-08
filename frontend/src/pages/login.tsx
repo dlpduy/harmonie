@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../styles/Form.module.css';
-import backgroungImage from '../assets/images/bglogin.png';
+import backgroungImage from '../assets/images/background.jpg';
 import { Link } from 'react-router-dom';
 import { Button } from 'antd';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
@@ -8,6 +8,12 @@ import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 
 const LoginPage: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [fName, setFName] = useState<string>('');
+    const [lName, setLName] = useState<string>('');
+    const [phone, setPhone] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+
     return (
         <main className={styles.loginPage}>
             <section className={styles.mainContent}>
@@ -36,6 +42,8 @@ const LoginPage: React.FC = () => {
                         <input
                             type="email"
                             id="username"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             className={styles.inputField}
                             placeholder="Email"
                             style={{ outline: 'none' }}
@@ -71,7 +79,11 @@ const LoginPage: React.FC = () => {
                             />
                         </div>
 
-                        <button type="submit" className={styles.loginButton}>
+                        <button
+                            type="submit"
+                            className={styles.loginButton}
+                            onClick={() => console.log()}
+                        >
                             Đăng nhập
                         </button>
 

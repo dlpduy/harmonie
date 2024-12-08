@@ -1,6 +1,6 @@
 
 import axios from './axios.customize';
-const createUserAPI = (fullName, email, password, phoneNumber) => {
+const createUserAPI = (fullName: String, email: String, password: String, phoneNumber: String) => {
     const URL_BACKEND = "/api/v1/user";
     const data = {
         fullName: fullName,
@@ -11,7 +11,7 @@ const createUserAPI = (fullName, email, password, phoneNumber) => {
     return axios.post(URL_BACKEND, data)
 }
 
-const updateUserAPI = (_id, fullName, phone) => {
+const updateUserAPI = (_id: Number, fullName: String, phone: String) => {
     const URL_BACKEND = "/api/v1/user";
     const data = {
         _id: _id,
@@ -21,13 +21,13 @@ const updateUserAPI = (_id, fullName, phone) => {
     return axios.put(URL_BACKEND, data)
 }
 
-const deleteUserAPI = (_id) => {
+const deleteUserAPI = (_id: Number) => {
     const URL_BACKEND = `/api/v1/user/${_id}`;
     //console.log(URL_BACKEND)
     return axios.delete(URL_BACKEND)
 }
 
-const uploadFileAPI = (file, folder) => {
+const uploadFileAPI = (file: File, folder: any) => {
     const URL_BACKEND = "/api/v1/file/upload";
     let config = {
         headers: {
@@ -40,12 +40,12 @@ const uploadFileAPI = (file, folder) => {
     return axios.post(URL_BACKEND, bodyFormData, config)
 }
 
-const fetchAllUsersAPI = (current, pageSize) => {
+const fetchAllUsersAPI = (current: Number, pageSize: Number) => {
     const URL_BACKEND = `/api/v1/user?current=${current}&pageSize=${pageSize}`;
     return axios.get(URL_BACKEND)
 }
 
-const updateUserAvatarAPI = (avatar, _id, fullName, phone) => {
+const updateUserAvatarAPI = (avatar: String, _id: Number, fullName: String, phone: String) => {
     const URL_BACKEND = "/api/v1/user";
     const data = {
         _id: _id,
@@ -56,7 +56,7 @@ const updateUserAvatarAPI = (avatar, _id, fullName, phone) => {
     return axios.put(URL_BACKEND, data)
 }
 
-const registerUserAPI = (fullName, email, password, phoneNumber) => {
+const registerUserAPI = (fullName: String, email: String, password: String, phoneNumber: String) => {
     const URL_BACKEND = "/api/v1/user/register";
     const data = {
         fullName: fullName,
@@ -67,7 +67,7 @@ const registerUserAPI = (fullName, email, password, phoneNumber) => {
     return axios.post(URL_BACKEND, data)
 }
 
-const loginUserAPI = (email, password) => {
+const loginUserAPI = (email: String, password: String) => {
     const URL_BACKEND = "api/v1/auth/login"
     const data = {
         username: email,

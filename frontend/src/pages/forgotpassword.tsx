@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../styles/Form.module.css';
-import backgroungImage from '../assets/images/bglogin.png';
+import backgroungImage from '../assets/images/background.jpg';
 import { Link } from 'react-router-dom';
 
 

@@ -1,12 +1,36 @@
 import React, { useState } from 'react';
 import styles from '../styles/Form.module.css';
-import backgroungImage from '../assets/images/bglogin.png';
+import backgroungImage from '../assets/images/background.jpg';
 import { Link } from 'react-router-dom';
-import { Button } from 'antd';
+import { Button, Input, notification } from 'antd';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
+//import { registerAPI } from '../services/api.service1';
 
 const RegisterPage: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [fName, setFName] = useState<string>('');
+    const [lName, setLName] = useState<string>('');
+    const [phone, setPhone] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async () => {
+        try {
+            setLoading(true);
+            // const response = await registerAPI(fName, lName, phone, email, password)
+            //console.log(response)
+        }
+        catch (error: any) {
+            notification.error({
+                message: 'Error',
+                description: `${error.toString()}`,
+            });
+            setLoading(false);
+
+        }
+        console.log(fName, lName, phone, email, password);
+    };
 
     return (
         <main className={styles.loginPage}>
@@ -21,22 +45,53 @@ const RegisterPage: React.FC = () => {
                     <form
                         className={styles.loginFormContainer}
                         style={{
-                            marginTop: '-5px',
-                            marginBottom: '-5px',
+                            height: '100%',
+                            scale: '0.9',
+                            marginTop: '-3.8%',
+                            marginBottom: '-3.8%',
                         }}
                     >
                         <h1 className={styles.formTitle}>
                             Thông tin đăng ký
                         </h1>
 
-                        <label htmlFor="fullName" className={styles['visually-hidden']}>
-                            Họ và tên
+                        <label htmlFor="fName" className={styles['visually-hidden']}>
+                            Tên
                         </label>
                         <input
                             type="text"
                             className={styles.inputField}
-                            placeholder="Họ và tên"
+                            placeholder="Tên"
                             style={{ outline: 'none' }}
+                            value={fName}
+                            onChange={(e) => setFName(e.target.value)}
+                            required
+                        />
+
+                        <label htmlFor="lName" className={styles['visually-hidden']}>
+                            Họ và tên đệm
+                        </label>
+                        <input
+                            type="text"
+                            className={styles.inputField}
+                            placeholder="Họ và tên đệm"
+                            style={{ outline: 'none' }}
+                            value={lName}
+                            onChange={(e) => setLName(e.target.value)}
+                            required
+                        />
+
+                        <label htmlFor="phone" className={styles['visually-hidden']}>
+                            Số điện thoại
+                        </label>
+                        <input
+                            type="tel"
+                            className={styles.inputField}
+                            placeholder="Số điện thoại"
+                            style={{ outline: 'none' }}
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            required
                         />
 
                         <label htmlFor="email" className={styles['visually-hidden']}>
@@ -47,6 +102,9 @@ const RegisterPage: React.FC = () => {
                             className={styles.inputField}
                             placeholder="Email"
                             style={{ outline: 'none' }}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
                         />
 
                         <div className={styles.passwordContainer}>
@@ -64,6 +122,9 @@ const RegisterPage: React.FC = () => {
                                     height: '100%',
                                     outline: 'none',
                                 }}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
                             />
                             <Button
                                 icon={showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
@@ -73,14 +134,28 @@ const RegisterPage: React.FC = () => {
                                     color: '#000',
                                     background: 'transparent',
                                     border: 'none',
+                                    marginTop: '-1%',
                                     outline: 'none',
                                 }}
                             />
                         </div>
 
-                        <button type="submit" className={styles.loginButton}>
+                        <Button
+                            aria-label="Đăng ký tài khoản"
+                            className={styles.loginButton}
+                            onClick={() => handleSubmit()}
+                            loading={loading}
+                            style={{
+                                color: '#fff',
+                                backgroundColor: '#4260fc',
+                                border: 'none',
+                                outline: 'none',
+                                height: '80px',
+
+                            }}
+                        >
                             Đăng ký
-                        </button>
+                        </Button>
 
                         <nav className={styles.linksContainer}>
                             <Link to="/login" className={styles.forgotPasswordLink}> Đã có tài khoản? </Link>

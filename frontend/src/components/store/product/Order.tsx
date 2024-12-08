@@ -1,5 +1,6 @@
 
 import styles from '../../../styles/Management.module.css';
+
 const orders = [
     { id: 1, code: 'KH13249', date: '06/11/2024', totalCost: '100.202', status: 'Đã giao' },
     { id: 2, code: 'KH13523', date: '07/11/2024', totalCost: '100.423', status: 'Chưa giao' },
@@ -40,7 +41,6 @@ export const Order = () => {
                                 <td>{order.code}</td>
                                 <td>{order.date}</td>
                                 <td>{order.totalCost}</td>
-                                <td>{order.status}</td>
                                 <td>
                                     <button
                                         style={{
@@ -50,7 +50,19 @@ export const Order = () => {
                                             fontSize: '16px',
                                             cursor: 'pointer',
                                             fontWeight: 'bold',
-                                            color: '#000000'
+                                            color: order.status === 'Đã giao' ? 'green' : 'red',
+                                        }}
+                                    >{order.status}</button>
+                                </td>
+                                <td>
+                                    <button
+                                        style={{
+                                            textDecoration: 'underline',
+                                            border: 'none',
+                                            backgroundColor: 'transparent',
+                                            fontSize: '16px',
+                                            cursor: 'pointer',
+                                            fontWeight: 'bold',
                                         }}
                                     >Chi tiết</button>
                                 </td>
