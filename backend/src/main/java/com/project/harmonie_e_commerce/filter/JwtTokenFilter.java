@@ -1,6 +1,9 @@
 package com.project.harmonie_e_commerce.filter;
 
+import com.project.harmonie_e_commerce.component.CustomAccessDeniedHandler;
+import com.project.harmonie_e_commerce.component.CustomAuthenticationEntryPoint;
 import com.project.harmonie_e_commerce.component.JwtTokenUtil;
+import com.project.harmonie_e_commerce.model.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,6 +32,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private String apiPrefix;
     private final JwtTokenUtil jwtTokenUtil;
     private final UserDetailsService userDetailsService;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
@@ -36,28 +42,28 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         //Allow all requests without authentication
         //filterChain.doFilter(request, response);
-
-        if (isBypassToken(request)) {
-            //Allow requests without authentication
-            filterChain.doFilter(request, response);
-            return;
-        }
-        final String authHeader = request.getHeader("Authorization");
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        try{
+            final String authHeader = request.getHeader("Authorization");
+            if(authHeader == null || !authHeader.startsWith("Bearer ")){
+                throw new AuthenticationException("Unauthorized") {};
+            }
             final String token = authHeader.substring(7);
-            final String email = jwtTokenUtil.extractEmail(token);
-            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-                if (jwtTokenUtil.validateToken(token, userDetails)) {
+            final String phoneNumber = jwtTokenUtil.extractEmail(token);
+            if (phoneNumber != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                User user = (User)userDetailsService.loadUserByUsername(phoneNumber);
+                if(jwtTokenUtil.validateToken(token, user)){
                     UsernamePasswordAuthenticationToken authenticationToken =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                            new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
-            }
 
+            }
+            filterChain.doFilter(request, response);
+        }catch (Exception e) {
+            customAuthenticationEntryPoint.commence(request, response, new AuthenticationException("Unauthorized") {});
         }
-        filterChain.doFilter(request, response);
+
     }
     private boolean isBypassToken(@NotNull HttpServletRequest request){
         //These are the endpoints that don't need authentication(token)

@@ -1,5 +1,6 @@
 package com.project.harmonie_e_commerce.service;
 
+import com.project.harmonie_e_commerce.exception.DataNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.project.harmonie_e_commerce.model.Order;
@@ -181,7 +182,7 @@ public class OrderService {
 
     public OrderResponse getOrderById(HttpServletRequest request, Integer id) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order id=" + id + " not found"));
+                .orElseThrow(() -> new DataNotFoundException("Order id=" + id + " not found"));
         return OrderResponse.fromOrder(order, boxRepository, productInBoxRepository);
     }
 
