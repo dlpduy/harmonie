@@ -16,7 +16,7 @@ public class BoxController {
 
     private final ProductInBoxService productInBoxService;
 
-    @GetMapping("/{box_id}")
+    @GetMapping("/show/{box_id}")
     public ResponseEntity<?> getAllProductInBox(
             @PathVariable Integer box_id
     ){

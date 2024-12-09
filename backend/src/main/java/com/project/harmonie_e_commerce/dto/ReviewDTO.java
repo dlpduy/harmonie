@@ -16,5 +16,4 @@ import java.sql.Timestamp;
 public class ReviewDTO {
     private Integer rating;
     private String text;
-    private Timestamp time;
 }
