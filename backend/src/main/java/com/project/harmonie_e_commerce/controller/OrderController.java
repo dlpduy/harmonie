@@ -56,7 +56,7 @@ public class OrderController {
    @PostMapping("")
    public ResponseEntity<?> createOrder(HttpServletRequest request,
    @Valid @RequestBody OrderDTO orderRequest){
-        String respone = orderService.createOrder(request, orderRequest);
+        Map<String, Integer> respone = orderService.createOrder(request, orderRequest);
         return ResponseEntity.ok(respone);
    }
 
