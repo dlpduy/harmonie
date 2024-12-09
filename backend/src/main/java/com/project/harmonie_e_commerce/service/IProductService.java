@@ -19,4 +19,6 @@ public interface IProductService {
     boolean existsByName(String name);
     ProductImage createProductImage(ProductImageDTO productImageDTO) throws Exception;
     List<ProductImage> getProductImagesByProductId(int productId);
+
+    List<ProductResponse> getProductsByCategoryId(Integer category_id);
 }

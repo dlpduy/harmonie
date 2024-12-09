@@ -4,20 +4,16 @@
  import com.project.harmonie_e_commerce.dto.ProductDTO;
  import com.project.harmonie_e_commerce.dto.ProductImageDTO;
  import com.project.harmonie_e_commerce.exception.DataNotFoundException;
- import com.project.harmonie_e_commerce.model.Category;
- import com.project.harmonie_e_commerce.model.Product;
- import com.project.harmonie_e_commerce.model.ProductImage;
- import com.project.harmonie_e_commerce.model.Store;
- import com.project.harmonie_e_commerce.repository.CategoryRepository;
- import com.project.harmonie_e_commerce.repository.ProductImageRepository;
- import com.project.harmonie_e_commerce.repository.ProductRepository;
- import com.project.harmonie_e_commerce.repository.StoreRepository;
+ import com.project.harmonie_e_commerce.model.*;
+ import com.project.harmonie_e_commerce.repository.*;
+ import com.project.harmonie_e_commerce.response.ProductInBoxRespone;
  import com.project.harmonie_e_commerce.response.ProductResponse;
  import lombok.RequiredArgsConstructor;
  import org.springframework.data.domain.Page;
  import org.springframework.data.domain.PageRequest;
  import org.springframework.stereotype.Service;
 
+ import java.util.ArrayList;
  import java.util.List;
  import java.util.Optional;
 
@@ -28,6 +24,7 @@
      private final CategoryRepository categoryRepository;
      private final ProductImageRepository productImageRepository;
      private final StoreRepository storeRepository;
+     private final BoxRepository boxRepository;
 
      @Override
      public ProductResponse createProduct(ProductDTO productDTO) throws DataNotFoundException {
@@ -138,4 +135,21 @@
      public List<ProductImage> getProductImagesByProductId(int productId) {
          return productImageRepository.findByProductId(productId);
      }
+
+     @Override
+     public List<ProductResponse> getProductsByCategoryId(Integer category_id) {
+         Category category = categoryRepository.findById(category_id).orElseThrow(
+                () -> new DataNotFoundException("Cannot find category with id: " + category_id)
+         );
+         List<Product> productList = productRepository.findAllByCategoryId(category_id);
+         List<ProductResponse> responseList = new ArrayList<>();
+
+         for (Product p : productList){
+             responseList.add(ProductResponse.fromProduct(p));
+         }
+
+         return responseList;
+     }
+
+
  }
