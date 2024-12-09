@@ -19,6 +19,8 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class StoreDiscountRespone {
+    @JsonProperty("id")
+    Integer id;
     String code;
     Integer quantity;
     @JsonProperty("release_date")
@@ -33,6 +35,7 @@ public class StoreDiscountRespone {
     static public StoreDiscountRespone fromStoreDiscount(StoreDiscount storeDiscount){
         return storeDiscount == null ? null :
             StoreDiscountRespone.builder()
+                .id(storeDiscount.getDiscount().getId())
                 .code(storeDiscount.getDiscount().getCode())
                 .quantity(storeDiscount.getDiscount().getQuantity())
                 .releaseDate(storeDiscount.getDiscount().getReleaseDate())
