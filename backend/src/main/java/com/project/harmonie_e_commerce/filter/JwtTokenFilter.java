@@ -48,16 +48,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 throw new AuthenticationException("Unauthorized") {};
             }
             final String token = authHeader.substring(7);
-            final String phoneNumber = jwtTokenUtil.extractEmail(token);
-            if (phoneNumber != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                User user = (User)userDetailsService.loadUserByUsername(phoneNumber);
+            final String email = jwtTokenUtil.extractEmail(token);
+            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                User user = (User)userDetailsService.loadUserByUsername(email);
                 if(jwtTokenUtil.validateToken(token, user)){
                     UsernamePasswordAuthenticationToken authenticationToken =
                             new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
-
             }
             filterChain.doFilter(request, response);
         }catch (Exception e) {

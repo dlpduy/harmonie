@@ -33,6 +33,9 @@ public class ProductResponse {
     @JsonProperty("avg_rating")
     private Float avgRating;
 
+    @JsonProperty("num_image")
+    private Integer numImage;
+
     @JsonProperty("status")
     private String productStatus;
 
@@ -51,6 +54,7 @@ public class ProductResponse {
             .description(product.getDescription())
             .ratingCount(product.getRatingCount())
             .avgRating(product.getAvgRating())
+            .numImage(product.getNumImage())
             .productStatus(product.getProductStatus().name())
             .categoryId(product.getCategory().getId())
             .build();

@@ -82,6 +82,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
 
+    @ExceptionHandler(UnsupportMediaException.class)
+    public ResponseEntity<RestResponse<Object>> handleUnsupportMediaException(Exception e) {
+        RestResponse<Object> res = new RestResponse<>();
+        res.setStatusCode(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value());
+        res.setError("Unsupport Media");
+        res.setMessage(e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(res);
+    }
+    @ExceptionHandler(FileTooLargeException.class)
+    public ResponseEntity<RestResponse<Object>> handleFileTooLargeException(Exception e) {
+        RestResponse<Object> res = new RestResponse<>();
+        res.setStatusCode(HttpStatus.PAYLOAD_TOO_LARGE.value());
+        res.setError("File Too Large");
+        res.setMessage(e.getMessage());
+        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(res);
+    }
     // Xử lý ngoại lệ chung
     @ExceptionHandler(Exception.class)
     public ResponseEntity<RestResponse<Object>> handleGeneralException(Exception ex) {
