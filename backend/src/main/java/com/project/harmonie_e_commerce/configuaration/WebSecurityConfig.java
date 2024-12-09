@@ -1,5 +1,7 @@
 package com.project.harmonie_e_commerce.configuaration;
 
+import com.project.harmonie_e_commerce.component.CustomAccessDeniedHandler;
+import com.project.harmonie_e_commerce.component.CustomAuthenticationEntryPoint;
 import com.project.harmonie_e_commerce.filter.JwtTokenFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,11 +16,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final JwtTokenFilter jwtTokenFilter;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
 //         Tắt tính năng CSRF (Cross-Site Request Forgery) trong Spring Security.
-        http.csrf(AbstractHttpConfigurer::disable)
+        http
+                .csrf(AbstractHttpConfigurer::disable)
                 //add a filter before the UsernamePasswordAuthenticationFilter
 //                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 //config rules for authorize requests
@@ -27,7 +31,12 @@ public class WebSecurityConfig {
                             //allow all requests without authentication
                             .permitAll();
 
-                });
+                })
+                .exceptionHandling(
+                        exceptions -> exceptions
+                                .authenticationEntryPoint(customAuthenticationEntryPoint) // 401
+                                .accessDeniedHandler(customAccessDeniedHandler)
+                );
         //build the http security configuration and return it
         return http.build();
     }
