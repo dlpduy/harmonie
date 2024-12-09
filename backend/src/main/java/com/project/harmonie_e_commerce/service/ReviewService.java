@@ -37,7 +37,6 @@ public class ReviewService implements IReviewService{
         Review review = Review.builder()
                 .text(reviewDTO.getText())
                 .rating(reviewDTO.getRating())
-                .time(reviewDTO.getTime())
                 .product(product)
                 .user(user)
                 .build();

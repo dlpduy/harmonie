@@ -42,6 +42,9 @@ public class ProductResponse {
     @JsonProperty("category_id")
     private Integer categoryId;
 
+    @JsonProperty("category_name")
+    private String categoryName;
+
     public static ProductResponse fromProduct(Product product) {
         return ProductResponse.builder()
             .id(product.getId())
@@ -57,6 +60,7 @@ public class ProductResponse {
             .numImage(product.getNumImage())
             .productStatus(product.getProductStatus().name())
             .categoryId(product.getCategory().getId())
+            .categoryName(product.getCategory().getName())
             .build();
     }
 }
