@@ -166,4 +166,11 @@ public class ProductController {
         }
         return ResponseEntity.ok("Fake products generated successfully");
     }
+
+    @GetMapping("/category/{category_id}")
+    public ResponseEntity<?> getAllProductsByCategoryId(
+            @PathVariable Integer category_id
+    ){
+        return ResponseEntity.ok(productService.getProductsByCategoryId(category_id));
+    }
 }
