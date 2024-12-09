@@ -7,6 +7,7 @@ import com.project.harmonie_e_commerce.model.ProductImage;
 import com.project.harmonie_e_commerce.response.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public interface IProductService {
     ProductResponse createProduct(ProductDTO productDTO) throws Exception;
     Product getProductById(int id);
     Page<ProductResponse> getAllProducts(PageRequest pageRequest);
+    String uploadImages(Integer productId, List<MultipartFile> files) throws Exception;
     ProductResponse updateProduct(int id, ProductDTO productDTO) throws Exception;
     void deleteProduct(int id);
     boolean existsByName(String name);

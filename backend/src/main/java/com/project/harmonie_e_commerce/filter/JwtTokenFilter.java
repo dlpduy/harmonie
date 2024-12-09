@@ -35,7 +35,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         //Allow all requests without authentication
-        //filterChain.doFilter(request, response);
 
         if (isBypassToken(request)) {
             //Allow requests without authentication
@@ -55,10 +54,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             }
-            filterChain.doFilter(request, response);
-        } else {
-            throw new RuntimeException("Token is missing");
+
         }
+        filterChain.doFilter(request, response);
     }
     private boolean isBypassToken(@NotNull HttpServletRequest request){
         //These are the endpoints that don't need authentication(token)
@@ -82,6 +80,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 return true;
             }
         }
+        //Temporary bypass for testing
         return false;
     }
 }
