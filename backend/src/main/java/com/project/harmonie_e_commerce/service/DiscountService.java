@@ -33,7 +33,7 @@ public class DiscountService implements IDiscountService{
 
     @Override
     @Transactional
-    public StoreDiscountRespone createStoreDiscount(Integer storeId, StoreDiscountDTO storeDiscountDTO) throws Exception {
+    public StoreDiscountRespone createStoreDiscount(Integer storeId, StoreDiscountDTO storeDiscountDTO) {
         Discount discount = createDiscount(
                 storeDiscountDTO.getCode(),
                 storeDiscountDTO.getQuantity(),
@@ -58,7 +58,7 @@ public class DiscountService implements IDiscountService{
 
     @Override
     @Transactional
-    public ShippingDiscountRespone createShippingDiscount(ShippingDiscountDTO shippingDiscountDTO) throws Exception {
+    public ShippingDiscountRespone createShippingDiscount(ShippingDiscountDTO shippingDiscountDTO) {
         Discount discount = createDiscount(
                 shippingDiscountDTO.getCode(),
                 shippingDiscountDTO.getQuantity(),
@@ -79,7 +79,7 @@ public class DiscountService implements IDiscountService{
 
     @Override
     @Transactional
-    public SystemDiscountResponse createSystemDiscount(SystemDiscountDTO systemDiscountDTO) throws Exception {
+    public SystemDiscountResponse createSystemDiscount(SystemDiscountDTO systemDiscountDTO) {
         Discount discount = createDiscount(
                 systemDiscountDTO.getCode(),
                 systemDiscountDTO.getQuantity(),
@@ -112,7 +112,7 @@ public class DiscountService implements IDiscountService{
     }
 
     @Override
-    public List<StoreDiscountRespone> getAllStoreDiscount(Integer storeId) throws Exception {
+    public List<StoreDiscountRespone> getAllStoreDiscount(Integer storeId){
 
         Store store = storeRepository.findById(storeId).orElseThrow(
                 () -> new DataNotFoundException("Store not found")

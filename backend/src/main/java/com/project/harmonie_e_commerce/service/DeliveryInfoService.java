@@ -22,7 +22,7 @@ public class DeliveryInfoService implements IDeliveryInfoService{
     private final UserRepository userRepository;
 
     @Override
-    public DIResponse createDeliveryInfo(Integer userId, DeliveryInformationDTO dto) throws Exception {
+    public DIResponse createDeliveryInfo(Integer userId, DeliveryInformationDTO dto){
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new DataNotFoundException("User not found")
         );
@@ -42,7 +42,7 @@ public class DeliveryInfoService implements IDeliveryInfoService{
     }
 
     @Override
-    public List<DIResponse> showAllDeliInfo(Integer userId) throws Exception {
+    public List<DIResponse> showAllDeliInfo(Integer userId){
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new DataNotFoundException("User not found")
         );
@@ -60,7 +60,7 @@ public class DeliveryInfoService implements IDeliveryInfoService{
     }
 
     @Override
-    public DIResponse updateDeliveryInfo(Integer id, DeliveryInformationDTO dto) throws Exception {
+    public DIResponse updateDeliveryInfo(Integer id, DeliveryInformationDTO dto){
         DeliveryInformation deliveryInformation = deliveryInformationRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("Not found Delivery Information")
         );
@@ -78,7 +78,7 @@ public class DeliveryInfoService implements IDeliveryInfoService{
     }
 
     @Override
-    public void deleteDeliInfo(Integer id) throws Exception{
+    public void deleteDeliInfo(Integer id) {
         DeliveryInformation deliveryInformation = deliveryInformationRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("Not found Delivery Information")
         );
@@ -87,7 +87,7 @@ public class DeliveryInfoService implements IDeliveryInfoService{
     }
 
     @Override
-    public DIResponse getById(Integer id) throws Exception{
+    public DIResponse getById(Integer id){
         return DIResponse.fromDeliveryInformation(deliveryInformationRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("Not found Delivery Information")
         ));

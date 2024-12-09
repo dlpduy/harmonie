@@ -15,13 +15,13 @@ import org.springframework.data.domain.PageRequest;
 import java.util.List;
 
 public interface ICartService {
-    List<ProductInCartResponse> getAllProductsInCart(Integer userId) throws Exception;
+    List<ProductInCartResponse> getAllProductsInCart(Integer userId);
 
-    void deleteItemInCart(Integer product_id, Integer userId) throws Exception;
+    void deleteItemInCart(Integer product_id, Integer userId);
 
-    ProductInCart addProductToCart(Integer product_id, Integer userId) throws Exception;
+    ProductInCart addProductToCart(Integer product_id, Integer userId);
 
-    ProductInCart updateQuantityProductinCart(Integer product_id, Integer cart_id, Integer newQuantity) throws  Exception;
+    ProductInCart updateQuantityProductinCart(Integer product_id, Integer cart_id, Integer newQuantity);
 
 //    Float getTotalPrice(Integer userId) throws Exception;
 

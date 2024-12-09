@@ -21,11 +21,7 @@ public class DiscountController {
 
     @GetMapping("shipping_discount")
     public ResponseEntity<?> getAllShippingDiscount(){
-        try {
             return new ResponseEntity<>(discountService.getAllShippingDiscount(), HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @GetMapping("store_discount/{storeId}")
@@ -33,42 +29,26 @@ public class DiscountController {
         @PathVariable Integer storeId
     )
     {
-        try {
             return new ResponseEntity<>(discountService.getAllStoreDiscount(storeId), HttpStatus.OK);
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @GetMapping("system_discount")
     public ResponseEntity<?> getAllSystemDiscount(){
-        try {
             return new ResponseEntity<>(discountService.getAllSystemDiscount(), HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @PostMapping("add/system_discount")
     public ResponseEntity<?> createSystemDiscount(
             @RequestBody SystemDiscountDTO systemDiscountDTO
             ){
-        try {
             return new ResponseEntity<>(discountService.createSystemDiscount(systemDiscountDTO), HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @PostMapping("add/shipping_discount")
     public ResponseEntity<?> createShippingDiscount(
             @RequestBody ShippingDiscountDTO shippingDiscountDTO
             ){
-        try {
             return new ResponseEntity<>(discountService.createShippingDiscount(shippingDiscountDTO), HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @PostMapping("add/store_discount/{store_id}")
@@ -76,10 +56,6 @@ public class DiscountController {
             @RequestBody StoreDiscountDTO dto,
             @PathVariable Integer store_id
             ){
-        try {
             return new ResponseEntity<>(discountService.createStoreDiscount(store_id,dto), HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 }

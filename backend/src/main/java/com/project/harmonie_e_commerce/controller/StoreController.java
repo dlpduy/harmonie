@@ -18,34 +18,22 @@ public class StoreController {
     public ResponseEntity<?> createStore(
             @PathVariable Integer user_id,
             @RequestBody StoreDTO dto
-            ){
-        try {
+    ){
             return new ResponseEntity<>(storeService.addNewStore(dto,user_id), HttpStatus.OK);
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @GetMapping("/{store_id}/all/product")
     public ResponseEntity<?> showAllProduct(
             @PathVariable Integer store_id
     ){
-        try {
             return new ResponseEntity<>(storeService.showAllProductInStore(store_id), HttpStatus.OK);
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @GetMapping("/{store_id}/all/box")
     public ResponseEntity<?> showAllBox(
             @PathVariable Integer store_id
     ){
-        try {
             return new ResponseEntity<>(storeService.showAllBoxInStore(store_id), HttpStatus.OK);
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @GetMapping("/{store_id}/statistic")
@@ -55,11 +43,7 @@ public class StoreController {
             @RequestParam Integer month,
             @RequestParam Integer year
     ){
-        try {
             return new ResponseEntity<>(storeService.getStatisticOfStore(store_id,day, month, year), HttpStatus.OK);
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
 

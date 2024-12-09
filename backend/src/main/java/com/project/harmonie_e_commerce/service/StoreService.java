@@ -30,7 +30,7 @@ public class StoreService implements IStoreService {
     private final ProductInBoxRepository productInBoxRepository;
 
     @Override
-    public Store addNewStore(StoreDTO storeDTO, Integer userId) throws Exception {
+    public Store addNewStore(StoreDTO storeDTO, Integer userId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new DataNotFoundException("User not found")
         );
@@ -52,7 +52,7 @@ public class StoreService implements IStoreService {
     }
 
     @Override
-    public List<ProductResponse> showAllProductInStore(Integer storeId) throws Exception {
+    public List<ProductResponse> showAllProductInStore(Integer storeId){
         List<ProductResponse> productResponseList = new ArrayList<>();
         Store store = storeRepository.findById(storeId).orElseThrow(
                 () -> new DataNotFoundException("Store not found")
@@ -70,7 +70,7 @@ public class StoreService implements IStoreService {
     }
 
     @Override
-    public List<BoxResponse> showAllBoxInStore(Integer storeId) throws Exception {
+    public List<BoxResponse> showAllBoxInStore(Integer storeId) {
         List<BoxResponse> boxResponseList = new ArrayList<>();
 
         Store store = storeRepository.findById(storeId).orElseThrow(
@@ -88,7 +88,7 @@ public class StoreService implements IStoreService {
     }
 
     @Override
-    public List<StoreDiscountRespone> showAllStoreDiscountInStore(Integer storeId) throws Exception {
+    public List<StoreDiscountRespone> showAllStoreDiscountInStore(Integer storeId){
         List<StoreDiscountRespone> storeDiscountResponeList = new ArrayList<>();
 
         Store store = storeRepository.findById(storeId).orElseThrow(
@@ -105,7 +105,7 @@ public class StoreService implements IStoreService {
     }
 
     @Override
-    public StatisticResponse getStatisticOfStore(Integer storeId, Integer day, Integer month, Integer year) throws Exception {
+    public StatisticResponse getStatisticOfStore(Integer storeId, Integer day, Integer month, Integer year) {
 
         Store store = storeRepository.findById(storeId).orElseThrow(
                 () -> new DataNotFoundException("Store not found")
