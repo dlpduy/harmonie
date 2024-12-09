@@ -34,22 +34,14 @@
 
      @GetMapping("/{id}")
      public ResponseEntity<?> getCategoryById(@PathVariable Integer id) {
-         try {
              Category existingCategory = categoryService.getCategoryById(id);
              return ResponseEntity.ok(existingCategory);
-         } catch (Exception e) {
-             return ResponseEntity.badRequest().body(e.getMessage());
-         }
 
      }
 
      @PutMapping("/{id}")
      public ResponseEntity<?> updateCategory(@PathVariable Integer id, @Valid @RequestBody CategoryDTO categoryDTO) {
-         try {
              return ResponseEntity.ok(categoryService.updateCategory(id, categoryDTO));
-         } catch (Exception e) {
-             return ResponseEntity.badRequest().body(e.getMessage());
-         }
      }
 
      @DeleteMapping("/{id}")

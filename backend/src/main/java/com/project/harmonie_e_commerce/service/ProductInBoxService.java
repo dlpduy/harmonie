@@ -2,7 +2,6 @@ package com.project.harmonie_e_commerce.service;
 
 import com.project.harmonie_e_commerce.exception.DataNotFoundException;
 import com.project.harmonie_e_commerce.repository.BoxRepository;
-import com.project.harmonie_e_commerce.response.PIBResponse;
 import com.project.harmonie_e_commerce.response.ProductInBoxRespone;
 import com.project.harmonie_e_commerce.response.ProductResponse;
 import org.springframework.stereotype.Service;
@@ -60,22 +59,18 @@ public class ProductInBoxService {
    }
 
 
-    public List<PIBResponse> getProductsInBox(Integer box_id) {
+    public List<ProductInBoxRespone> getProductsInBox(Integer box_id) {
         Box box = boxRepository.findById(box_id).orElseThrow(
                 () -> new DataNotFoundException("Cannot find box with id: " + box_id)
         );
 
         List<ProductInBox> productInBoxList = productInBoxRepository.findAllByBoxId(box_id);
-        List<PIBResponse> responeList = new ArrayList<>();
+        List<ProductInBoxRespone> responeList = new ArrayList<>();
 
         for (ProductInBox p: productInBoxList) {
-            ProductResponse productResponse = ProductResponse.fromProduct(p.getProduct());
-            ProductInBoxRespone productInBoxRespone = ProductInBoxRespone.fromProductInBox(p);
 
-            responeList.add(PIBResponse.builder()
-                    .productInBoxRespone(productInBoxRespone)
-                    .productResponse(productResponse)
-                    .build());
+            responeList.add(ProductInBoxRespone.fromProductInBox(p));
+
         }
 
         return responeList;
