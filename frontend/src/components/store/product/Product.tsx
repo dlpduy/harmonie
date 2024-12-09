@@ -1,40 +1,99 @@
-import { message } from 'antd';
+import { Button, notification, Popconfirm, PopconfirmProps } from 'antd';
 import styles from '../../../styles/Management.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ModalCreate } from './modal/ModalCreateProduct';
+import { ModalUpdate } from './modal/ModalUpdateProduct';
+import { fetchAllProductsinStore } from '../../../services/api.service1';
+import { AxiosResponse } from 'axios';
 const products = [
     {
-        id: 1,
-        name: 'IP 16 promax',
-        image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/628847716364a6384e7dbbdc2a500eda53f38cccdb3cfe29a83253f5b6ac5407?placeholderIfAbsent=true&apiKey=f0873bf2dfbf4fd991f254a2ddabbdea',
-        description: 'Sản phẩm mới ra mắt của Apple với dung lượng ....',
-        price: '30.000.000',
-        quantity: 10,
+        "id": 1,
+        "name": "Sản phẩm A",
+        "brand": "Thương hiệu A",
+        "price": 250000,
+        "quantity": 150,
+        "description": "Mô tả chi tiết về sản phẩm A.",
+        "category_id": 1,
+        "countImage": 3
     },
     {
-        id: 2,
-        name: 'Apilewitch',
-        image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/bf18860965edd3f3bff690d816f70641ff2a5a45220988651736285a78aafa28?placeholderIfAbsent=true&apiKey=f0873bf2dfbf4fd991f254a2ddabbdea',
-        description: 'Vừa đeo vừa tập gym kêu tít tít ....',
-        price: '10.999.000',
-        quantity: 15,
+        "id": 2,
+        "name": "Sản phẩm B",
+        "brand": "Thương hiệu B",
+        "price": 350000,
+        "quantity": 80,
+        "description": "Mô tả chi tiết về sản phẩm B.",
+        "category_id": 2,
+        "countImage": 3
     },
     {
-        id: 3,
-        name: 'Dio Sauvage',
-        image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/cabaa6a09cc5e2b4beb11023a550103d14ff37f3d10cea17d8eb4c4d648630b7?placeholderIfAbsent=true&apiKey=f0873bf2dfbf4fd991f254a2ddabbdea',
-        description: 'Với hương thơm nam tính quyến rũ...',
-        price: '2.999.000',
-        quantity: 30,
-    },
-];
+        "id": 3,
+        "name": "Sản phẩm C",
+        "brand": "Thương hiệu C",
+        "price": 150000,
+        "quantity": 200,
+        "description": "Mô tả chi tiết về sản phẩm C.",
+        "category_id": 3,
+        "countImage": 3
+    }
+]
 
 export const Product = () => {
 
+
+    const [listProducts, setListProducts] = useState<any[]>([]);
     const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
     const showModalCreate = () => {
         setIsModalCreateOpen(true);
     };
+
+    const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
+    const showModalUpdate = () => {
+        setIsModalUpdateOpen(true);
+
+    };
+    const [dataProduct, setDataProduct] = useState<Object>({})
+
+    const confirm: PopconfirmProps['onConfirm'] = (e) => {
+        notification.success({
+            message: "Xoa dia chi thanh cong",
+            description: "Xoa dia chi thanh cong"
+        });
+
+    };
+
+    const handleFileList = (product: any) => {
+        const fileLists: any[] = [];
+        for (let i = 1; i <= product.countImage; i++) {
+            fileLists.push({
+                uid: `-${i}`,
+                name: `${i}.jpg`,
+                status: 'done',
+                url: `http://localhost:9091/images/${product.id}/${i}.jpg`
+            })
+        }
+        return fileLists;
+    }
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const response: any = await fetchAllProductsinStore(10);
+            if (response.statusCode === 200) {
+                await setListProducts(response.data);
+            }
+            else {
+                notification.error({
+                    message: `Lỗi ${response.statusCode}`,
+                    description: response.data.message
+                });
+            }
+        }
+        fetchProducts();
+    }, []);
+
+    useEffect(() => {
+        console.log(listProducts);
+    }, [dataProduct, listProducts]);
 
     return (
         <>
@@ -48,14 +107,15 @@ export const Product = () => {
                                 left: '-80%'
                             }}
                         >Sản phẩm</h2>
-                        <button
+                        <Button
                             className={styles.addButton}
                             style={{
                                 position: 'relative',
-                                left: '80%'
+                                left: '80%',
                             }}
+                            type='primary'
                             onClick={() => showModalCreate()}
-                        >Thêm sản phẩm</button>
+                        >Thêm sản phẩm</Button>
 
                     </div>
                     <table className={styles.Table}>
@@ -64,26 +124,64 @@ export const Product = () => {
                                 <th>STT</th>
                                 <th>Tên</th>
                                 <th>Hình ảnh</th>
-                                <th>Mô tả</th>
+                                <th>Thương hiệu</th>
                                 <th>Giá</th>
                                 <th>Số lượng</th>
-                                <th>Hoạt động</th>
+                                <th>Mô tả</th>
+                                <th>Danh mục</th>
+                                <th>Thao tác</th>
                             </tr>
                         </thead>
                         <tbody className={styles.TableBody}>
-                            {products.map((product) => (
+                            {listProducts.map((product, index) => (
                                 <tr key={product.id}>
-                                    <td>{product.id}</td>
+
+                                    <td>{index + 1}</td>
                                     <td>{product.name}</td>
                                     <td>
-                                        <img src={product.image} alt={product.name} className={styles.productImage} />
+                                        {Array.from({ length: product.num_image }, (_, i) => (
+                                            <img
+                                                key={i} // Thêm key cho mỗi phần tử trong danh sách
+                                                src={`http://localhost:9091/images/${product.id}/${i + 1}.jpg`} // Đảm bảo index bắt đầu từ 1
+                                                alt={`Image ${i + 1}`}
+                                                className={styles.productImage}
+                                            />
+                                        ))}
                                     </td>
-                                    <td>{product.description}</td>
+                                    <td>{product.brand}</td>
                                     <td>{product.price}</td>
                                     <td>{product.quantity}</td>
+                                    <td>{product.description}</td>
+                                    <td>{product.category_id}</td>
                                     <td>
-                                        <button className={`${styles.actionButton} ${styles.editButton}`}>Edit</button>
-                                        <button className={`${styles.actionButton} ${styles.deleteButton}`}>Xóa</button>
+                                        <Button
+                                            type='primary'
+                                            onClick={() => {
+                                                setDataProduct({
+                                                    id: product.id,
+                                                    name: product.name,
+                                                    brand: product.brand,
+                                                    description: product.description,
+                                                    price: product.price,
+                                                    quantity: product.quantity,
+                                                    category_id: product.category_id,
+                                                    fileList: handleFileList(product)
+                                                })
+                                                showModalUpdate();
+                                            }}
+                                        >Edit</Button>
+                                        <Popconfirm
+                                            title="Delete product"
+                                            description="Bạn có chắc muốn xóa sản phẩm này?"
+                                            onConfirm={confirm}
+                                            okText="Yes"
+                                            cancelText="No"
+                                        >
+                                            <Button
+                                                danger
+                                                style={{ marginTop: '10px' }}
+                                            >Delete</Button>
+                                        </Popconfirm>
                                     </td>
                                 </tr>
                             ))}
@@ -94,7 +192,11 @@ export const Product = () => {
             <ModalCreate
                 isModalCreateOpen={isModalCreateOpen}
                 setIsModalCreateOpen={setIsModalCreateOpen}
-
+            />
+            <ModalUpdate
+                isModalUpdateOpen={isModalUpdateOpen}
+                setIsModalUpdateOpen={setIsModalUpdateOpen}
+                dataProduct={dataProduct}
             />
 
 

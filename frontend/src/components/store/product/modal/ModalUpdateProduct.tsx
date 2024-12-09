@@ -1,17 +1,29 @@
 import { UploadOutlined } from "@ant-design/icons";
-import { Button, Input, Modal, Upload } from "antd"
-import { useState } from "react";
+import { Button, Input, Modal, notification, Upload } from "antd"
+import { useEffect, useState } from "react";
+import { updateProductAPI } from "../../../../services/api.service1";
 
 export const ModalUpdate = (props: any) => {
 
-    const { isModalCreateOpen, handleOkCreate, handleCancelCreate } = props;
-
-    const [productName, setProductName] = useState('');
-    const [brand, setBrand] = useState('');
-    const [price, setPrice] = useState('');
-    const [quantity, setQuantity] = useState('');
-    const [description, setDescription] = useState('');
-    const [fileList, setFileList] = useState([]);
+    const { isModalUpdateOpen, setIsModalUpdateOpen, dataProduct } = props;
+    const [id, setId] = useState<number>(0);
+    const [productName, setProductName] = useState<string>('');
+    const [brand, setBrand] = useState<string>('');
+    const [price, setPrice] = useState<number>(0);
+    const [quantity, setQuantity] = useState<number>(0);
+    const [description, setDescription] = useState<string>('');
+    const [category, setCategory] = useState<number>(0);
+    const [fileList, setFileList] = useState<any[]>([]);
+    useEffect(() => {
+        setId(dataProduct.id);
+        setProductName(dataProduct.name);
+        setBrand(dataProduct.brand);
+        setPrice(dataProduct.price);
+        setQuantity(dataProduct.quantity);
+        setCategory(dataProduct.category_id);
+        setDescription(dataProduct.description);
+        setFileList(dataProduct.fileList);
+    }, [dataProduct]);
 
     const handleFileChange = (newFileList: any) => {
         setFileList(newFileList);
@@ -20,27 +32,36 @@ export const ModalUpdate = (props: any) => {
     const resetModal = () => {
         setProductName('');
         setBrand('');
-        setPrice('');
-        setQuantity('');
+        setPrice(0);
+        setQuantity(0);
+        setCategory(0);
         setDescription('');
         setFileList([]);
     }
 
+    const handleOkUpdate = async () => {
+        // console.log(fileList);
+        console.log(dataProduct.fileList)
+    }
+
+    const handleCancelUpdate = () => {
+        setIsModalUpdateOpen(false);
+        resetModal();
+    }
+
+
     return (
         <>
             <Modal title="Thêm sản phẩm"
-                open={isModalCreateOpen}
+                open={isModalUpdateOpen}
                 onOk={() => {
-                    console.log(productName, brand, price, quantity, description, fileList),
-                        handleOkCreate(),
-                        resetModal()
+                    handleOkUpdate()
                 }}
                 onCancel={() => {
-                    handleCancelCreate(),
-                        resetModal()
+                    handleCancelUpdate()
                 }}
                 maskClosable={false}
-                okText="Create"
+                okText="Update"
 
             >
                 <div style={{ display: "flex", gap: "15px", flexDirection: "column" }}>
@@ -62,16 +83,25 @@ export const ModalUpdate = (props: any) => {
                         <span>Giá bán</span>
                         <Input
                             value={price}
-                            onChange={(e) => setPrice(e.target.value)}
+                            onChange={(e) => setPrice(Number(e.target.value))}
                         />
                     </div>
                     <div>
                         <span>Số lượng</span>
                         <Input
                             value={quantity}
-                            onChange={(e) => setQuantity(e.target.value)}
+                            onChange={(e) => setQuantity(Number(e.target.value))}
                         />
                     </div>
+
+                    <div>
+                        <span>Danh mục</span>
+                        <Input
+                            value={category}
+                            onChange={(e) => setCategory(Number(e.target.value))}
+                        />
+                    </div>
+
                     <div>
                         <span>Mô tả</span>
                         <Input.TextArea
@@ -79,6 +109,7 @@ export const ModalUpdate = (props: any) => {
                             onChange={(e) => setDescription(e.target.value)}
                         />
                     </div>
+
 
                     <div>
                         <span>Ảnh</span>
@@ -90,7 +121,7 @@ export const ModalUpdate = (props: any) => {
                             onChange={(info) => handleFileChange(info.fileList)}
                             multiple
                         >
-                            {fileList.length < 1 && <Button icon={<UploadOutlined />}>Chọn ảnh</Button>}
+                            <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
                         </Upload>
                     </div>
                 </div>

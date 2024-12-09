@@ -54,7 +54,7 @@ export const ModalCreate = (props: any) => {
             else {
                 console.log(response.toString());
                 notification.error({
-                    message: 'Tao sản phẩm thất bại',
+                    message: 'Tạo sản phẩm thất bại',
                     description: response.toString()
                 })
             }
@@ -143,7 +143,7 @@ export const ModalCreate = (props: any) => {
                             onChange={(info) => handleFileChange(info.fileList)}
                             multiple
                         >
-                            {fileList.length < 1 && <Button icon={<UploadOutlined />}>Chọn ảnh</Button>}
+                            <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
                         </Upload>
                     </div>
                 </div>
