@@ -27,7 +27,6 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userDTO,
                                         BindingResult result) {
-        try {
             if (result.hasErrors()) {
                 List<String> errorMessages = result.getFieldErrors()
                         .stream()
@@ -37,21 +36,14 @@ public class UserController {
             }
             User user = userService.createUser(userDTO);
             return ResponseEntity.ok("User created successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     //No need to validate because u can input everything, if phone number and password are wrong
     // it will alert an error (500)
     @PostMapping("/login")
     public ResponseEntity<String> login(@Valid @RequestBody UserLoginDTO userLoginDTO) {
-        try {
             String token = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
             return ResponseEntity.ok(token);
-        } catch (DataNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
 
     }
 }

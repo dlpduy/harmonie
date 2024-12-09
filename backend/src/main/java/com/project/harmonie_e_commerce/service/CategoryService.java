@@ -41,7 +41,7 @@
      }
 
      @Override
-     public Category updateCategory(Integer id, CategoryDTO categoryDTO) throws Exception{
+     public Category updateCategory(Integer id, CategoryDTO categoryDTO){
          Category existingCategory = getCategoryById(id);
          existingCategory.setName(categoryDTO.getName());
          return categoryRepository.save(existingCategory);

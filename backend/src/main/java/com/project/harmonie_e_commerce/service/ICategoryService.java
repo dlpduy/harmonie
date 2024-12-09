@@ -7,9 +7,9 @@ import com.project.harmonie_e_commerce.model.Category;
 import java.util.List;
 
 public interface ICategoryService {
-    List<Category> getAllCategories() throws Exception;
-    Category getCategoryById(Integer id) throws Exception;
-    Category createCategory(CategoryDTO categoryDTO) throws Exception;
-    Category updateCategory(Integer id, CategoryDTO categoryDTO) throws Exception;
+    List<Category> getAllCategories();
+    Category getCategoryById(Integer id);
+    Category createCategory(CategoryDTO categoryDTO);
+    Category updateCategory(Integer id, CategoryDTO categoryDTO);
     void deleteCategory(Integer id);
 }

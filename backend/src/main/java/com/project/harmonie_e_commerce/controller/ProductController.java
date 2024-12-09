@@ -38,7 +38,6 @@ public class ProductController {
     @PostMapping("")
     public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDTO productDTO,
                                            BindingResult result) {
-        try {
             if (result.hasErrors()) {
                 List<String> errorMessages = result.getFieldErrors()
                         .stream()
@@ -48,22 +47,14 @@ public class ProductController {
             }
             ProductResponse newProduct = productService.createProduct(productDTO);
             return ResponseEntity.ok(newProduct);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
 
     }
 
     @PostMapping(value = "uploads/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadImages(@PathVariable Integer id,
-                                          @RequestParam("files") List<MultipartFile> files) {
-        try {
+                                          @RequestParam("files") List<MultipartFile> files) throws Exception{
             List<ProductImage> productImages = new ArrayList<>();
-
             return ResponseEntity.ok(productService.uploadImages(id, files));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
 
@@ -136,12 +127,8 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable int id, @Valid @RequestBody ProductDTO productDTO) {
-        try {
-            productService.updateProduct(id, productDTO);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<?> updateProduct(@PathVariable int id, @Valid @RequestBody ProductDTO productDTO) throws Exception{
+        productService.updateProduct(id, productDTO);
         return ResponseEntity.ok("Product with id " + id + " is updated");
     }
 
