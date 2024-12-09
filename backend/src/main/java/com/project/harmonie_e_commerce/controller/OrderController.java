@@ -67,7 +67,7 @@ public class OrderController {
 
    @GetMapping("/{id}")
    public ResponseEntity<?> getOrder(HttpServletRequest request, @PathVariable Integer id){
-        Object orderResponse = orderService.getOrderById(request, id);
+        OrderResponse orderResponse = orderService.getOrderById(request, id);
         return ResponseEntity.ok(orderResponse);
    }
 
