@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 
+import java.util.HashMap;
+import java.util.Map;
 
 // {
 //     "consignee_information_id": 5,
@@ -54,40 +56,24 @@ public class OrderController {
    @PostMapping("")
    public ResponseEntity<?> createOrder(HttpServletRequest request,
    @Valid @RequestBody OrderDTO orderRequest){
-       try {
-           String respone = orderService.createOrder(request, orderRequest);
-           return ResponseEntity.ok(respone);
-       } catch (Exception e) {
-           return ResponseEntity.badRequest().body(e.getMessage());
-       }
+        Map<String, Integer> respone = orderService.createOrder(request, orderRequest);
+        return ResponseEntity.ok(respone);
    }
 
    @GetMapping("/user/{user_id}")
     public ResponseEntity<?> getOrdersByUserId(HttpServletRequest request, @PathVariable Integer user_id){
-        try {
-            return ResponseEntity.ok(orderService.getOrdersByUserId(request, user_id));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(orderService.getOrdersByUserId(request, user_id));
     }
 
    @GetMapping("/{id}")
    public ResponseEntity<?> getOrder(HttpServletRequest request, @PathVariable Integer id){
-       try {
-           OrderResponse orderResponse = orderService.getOrderById(request, id);
-           return ResponseEntity.ok(orderResponse);
-       } catch (Exception e) {
-           return ResponseEntity.badRequest().body(e.getMessage());
-       }
+        OrderResponse orderResponse = orderService.getOrderById(request, id);
+        return ResponseEntity.ok(orderResponse);
    }
 
    @GetMapping("/all")
     public ResponseEntity<?> getAllOrders(HttpServletRequest request){
-        try {
-            return ResponseEntity.ok(orderService.getAll(request));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(orderService.getAll(request));
     }
 
     

@@ -15,6 +15,7 @@ import com.project.harmonie_e_commerce.repository.*;
 import com.project.harmonie_e_commerce.response.OrderResponse;
 import com.project.harmonie_e_commerce.dto.OrderDTO;
 import com.project.harmonie_e_commerce.dto.OrderProductDTO;
+import com.project.harmonie_e_commerce.exception.DataNotFoundException;
 import com.project.harmonie_e_commerce.dto.OrderBoxDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -47,20 +48,20 @@ public class OrderService {
 
 
    @Transactional
-   public String createOrder(HttpServletRequest request, OrderDTO orderRequest) {
+   public Map<String, Integer> createOrder(HttpServletRequest request, OrderDTO orderRequest) {
        Order order = new Order();
 
        // Set the delivery information
        Integer deliveryInformationId = orderRequest.getConsigneeInformationId();
        DeliveryInformation deliveryInformation = deliveryInformationRepository.findById(deliveryInformationId)
-                                                                              .orElseThrow(() -> new RuntimeException("Delivery information not found"));
+            .orElseThrow(() -> new DataNotFoundException("Delivery information id=" + deliveryInformationId + " not found"));
        order.setDeliveryInformation(deliveryInformation);
 
        // Set the system discount - optional
        Integer systemDiscountId = orderRequest.getSystemDiscountId();
        if (systemDiscountId != null){
            SystemDiscount systemDiscount = systemDiscountRepository.findById(systemDiscountId)
-                                                                   .orElseThrow(() -> new RuntimeException("System discount not found"));
+                .orElseThrow(() -> new DataNotFoundException("System discount id=" + systemDiscountId + " not found"));
            
            if(systemDiscount.getDiscount().getQuantity() == 0)
                throw new RuntimeException("System discount id=" + systemDiscountId + " is out of stock");
@@ -72,6 +73,8 @@ public class OrderService {
 
        // Set the pay method
        PayMethod payMethod = orderRequest.getPayMethod();
+       if (payMethod == null)
+           throw new RuntimeException("Pay method is required");
        order.setPayMethod(payMethod);
 
        // save order temporarily to exist Order entity for creating Box entities
@@ -92,16 +95,16 @@ public class OrderService {
            Integer productId = orderProductDTO.getId();
            Integer buyQuantity = orderProductDTO.getQuantity();
            Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new RuntimeException("Product id=" + productId + " not found"));
+                    .orElseThrow(() -> new DataNotFoundException("Product id=" + productId + " not found"));
 
            Integer remainingQuantity = product.getQuantity();
 
            if (remainingQuantity < buyQuantity)
-               throw new RuntimeException("Not enough product " + product.getName() + " in stock");
+               throw new DataNotFoundException("Not enough product id=" + productId + " in stock");
 
 
            Store store = productRepository.findStoreByProductId(productId)
-                        .orElseThrow(() -> new RuntimeException("Product id=" + productId + " not in any store"));
+                    .orElseThrow(() -> new DataNotFoundException("Product id=" + productId + " not in any store"));
 
            // handle case this is the first time this store appears
            productInStores.putIfAbsent(store, new Pair<>(new ArrayList<>(), null)); // storeDiscount is null for now
@@ -119,16 +122,16 @@ public class OrderService {
        if (storeDiscountIds != null) {
             for (Integer storeDiscountId : storeDiscountIds){
                 StoreDiscount storeDiscount = storeDiscountRepository.findById(storeDiscountId)
-                            .orElseThrow(() -> new RuntimeException("Store discount id=" + storeDiscountId + " not found"));
+                        .orElseThrow(() -> new DataNotFoundException("Store discount id=" + storeDiscountId + " not found"));
                 
-                    Store store = storeDiscount.getStore();
+                Store store = storeDiscount.getStore();
                 if(!productInStores.containsKey(store))
-                    throw new RuntimeException("Store discount id=" + storeDiscountId +  " does not match any store");
+                    throw new DataNotFoundException("Store discount id=" + storeDiscountId +  " does not match any store");
                 
                 if(storeDiscount.getDiscount().getQuantity() == 0)
-                    throw new RuntimeException("Store discount id=" + storeDiscountId + " is out of stock");
+                    throw new DataNotFoundException("Store discount id=" + storeDiscountId + " is out of stock");
                 if(storeDiscount.getDiscount().getExpirationDate().before(new Timestamp(System.currentTimeMillis())))
-                    throw new RuntimeException("Store discount id=" + storeDiscountId + " is expired");
+                    throw new DataNotFoundException("Store discount id=" + storeDiscountId + " is expired");
                 
                 productInStores.get(store).second = storeDiscount;
             }
@@ -139,7 +142,7 @@ public class OrderService {
        Integer shippingDiscountId = orderRequest.getShippingDiscountId();
        ShippingDiscount shippingDiscount = shippingDiscountId == null ? null :
             shippingDiscountRepository.findById(shippingDiscountId)
-                    .orElseThrow(() -> new RuntimeException("Shipping discount id=" + shippingDiscountId + " not found"));
+                    .orElseThrow(() -> new DataNotFoundException("Shipping discount id=" + shippingDiscountId + " not found"));
        
                                     
        // create boxes, number of boxes exactly equal size of hashmap above
@@ -176,12 +179,14 @@ public class OrderService {
        order.setTotalPrice(totalPrice);
 
     //    return OrderResponse.fromOrder(orderRepository.saveAndFlush(order), boxRepository, productInBoxRepository);
-       return "Add order successfully";
+        Map<String, Integer> result = new HashMap<>();
+        result.put("id", orderRepository.saveAndFlush(order).getId());
+        return result;
     }
 
     public OrderResponse getOrderById(HttpServletRequest request, Integer id) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order id=" + id + " not found"));
+                .orElseThrow(() -> new DataNotFoundException("Order id=" + id + " not found"));
         return OrderResponse.fromOrder(order, boxRepository, productInBoxRepository);
     }
 

@@ -16,6 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ProductInBoxRespone {
+    @JsonProperty("id")
+    private Integer id;
     @JsonProperty("buy_quantity")
     private Integer quantity;
     @JsonProperty("product_response")
@@ -26,6 +28,7 @@ public class ProductInBoxRespone {
 
     static public ProductInBoxRespone fromProductInBox(ProductInBox productInBox) {
         return ProductInBoxRespone.builder()
+                .id(productInBox.getId())
                 .quantity(productInBox.getQuantity())
                 .productResponse(ProductResponse.fromProduct(productInBox.getProduct()))
                 .totalPrice(productInBox.getTotalPrice())
