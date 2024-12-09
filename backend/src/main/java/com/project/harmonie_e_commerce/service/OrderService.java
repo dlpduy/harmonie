@@ -15,6 +15,7 @@ import com.project.harmonie_e_commerce.repository.*;
 import com.project.harmonie_e_commerce.response.OrderResponse;
 import com.project.harmonie_e_commerce.dto.OrderDTO;
 import com.project.harmonie_e_commerce.dto.OrderProductDTO;
+import com.project.harmonie_e_commerce.exception.DataNotFoundException;
 import com.project.harmonie_e_commerce.dto.OrderBoxDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -183,7 +184,7 @@ public class OrderService {
 
     public OrderResponse getOrderById(HttpServletRequest request, Integer id) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order id=" + id + " not found"));
+                .orElseThrow(() -> new DataNotFoundException("Order id=" + id + " not found"));
         return OrderResponse.fromOrder(order, boxRepository, productInBoxRepository);
     }
 
