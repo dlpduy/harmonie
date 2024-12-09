@@ -11,14 +11,14 @@ import com.project.harmonie_e_commerce.response.StoreDiscountRespone;
 import java.util.List;
 
 public interface IStoreService{
-    Store addNewStore(StoreDTO storeDTO, Integer userId) throws Exception;
+    Store addNewStore(StoreDTO storeDTO, Integer userId) ;
 
-    List<ProductResponse> showAllProductInStore(Integer storeId) throws Exception;
+    List<ProductResponse> showAllProductInStore(Integer storeId) ;
 
-    List<BoxResponse> showAllBoxInStore(Integer storeId) throws Exception;
+    List<BoxResponse> showAllBoxInStore(Integer storeId) ;
 
-    List<StoreDiscountRespone> showAllStoreDiscountInStore(Integer storeId) throws Exception;
+    List<StoreDiscountRespone> showAllStoreDiscountInStore(Integer storeId);
 
-    StatisticResponse getStatisticOfStore(Integer storeId, Integer day, Integer month, Integer year) throws Exception;
+    StatisticResponse getStatisticOfStore(Integer storeId, Integer day, Integer month, Integer year) ;
 
 }

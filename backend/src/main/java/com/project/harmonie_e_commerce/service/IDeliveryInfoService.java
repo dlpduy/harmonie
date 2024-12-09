@@ -7,14 +7,14 @@ import java.util.List;
 
 public interface IDeliveryInfoService{
 
-    DIResponse createDeliveryInfo(Integer userId, DeliveryInformationDTO deliveryInformationDTO) throws Exception;
+    DIResponse createDeliveryInfo(Integer userId, DeliveryInformationDTO deliveryInformationDTO);
 
-    List<DIResponse> showAllDeliInfo(Integer userId) throws Exception;
+    List<DIResponse> showAllDeliInfo(Integer userId);
 
-    DIResponse updateDeliveryInfo(Integer userId, DeliveryInformationDTO deliveryInformationDTO) throws Exception;
+    DIResponse updateDeliveryInfo(Integer userId, DeliveryInformationDTO deliveryInformationDTO) ;
 
-    void deleteDeliInfo(Integer id) throws Exception;
+    void deleteDeliInfo(Integer id);
 
-    DIResponse getById(Integer id) throws Exception;
+    DIResponse getById(Integer id);
 
 }

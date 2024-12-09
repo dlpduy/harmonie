@@ -36,7 +36,7 @@
      private final ProductImageRepository productImageRepository;
 
      @Override
-     public List<ProductInCartResponse> getAllProductsInCart(Integer userId) throws Exception {
+     public List<ProductInCartResponse> getAllProductsInCart(Integer userId){
 
          User user = userRepository.findById(userId).orElseThrow(
                  () -> new DataNotFoundException("User not found")
@@ -76,7 +76,7 @@
      }
 
      @Override
-     public void deleteItemInCart(Integer product_id, Integer userId) throws Exception {
+     public void deleteItemInCart(Integer product_id, Integer userId){
 
          Product product = productRepository.findById(product_id).get();
 
@@ -104,7 +104,7 @@
 //     }
 
      @Override
-     public ProductInCart addProductToCart(Integer product_id, Integer userId) throws Exception{
+     public ProductInCart addProductToCart(Integer product_id, Integer userId){
          //nếu tồn tại sản phẩm rồi thì + quantity
          Product product = productRepository.findById(product_id).get();
 
@@ -132,7 +132,7 @@
      }
 
      @Override
-     public ProductInCart updateQuantityProductinCart(Integer product_id, Integer userId, Integer newQuantity) throws  Exception {
+     public ProductInCart updateQuantityProductinCart(Integer product_id, Integer userId, Integer newQuantity){
          Product product = productRepository.findById(product_id).get();
 
          User user = userRepository.findById(userId).orElseThrow(
