@@ -43,6 +43,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         //Allow all requests without authentication
         //filterChain.doFilter(request, response);
         try{
+            if(isBypassToken(request)) {
+                filterChain.doFilter(request, response); //enable bypass
+                return;
+            }
             final String authHeader = request.getHeader("Authorization");
             if(authHeader == null || !authHeader.startsWith("Bearer ")){
                 throw new AuthenticationException("Unauthorized") {};

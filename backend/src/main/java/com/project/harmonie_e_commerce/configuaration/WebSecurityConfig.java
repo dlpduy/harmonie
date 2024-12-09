@@ -24,7 +24,7 @@ public class WebSecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 //add a filter before the UsernamePasswordAuthenticationFilter
-//                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 //config rules for authorize requests
                 .authorizeHttpRequests(requests -> {
                     requests.requestMatchers("**")
