@@ -63,24 +63,18 @@ public class UserService implements IUserService {
     @Override
     public String loginSocial(String email, String name, String sub) throws DataNotFoundException {
         Optional<User> optionalUser = userRepository.findByEmail(email);
-        String encodedPassword = passwordEncoder.encode(sub);
         User existingUser;
         if(optionalUser.isEmpty()) {
             User newUser = User.builder()
                     .email(email)
                     .fullName(name)
-                    .password(encodedPassword)
+                    .password("defaultGG")
                     .role(User.Role.USER)
                     .build();
             optionalUser = Optional.of(newUser);
             userRepository.save(newUser);
         }
         User user =optionalUser.get();
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(
-                        email, sub, user.getAuthorities()
-                );
-        authenticationManager.authenticate(authenticationToken);
         return jwtTokenUtil.generateToken(user);
     }
 }
