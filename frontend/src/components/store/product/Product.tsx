@@ -77,7 +77,7 @@ export const Product = () => {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const response: any = await fetchAllProductsinStore(10);
+            const response: any = await fetchAllProductsinStore(12);
             if (response.statusCode === 200) {
                 await setListProducts(response.data);
             }

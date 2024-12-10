@@ -1,25 +1,56 @@
 import React, { useState } from 'react';
 import styles from '../styles/Form.module.css';
 import backgroungImage from '../assets/images/background.jpg';
-import { Link } from 'react-router-dom';
-import { Button, Input, notification } from 'antd';
-import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
+import { Button, Checkbox, DatePicker, Form, Input, notification, Radio } from 'antd';
+import moment from 'moment';
+import { registerAPI } from '../services/api.service1';
+import { Link, useNavigate } from 'react-router-dom';
 //import { registerAPI } from '../services/api.service1';
 
 const RegisterPage: React.FC = () => {
-    const [showPassword, setShowPassword] = useState(false);
     const [fName, setFName] = useState<string>('');
     const [lName, setLName] = useState<string>('');
+    const [birthdate, setBirthdate] = useState<string>('');
+    const [gender, setGender] = useState('');
     const [phone, setPhone] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async () => {
         try {
             setLoading(true);
-            // const response = await registerAPI(fName, lName, phone, email, password)
-            //console.log(response)
+            const data = {
+                fname: fName,
+                lname: lName,
+                dob: birthdate,
+                sex: gender,
+                phone: phone,
+                email: email,
+                password: password
+            }
+
+            const response: any = await registerAPI(data);
+            if (response.statusCode && response.statusCode >= 400) {
+                notification.error({
+                    message: `Lỗi ${response.statusCode}`,
+                    description: response.message
+                })
+                setLoading(false);
+
+            }
+            else {
+                notification.success({
+                    message: 'Thành công',
+                    description: 'Đăng ký thành công, vui lòng đăng nhập'
+                });
+                setLoading(false);
+                setTimeout(() => {
+                    navigate('/login');
+                }, 1000);
+            }
         }
         catch (error: any) {
             notification.error({
@@ -29,7 +60,6 @@ const RegisterPage: React.FC = () => {
             setLoading(false);
 
         }
-        console.log(fName, lName, phone, email, password);
     };
 
     return (
@@ -42,127 +72,142 @@ const RegisterPage: React.FC = () => {
                         className={styles.backgroundImage}
                         alt=""
                     />
-                    <form
+                    <Form
+                        name="basic"
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 32 }}
+                        initialValues={{ remember: true }}
+                        //   onFinish={onFinish}
+                        //   onFinishFailed={onFinishFailed}
+                        autoComplete="off"
                         className={styles.loginFormContainer}
                         style={{
-                            height: '100%',
-                            scale: '0.9',
-                            marginTop: '-3.8%',
-                            marginBottom: '-3.8%',
+                            height: '650px',
+                            scale: '1.3',
+                            marginBottom: '2%',
+                            marginTop: '2%',
+                            position: 'relative',
+                            left: '-5%'
                         }}
                     >
-                        <h1 className={styles.formTitle}>
-                            Thông tin đăng ký
-                        </h1>
+                        <Form.Item
+                            label="Tên"
+                            name="firstName"
+                            rules={[{ required: true, message: 'Please input your first name!' }]}
+                        >
+                            <Input
+                                value={fName}
+                                onChange={(e) => setFName(e.target.value)}
+                            />
+                        </Form.Item>
 
-                        <label htmlFor="fName" className={styles['visually-hidden']}>
-                            Tên
-                        </label>
-                        <input
-                            type="text"
-                            className={styles.inputField}
-                            placeholder="Tên"
-                            style={{ outline: 'none' }}
-                            value={fName}
-                            onChange={(e) => setFName(e.target.value)}
-                            required
-                        />
+                        <Form.Item
+                            label="Họ và tên đệm"
+                            name="lastName"
+                            rules={[{ required: true, message: 'Please input your last name!' }]}
+                        >
+                            <Input
+                                value={lName}
+                                onChange={(e) => setLName(e.target.value)}
+                            />
+                        </Form.Item>
 
-                        <label htmlFor="lName" className={styles['visually-hidden']}>
-                            Họ và tên đệm
-                        </label>
-                        <input
-                            type="text"
-                            className={styles.inputField}
-                            placeholder="Họ và tên đệm"
-                            style={{ outline: 'none' }}
-                            value={lName}
-                            onChange={(e) => setLName(e.target.value)}
-                            required
-                        />
+                        <Form.Item
+                            label="Ngày sinh"
+                            name="birthday"
+                            rules={[{ required: true, message: 'Please input your birthday!' }]}
+                        >
+                            <DatePicker
+                                value={birthdate ? moment(birthdate) : null}
+                                onChange={(date, dateString) => setBirthdate(date.format('YYYY-MM-DD'))}
+                                style={{ width: '100%' }} />
+                        </Form.Item>
 
-                        <label htmlFor="phone" className={styles['visually-hidden']}>
-                            Số điện thoại
-                        </label>
-                        <input
-                            type="tel"
-                            className={styles.inputField}
-                            placeholder="Số điện thoại"
-                            style={{ outline: 'none' }}
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            required
-                        />
+                        <Form.Item
+                            label="Giới tính"
+                            name="gender"
+                            rules={[{ required: true, message: 'Please select your gender!' }]}
+                        >
+                            <Radio.Group
+                                value={gender}
+                                onChange={(e) => setGender(e.target.value)}
+                            >
+                                <Radio value="M">Male</Radio>
+                                <Radio value="F">Female</Radio>
+                            </Radio.Group>
+                        </Form.Item>
 
-                        <label htmlFor="email" className={styles['visually-hidden']}>
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            className={styles.inputField}
-                            placeholder="Email"
-                            style={{ outline: 'none' }}
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
+                        <Form.Item
+                            label="Số điện thoại"
+                            name="phone"
+                            rules={[{ required: true, message: 'Please input your phone number!' }]}
+                        >
+                            <Input
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                            />
+                        </Form.Item>
 
-                        <div className={styles.passwordContainer}>
-                            <label htmlFor="password" className={styles['visually-hidden']}>
-                                Mật khẩu
-                            </label>
-                            <input
-                                type={showPassword ? 'text' : 'password'}
-                                placeholder="Mật khẩu"
-                                style={{
-                                    border: 'none',
-                                    background: 'transparent',
-                                    fontSize: '24px',
-                                    width: '100%',
-                                    height: '100%',
-                                    outline: 'none',
-                                }}
+                        <Form.Item
+                            label="Email"
+                            name="email"
+                            rules={[{ required: true, message: 'Please input your email!', type: 'email' }]}
+                        >
+                            <Input
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Mật khẩu"
+                            name="password"
+                            rules={[{ required: true, message: 'Please input your password!' }]}
+                        >
+                            <Input.Password
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                required
                             />
-                            <Button
-                                icon={showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-                                onClick={() => setShowPassword(!showPassword)}
-                                role="button"
-                                style={{
-                                    color: '#000',
-                                    background: 'transparent',
-                                    border: 'none',
-                                    marginTop: '-1%',
-                                    outline: 'none',
-                                }}
-                            />
-                        </div>
+                        </Form.Item>
 
-                        <Button
-                            aria-label="Đăng ký tài khoản"
-                            className={styles.loginButton}
-                            onClick={() => handleSubmit()}
-                            loading={loading}
-                            style={{
-                                color: '#fff',
-                                backgroundColor: '#4260fc',
-                                border: 'none',
-                                outline: 'none',
-                                height: '80px',
-
-                            }}
+                        <Form.Item
+                            label="Xác nhận mật khẩu"
+                            name="confirm"
+                            dependencies={['password']}
+                            hasFeedback
+                            rules={[
+                                { required: true, message: 'Vui lòng xác nhận mật khẩu!' },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || getFieldValue('password') === value) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('Mật khẩu xác nhận không khớp!'));
+                                    },
+                                }),
+                            ]}
                         >
-                            Đăng ký
-                        </Button>
+                            <Input.Password
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                            />
+                        </Form.Item>
 
-                        <nav className={styles.linksContainer}>
-                            <Link to="/login" className={styles.forgotPasswordLink}> Đã có tài khoản? </Link>
-                            <Link to="/forgot-password" className={styles.forgotPasswordLink}> Quên mật khẩu? </Link>
-
-                        </nav>
-                    </form>
+                        <Form.Item wrapperCol={{ offset: 16, span: 16 }}>
+                            <Link to="/login">Bạn đã có tài khoản?</Link>
+                        </Form.Item>
+                        <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
+                            <Button
+                                type="primary"
+                                formAction='submit'
+                                loading={loading}
+                                onClick={() => handleSubmit()}
+                                style={{ width: '100%', height: '60px', marginBottom: '-10%', marginTop: '-10%' }}
+                            >
+                                Đăng ký
+                            </Button>
+                        </Form.Item>
+                    </Form>
                 </div>
             </section>
         </main>

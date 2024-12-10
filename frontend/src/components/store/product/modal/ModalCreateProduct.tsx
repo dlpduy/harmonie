@@ -1,5 +1,5 @@
 import { UploadOutlined } from "@ant-design/icons";
-import { Button, Input, Modal, notification, Upload } from "antd"
+import { Button, Input, message, Modal, notification, Upload } from "antd"
 import { useState } from "react";
 import { createProductAPI } from "../../../../services/api.service1";
 
@@ -32,7 +32,7 @@ export const ModalCreate = (props: any) => {
     const handleOkCreate = async () => {
         try {
             const data = {
-                store_id: 1,
+                store_id: 12,
                 name: productName,
                 brand: brand,
                 price: price,
@@ -42,20 +42,19 @@ export const ModalCreate = (props: any) => {
                 // images: fileList.map((file: any) => file.originFileObj)
             }
 
-            const response = await createProductAPI(data);
-            if (response.data) {
+            const response: any = await createProductAPI(data);
+            if (response.statusCode === 200) {
                 notification.success({
-                    message: response.data.message,
+                    message: 'Thành công',
                     description: 'Tạo sản phẩm thành công'
                 })
                 resetModal();
                 setIsModalCreateOpen(false);
             }
             else {
-                console.log(response.toString());
                 notification.error({
-                    message: 'Tạo sản phẩm thất bại',
-                    description: response.toString()
+                    message: `Lỗi ${response.statusCode}`,
+                    description: response.message
                 })
             }
         }
