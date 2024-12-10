@@ -4,6 +4,7 @@ import com.project.harmonie_e_commerce.dto.UserDTO;
 import com.project.harmonie_e_commerce.dto.UserLoginDTO;
 import com.project.harmonie_e_commerce.exception.DataNotFoundException;
 import com.project.harmonie_e_commerce.model.User;
+import com.project.harmonie_e_commerce.response.TokenResponse;
 import com.project.harmonie_e_commerce.service.IUserService;
 import com.project.harmonie_e_commerce.service.UserService;
 import jakarta.validation.Valid;
@@ -41,9 +42,8 @@ public class UserController {
     //No need to validate because u can input everything, if phone number and password are wrong
     // it will alert an error (500)
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody UserLoginDTO userLoginDTO) {
+    public ResponseEntity<?> login(@Valid @RequestBody UserLoginDTO userLoginDTO) {
             String token = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
-            return ResponseEntity.ok(token);
-
+            return ResponseEntity.ok(new TokenResponse(token));
     }
 }
