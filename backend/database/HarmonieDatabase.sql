@@ -8,11 +8,10 @@ USE Harmonie;
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
 	id              INT             AUTO_INCREMENT              PRIMARY KEY,
-	fname           VARCHAR(20)	                                NOT NULL,
-	lname           VARCHAR(20)                                 NOT NULL,
-	dob             DATE                                        NOT NULL,
-	sex 	        ENUM('M', 'F', 'Other')                     NOT NULL,
-	phone           VARCHAR(10)     UNIQUE                      NOT NULL,
+	full_name          VARCHAR(50)	                      NOT NULL,
+	dob             DATE                                        ,
+	sex 	        ENUM('M', 'F', 'Other')                     ,
+	phone           VARCHAR(10)     UNIQUE                      ,
 	email           VARCHAR(50)    	UNIQUE                      NOT NULL,
 	creation_date   TIMESTAMP       DEFAULT CURRENT_TIMESTAMP   NOT NULL,
 	password 		VARCHAR(65) 								NOT NULL,
