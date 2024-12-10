@@ -6,9 +6,11 @@ import com.project.harmonie_e_commerce.model.User;
 import com.project.harmonie_e_commerce.response.TokenResponse;
 import com.project.harmonie_e_commerce.service.IUserService;
 import com.project.harmonie_e_commerce.util.JwtUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -44,9 +46,13 @@ public class UserController {
             return ResponseEntity.ok(new TokenResponse(token));
     }
 
-    @PostMapping("/login-social/{idToken}")
-    public ResponseEntity<?> loginSocial(@PathVariable("idToken") String idToken) {
-        Map<String,String> info = JwtUtils.decodeIdToken(idToken);
+    @PostMapping("/login-social")
+    public ResponseEntity<?> loginSocial(HttpServletRequest request) {
+        String idToken = request.getHeader("Authorization");
+        if(idToken == null || !idToken.startsWith("Bearer ")){
+            throw new AuthenticationException("Unauthorized") {};
+        }
+        Map<String,String> info = JwtUtils.decodeIdToken(idToken.substring(7));
         String token = userService.loginSocial(info.get("email"), info.get("name"), info.get("sub"));
         return ResponseEntity.ok(new TokenResponse(token));
     }
