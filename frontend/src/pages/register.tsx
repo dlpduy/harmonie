@@ -8,8 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 //import { registerAPI } from '../services/api.service1';
 
 const RegisterPage: React.FC = () => {
-    const [fName, setFName] = useState<string>('');
-    const [lName, setLName] = useState<string>('');
+    const [fullName, setFullName] = useState<string>('');
     const [birthdate, setBirthdate] = useState<string>('');
     const [gender, setGender] = useState('');
     const [phone, setPhone] = useState<string>('');
@@ -23,8 +22,7 @@ const RegisterPage: React.FC = () => {
         try {
             setLoading(true);
             const data = {
-                fname: fName,
-                lname: lName,
+                fullName: fullName,
                 dob: birthdate,
                 sex: gender,
                 phone: phone,
@@ -91,24 +89,13 @@ const RegisterPage: React.FC = () => {
                         }}
                     >
                         <Form.Item
-                            label="Tên"
-                            name="firstName"
+                            label="Họ và tên"
+                            name="fullName"
                             rules={[{ required: true, message: 'Please input your first name!' }]}
                         >
                             <Input
-                                value={fName}
-                                onChange={(e) => setFName(e.target.value)}
-                            />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Họ và tên đệm"
-                            name="lastName"
-                            rules={[{ required: true, message: 'Please input your last name!' }]}
-                        >
-                            <Input
-                                value={lName}
-                                onChange={(e) => setLName(e.target.value)}
+                                value={fullName}
+                                onChange={(e) => setFullName(e.target.value)}
                             />
                         </Form.Item>
 

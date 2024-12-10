@@ -1,12 +1,18 @@
 import { Menu, MenuProps } from "antd";
 import { AppstoreOutlined, BellOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, MenuOutlined, SettingOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import './header.css'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 const Header = () => {
     type MenuItem = Required<MenuProps>['items'][number];
     //const { isLogin } = props;
+    const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
+    const handleLogout = () => {
+        localStorage.removeItem("access_token"); // Xóa token
+        setIsLogin(false);
+        navigate('/login');
+    };
 
     const items: MenuItem[] = [
         {
@@ -73,7 +79,7 @@ const Header = () => {
                         label: "Đăng xuất",
                         key: 'setting:3',
                         icon: <LogoutOutlined />,
-                        onClick: () => setIsLogin(false)
+                        onClick: () => handleLogout()
                     }
                 ]
             }
