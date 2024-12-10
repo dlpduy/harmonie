@@ -30,12 +30,8 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "fname", length = 20, nullable = false)
-    private String fName;
-
-    @NotBlank(message = "Last name is required")
-    @Column(name = "lname", length = 20, nullable = false)
-    private String lName;
+    @Column(name = "full_name", length = 50, nullable = false)
+    private String fullName;
 
     @NotNull(message = "Password is required")
     @Column(name = "password", length = 255, nullable = false)
@@ -46,7 +42,7 @@ public class User implements UserDetails {
     private Date dob;
 
 
-    @Column(name = "sex", nullable = false)
+    @Column(name = "sex")
     private String sex;
 
     @Column(name = "phone", length = 10, unique = true)

@@ -2,22 +2,19 @@ package com.project.harmonie_e_commerce.controller;
 
 import com.project.harmonie_e_commerce.dto.UserDTO;
 import com.project.harmonie_e_commerce.dto.UserLoginDTO;
-import com.project.harmonie_e_commerce.exception.DataNotFoundException;
 import com.project.harmonie_e_commerce.model.User;
 import com.project.harmonie_e_commerce.response.TokenResponse;
 import com.project.harmonie_e_commerce.service.IUserService;
-import com.project.harmonie_e_commerce.service.UserService;
+import com.project.harmonie_e_commerce.util.JwtUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("${api.prefix}/users")
@@ -45,5 +42,12 @@ public class UserController {
     public ResponseEntity<?> login(@Valid @RequestBody UserLoginDTO userLoginDTO) {
             String token = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
             return ResponseEntity.ok(new TokenResponse(token));
+    }
+
+    @PostMapping("/login-social/{idToken}")
+    public ResponseEntity<?> loginSocial(@PathVariable("idToken") String idToken) {
+        Map<String,String> info = JwtUtils.decodeIdToken(idToken);
+        String token = userService.loginSocial(info.get("email"), info.get("name"), info.get("sub"));
+        return ResponseEntity.ok(new TokenResponse(token));
     }
 }

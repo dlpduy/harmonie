@@ -13,10 +13,8 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-    @NotBlank(message = "First name is required")
-    private String fName;
-    @NotBlank(message = "Last name is required")
-    private String lName;
+    @NotBlank(message = "Full name is required")
+    private String fullName;
     private Date dob;
     @Enumerated(EnumType.STRING)
     private Sex sex;
