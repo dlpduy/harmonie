@@ -61,10 +61,10 @@ export const Product = () => {
         });
 
     };
-
+    const fileLists: any[] = [];
     const handleFileList = (product: any) => {
-        const fileLists: any[] = [];
-        for (let i = 1; i <= product.countImage; i++) {
+
+        for (let i = 1; i <= product.num_image; i++) {
             fileLists.push({
                 uid: `-${i}`,
                 name: `${i}.jpg`,
@@ -72,14 +72,15 @@ export const Product = () => {
                 url: `http://localhost:9091/images/${product.id}/${i}.jpg`
             })
         }
+
         return fileLists;
     }
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const response: any = await fetchAllProductsinStore(12);
+            const response: any = await fetchAllProductsinStore(1);
             if (response.statusCode === 200) {
-                await setListProducts(response.data);
+                setListProducts(response.data);
             }
             else {
                 notification.error({
@@ -92,8 +93,8 @@ export const Product = () => {
     }, []);
 
     useEffect(() => {
-        console.log(listProducts);
-    }, [dataProduct, listProducts]);
+        //console.log(handleFileList(products[0]));
+    }, [dataProduct, listProducts, fileLists]);
 
     return (
         <>
@@ -166,7 +167,7 @@ export const Product = () => {
                                                     quantity: product.quantity,
                                                     category_id: product.category_id,
                                                     fileList: handleFileList(product)
-                                                })
+                                                });
                                                 showModalUpdate();
                                             }}
                                         >Edit</Button>

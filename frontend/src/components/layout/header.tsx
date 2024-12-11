@@ -2,18 +2,36 @@ import { Menu, MenuProps } from "antd";
 import { AppstoreOutlined, BellOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, MenuOutlined, SettingOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import './header.css'
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getUserLoginAPI } from "../../services/api.service1";
 const Header = () => {
     type MenuItem = Required<MenuProps>['items'][number];
     //const { isLogin } = props;
     const navigate = useNavigate();
-    const [isLogin, setIsLogin] = useState(true);
+    //const [isLogin, setIsLogin] = useState(true);
+    const [user, setUser] = useState<any>({});
     const handleLogout = () => {
         localStorage.removeItem("access_token"); // Xóa token
-        setIsLogin(false);
+        //setIsLogin(false);
         navigate('/login');
     };
-
+    useEffect(() => {
+        const getUserLogin = async () => {
+            try {
+                const response: any = await getUserLoginAPI();
+                if (response.statusCode === 200) {
+                    setUser(response.data);
+                }
+                else {
+                    setUser(null);
+                }
+            }
+            catch (error) {
+                setUser(null);
+            }
+        }
+        getUserLogin();
+    }, []);
     const items: MenuItem[] = [
         {
             label: 'logo',
@@ -33,21 +51,10 @@ const Header = () => {
             key: 'notification',
             icon: <BellOutlined />,
         },
-        isLogin === false ? {
-            label: (
-                <Link to="/login" style={{ color: "black" }}>Đăng nhập</Link>
-            ),
-            key: 'login',
-            icon: <LoginOutlined />,
-            style: {
-                right: 10,
-                position: 'absolute',
-                color: 'black'
-            },
-        } :
+        user ?
             {
                 key: 'login',
-                label: "Xin chào Đinh Lê Phúc Duy",
+                label: `Xin chào ${user.full_name}`,
                 icon: <UserOutlined />,
                 style: {
                     right: 10,
@@ -82,6 +89,17 @@ const Header = () => {
                         onClick: () => handleLogout()
                     }
                 ]
+            } : {
+                label: (
+                    <Link to="/login" style={{ color: "black" }}>Đăng nhập</Link>
+                ),
+                key: 'login',
+                icon: <LoginOutlined />,
+                style: {
+                    right: 10,
+                    position: 'absolute',
+                    color: 'black'
+                },
             }
 
     ];

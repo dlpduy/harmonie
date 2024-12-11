@@ -1,44 +1,95 @@
+import { Button, Form, Input } from 'antd';
 import styles from '../../styles/Management.module.css';
+import { useState } from 'react';
 
 
 export const ChangePassword = () => {
+    const [form] = Form.useForm();
+    const [oldPassword, setOldPassword] = useState<string>('');
+    const [newPassword, setNewPassword] = useState<string>('');
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = () => {
+        console.log({ oldPassword, newPassword });
+    }
+
     return (
         <section className={styles.mainSection}>
             <div className={styles.infoCard}>
                 <h2 className={styles.infoTitle}>Đổi mật khẩu</h2>
-                <form>
-                    <div className={styles.infoRow}>
-                        <label htmlFor="oldPassword" className={styles.infoLabel}>Mật khẩu hiện tại:</label>
-                        <input
-                            type="password"
-                            name="oldPassword"
-                            className={styles.infoValue}
-                            placeholder="Mật khẩu hiện tại"
-                            style={{ outline: 'none' }}
+                <Form
+                    form={form}
+                    name="basic"
+                    labelCol={{ span: 7 }}
+                    wrapperCol={{ span: 32 }}
+                    //   onFinish={onFinish}
+                    //   onFinishFailed={onFinishFailed}
+                    autoComplete="off"
+                    //className={styles.loginFormContainer}
+                    style={{
+                        height: '650px',
+                        scale: '1.5',
+                        width: '60%',
+                        position: 'relative',
+                        top: '30%',
+                        left: '0%'
+                    }}
+                >
+                    <Form.Item
+                        label="Mật khẩu hiện tại"
+                        name="oldPassword"
+                        rules={[{ required: true, message: 'Please input your password!' }]}
+                    >
+                        <Input.Password
+                            value={oldPassword}
+                            onChange={(e) => setOldPassword(e.target.value)}
                         />
-                    </div>
-                    <div className={styles.infoRow}>
-                        <label htmlFor="newPassword" className={styles.infoLabel}>Mật khẩu mới:</label>
-                        <input
-                            type="password"
-                            name="newPassword"
-                            className={styles.infoValue}
-                            placeholder="Mật khẩu mới"
-                            style={{ outline: 'none' }}
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Mật khẩu mới"
+                        name="newPassword"
+                        rules={[{ required: true, message: 'Please input your password!' }]}
+                    >
+                        <Input.Password
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
                         />
-                    </div>
-                    <div className={styles.infoRow}>
-                        <label htmlFor="confirmPassword" className={styles.infoLabel}>Xác nhận mật khẩu:</label>
-                        <input
-                            type="password"
-                            name="passwordConfirm"
-                            className={styles.infoValue}
-                            placeholder="Xác nhận mật khẩu"
-                            style={{ outline: 'none' }}
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Xác nhận mật khẩu mới"
+                        name="confirm"
+                        dependencies={['newPassword']}
+                        hasFeedback
+                        rules={[
+                            { required: true, message: 'Vui lòng xác nhận mật khẩu!' },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    if (!value || getFieldValue('newPassword') === value) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error('Mật khẩu xác nhận không khớp!'));
+                                },
+                            }),
+                        ]}
+                    >
+                        <Input.Password
                         />
-                    </div>
-                    <button type="submit" className={styles.submitButton}>Hoàn tất</button>
-                </form>
+                    </Form.Item>
+
+                    <Form.Item wrapperCol={{ offset: 16, span: 16 }}>
+                        <Button
+                            type="primary"
+                            formAction='submit'
+                            loading={loading}
+                            onClick={() => handleSubmit()}
+                            style={{ width: '100%', height: '60px' }}
+                        >
+                            Cập nhật mật khẩu
+                        </Button>
+                    </Form.Item>
+                </Form>
             </div>
         </section>
     );

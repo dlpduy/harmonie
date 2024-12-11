@@ -1,0 +1,160 @@
+import { useState } from 'react';
+import styles from '../../../styles/Management.module.css';
+import { ModalCreate } from './modal/ModalCreate';
+import { ModalUpdate } from './modal/ModalUpdate';
+import { Button, notification, Popconfirm, PopconfirmProps } from 'antd';
+
+
+const promotions = [
+    {
+        id: 1,
+        code: "KH10248",
+        quantity: 10,
+        amount: 900000,
+        release_date: "01/01/2024",
+        start_date: "01/01/2024",
+        expiration_date: "31/12/2024"
+    },
+    {
+        id: 2,
+        code: "KH38242",
+        quantity: 15,
+        amount: 1350000,
+        release_date: "01/01/2024",
+        start_date: "01/01/2024",
+        expiration_date: "01/05/2025"
+    },
+    {
+        id: 3,
+        code: "KH10382",
+        quantity: 10,
+        amount: 950000,
+        release_date: "01/01/2024",
+        start_date: "01/01/2024",
+        expiration_date: "31/12/2024"
+    },
+    {
+        id: 4,
+        code: "KH33393",
+        quantity: 35,
+        amount: 1650000,
+        release_date: "01/01/2024",
+        start_date: "01/01/2024",
+        expiration_date: "01/05/2025"
+    },
+    {
+        id: 5,
+        code: "KH76543",
+        quantity: 20,
+        amount: 1800000,
+        release_date: "01/01/2024",
+        start_date: "01/01/2024",
+        expiration_date: "31/12/2024"
+    }
+];
+
+export const Promotion = () => {
+
+
+    const [isModalCreateOpen, setIsModalCreateOpen] = useState<boolean>(false);
+    const showModalCreate = () => {
+        setIsModalCreateOpen(true);
+    };
+
+    const [isModalUpdateOpen, setIsModalUpdateOpen] = useState<boolean>(false);
+    const showModalUpdate = () => {
+        setIsModalUpdateOpen(true);
+
+    };
+    const [dataPromotion, setDataPromotion] = useState<Object>({});
+    const confirm: PopconfirmProps['onConfirm'] = (e) => {
+        notification.success({
+            message: "Xoa dia chi thanh cong",
+            description: "Xoa dia chi thanh cong"
+        });
+    };
+
+    return (
+        <section className={styles.mainSection}>
+            <div className={styles.infoCard}>
+                <div className={styles.Header}>
+                    <h2 className={styles.Title}>Mã khuyến mãi</h2>
+                    <Button
+                        style={{
+                            height: '50px',
+                            width: '200px',
+                            borderRadius: '5px',
+                            left: '43%',
+                            fontSize: '20px'
+                        }}
+                        type='primary'
+                        onClick={() => showModalCreate()}
+                    >Thêm mã khuyến mãi</Button>
+                </div>
+
+                <table className={styles.Table}>
+                    <thead className={styles.TableHeader}>
+                        <tr>
+                            <th>STT</th>
+                            <th>Mã khuyến mãi</th>
+                            <th>Số lượng</th>
+                            <th>Tổng số tiền</th>
+                            <th>Ngày bắt đầu</th>
+                            <th>Ngày hết hạn</th>
+                            <th>Hoạt động</th>
+                        </tr>
+                    </thead>
+                    <tbody className={styles.TableBody}>
+                        {promotions.map((promotion, index) => (
+                            <tr key={promotion.id}>
+                                <td>{index + 1}</td>
+                                <td>{promotion.code}</td>
+                                <td>{promotion.quantity}</td>
+                                <td>{promotion.amount}</td>
+                                <td>{promotion.start_date}</td>
+                                <td>{promotion.expiration_date}</td>
+                                <td>
+                                    <Button
+                                        type='primary'
+                                        onClick={() => {
+                                            setDataPromotion({
+                                                code: promotion.code,
+                                                quantity: promotion.quantity,
+                                                amount: promotion.amount,
+                                                releaseDate: promotion.release_date,
+                                                startDate: promotion.start_date,
+                                                expirationDate: promotion.expiration_date
+                                            })
+                                            showModalUpdate()
+                                        }
+                                        }
+                                    >Edit</Button>
+                                    <Popconfirm
+                                        title="Delete product"
+                                        description="Bạn có chắc muốn xóa sản phẩm này?"
+                                        onConfirm={confirm}
+                                        okText="Yes"
+                                        cancelText="No"
+
+                                    >
+                                        <Button
+                                            danger
+                                            style={{ marginLeft: '10px' }}
+                                        >Delete</Button>
+                                    </Popconfirm>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            <ModalCreate isModalCreateOpen={isModalCreateOpen} setIsModalCreateOpen={setIsModalCreateOpen} />
+            <ModalUpdate
+                isModalUpdateOpen={isModalUpdateOpen}
+                setIsModalUpdateOpen={setIsModalUpdateOpen}
+                dataPromotion={dataPromotion} />
+        </section>
+    );
+}
+

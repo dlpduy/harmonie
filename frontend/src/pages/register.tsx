@@ -22,7 +22,7 @@ const RegisterPage: React.FC = () => {
         try {
             setLoading(true);
             const data = {
-                fullName: fullName,
+                full_name: fullName,
                 dob: birthdate,
                 sex: gender,
                 phone: phone,
@@ -31,15 +31,7 @@ const RegisterPage: React.FC = () => {
             }
 
             const response: any = await registerAPI(data);
-            if (response.statusCode && response.statusCode >= 400) {
-                notification.error({
-                    message: `Lỗi ${response.statusCode}`,
-                    description: response.message
-                })
-                setLoading(false);
-
-            }
-            else {
+            if (response.statusCode === 200 || response.data === "User created successfully") {
                 notification.success({
                     message: 'Thành công',
                     description: 'Đăng ký thành công, vui lòng đăng nhập'
@@ -48,6 +40,14 @@ const RegisterPage: React.FC = () => {
                 setTimeout(() => {
                     navigate('/login');
                 }, 1000);
+
+            }
+            else {
+                notification.error({
+                    message: `Lỗi ${response.statusCode}`,
+                    description: response.message
+                })
+                setLoading(false);
             }
         }
         catch (error: any) {

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import styles from '../styles/Form.module.css';
 import backgroungImage from '../assets/images/background.jpg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Form, GetProps, Input, notification } from 'antd';
+import { forgotPasswordAPI, updatePasswordAPI } from '../services/api.service1';
 
 
 
@@ -13,7 +14,7 @@ const ForgotPassWordPage: React.FC = () => {
     const [otp, setOtp] = useState<string>('');
     const [showInput, setShowInput] = useState(true);
     const [loading, setLoading] = useState(false);
-
+    const navigate = useNavigate();
 
     type OTPProps = GetProps<typeof Input.OTP>;
 
@@ -25,26 +26,46 @@ const ForgotPassWordPage: React.FC = () => {
     };
     const handleSubmit = async () => {
         setLoading(true);
-        setTimeout(() => {
-
-            if (showInput) {
+        if (showInput) {
+            const response: any = await forgotPasswordAPI({ username: email });
+            if (response.statusCode !== 200) {
+                notification.error({
+                    message: 'Error',
+                    description: 'Đã có lỗi xảy ra'
+                })
+                setLoading(false);
+                return;
+            }
+            else {
                 setShowInput(false);
                 notification.success({
                     message: 'Success',
                     description: 'Mã otp đã được gửi về email của bạn'
                 })
             }
+        }
+        else {
+            const response: any = await updatePasswordAPI({ username: email, codeVerify: otp, new_password: password });
+            if (response.statusCode !== 200) {
+                notification.error({
+                    message: 'Error',
+                    description: 'Đã có lỗi xảy ra'
+                })
+                setLoading(false);
+                return;
+            }
             else {
                 notification.success({
                     message: 'Success',
                     description: 'Đổi mật khẩu thành công'
                 })
+                navigate('/login');
             }
 
-            setLoading(false);
-        }, 3000);
+        }
 
-        console.log({ email, password, otp });
+        setLoading(false);
+
     }
 
     return (

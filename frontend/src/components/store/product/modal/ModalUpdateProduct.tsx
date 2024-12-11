@@ -41,7 +41,7 @@ export const ModalUpdate = (props: any) => {
 
     const handleOkUpdate = async () => {
         // console.log(fileList);
-        console.log(dataProduct.fileList)
+        //console.log(dataProduct.fileList)
     }
 
     const handleCancelUpdate = () => {
