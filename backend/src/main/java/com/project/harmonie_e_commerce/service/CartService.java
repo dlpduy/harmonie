@@ -55,7 +55,7 @@
                  }
 
                  ProductInCartResponse productInCartResponse = ProductInCartResponse.builder()
-                         .id(p.getId())
+                         .id(product.getId())//id bên bảng product gốc
                          .name(product.getName())
                          .brand(product.getBrand())
                          .price(product.getPrice() * p.getQuantity())
@@ -129,16 +129,14 @@
      }
 
      @Override
-     public ProductInCart updateQuantityProductinCart(Integer id, Integer newQuantity){
-//         Product product = productRepository.findById(product_id).get();
-//
-//         User user = userRepository.findById(userId).orElseThrow(
-//                 () -> new DataNotFoundException("User not found")
-//         );
+     public ProductInCart updateQuantityProductinCart(Integer product_id, Integer userId, Integer newQuantity){
+         Product product = productRepository.findById(product_id).get();
 
-         ProductInCart product_to_add = productInCartRepository.findById(id).orElseThrow(
-                 () -> new DataNotFoundException("Not found product in cart")
+         User user = userRepository.findById(userId).orElseThrow(
+                 () -> new DataNotFoundException("User not found")
          );
+
+         ProductInCart product_to_add = productInCartRepository.findByProductAndUser(product,user);
          product_to_add.setQuantity(newQuantity);
          return productInCartRepository.save(product_to_add);
      }

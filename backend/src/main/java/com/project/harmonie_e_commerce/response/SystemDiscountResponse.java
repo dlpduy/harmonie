@@ -37,7 +37,7 @@ public class SystemDiscountResponse {
     public static SystemDiscountResponse fromSystemDiscount(SystemDiscount systemDiscount) {
         return systemDiscount == null ? null :
                 SystemDiscountResponse.builder()
-                .id(systemDiscount.getDiscount().getId())
+                .id(systemDiscount.getId())
                 .code(systemDiscount.getDiscount().getCode())
                 .quantity(systemDiscount.getDiscount().getQuantity())
                 .releaseDate(systemDiscount.getDiscount().getReleaseDate())
