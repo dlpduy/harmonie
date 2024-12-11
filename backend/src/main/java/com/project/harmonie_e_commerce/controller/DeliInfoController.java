@@ -2,6 +2,8 @@ package com.project.harmonie_e_commerce.controller;
 
 import com.project.harmonie_e_commerce.dto.DeliveryInformationDTO;
 import com.project.harmonie_e_commerce.service.DeliveryInfoService;
+import com.project.harmonie_e_commerce.service.ExtractToken;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +15,14 @@ import org.springframework.web.bind.annotation.*;
 public class DeliInfoController {
 
     private final DeliveryInfoService deliveryInfoService;
+    private final ExtractToken extractToken;
 
-    @PostMapping("/create/{user_id}")
+    @PostMapping("/create")
     public ResponseEntity<?> createDeliInfo(
-            @PathVariable Integer user_id,
-            @RequestBody DeliveryInformationDTO dto
+            @RequestBody DeliveryInformationDTO dto,
+            HttpServletRequest request
     ){
+            Integer user_id = extractToken.getIdFromToken(request);
             return new ResponseEntity<>(deliveryInfoService.createDeliveryInfo(user_id,dto), HttpStatus.OK);
     }
 
@@ -30,10 +34,11 @@ public class DeliInfoController {
             return new ResponseEntity<>(deliveryInfoService.updateDeliveryInfo(deli_id,dto), HttpStatus.OK);
     }
 
-    @GetMapping("/all/{user_id}")
+    @GetMapping("/all")
     public ResponseEntity<?> updateDeliInfo(
-            @PathVariable Integer user_id
+            HttpServletRequest request
     ){
+            Integer user_id = extractToken.getIdFromToken(request);
             return new ResponseEntity<>(deliveryInfoService.showAllDeliInfo(user_id), HttpStatus.OK);
     }
 

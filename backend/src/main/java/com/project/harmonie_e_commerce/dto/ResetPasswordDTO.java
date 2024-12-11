@@ -1,4 +1,4 @@
-package com.project.harmonie_e_commerce.response;
+package com.project.harmonie_e_commerce.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TokenResponse {
-    private String token;
+public class ResetPasswordDTO {
+    private String oldPassword;
+    private String newPassword;
 }

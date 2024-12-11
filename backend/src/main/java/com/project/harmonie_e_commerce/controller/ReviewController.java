@@ -1,7 +1,9 @@
 package com.project.harmonie_e_commerce.controller;
 
 import com.project.harmonie_e_commerce.dto.ReviewDTO;
+import com.project.harmonie_e_commerce.service.ExtractToken;
 import com.project.harmonie_e_commerce.service.ReviewService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +16,15 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping("/create/{user_id}/{product_id}")
+    private final ExtractToken extractToken;
+
+    @PostMapping("/create/{product_id}")
     public ResponseEntity<?> createReview(
             @RequestBody ReviewDTO reviewDTO,
-            @PathVariable Integer user_id,
-            @PathVariable Integer product_id
+            @PathVariable Integer product_id,
+            HttpServletRequest request
     ){
+        Integer user_id = extractToken.getIdFromToken(request);
         return new ResponseEntity<>(reviewService.createReview(reviewDTO,user_id,product_id), HttpStatus.OK);
     }
 

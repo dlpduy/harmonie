@@ -10,10 +10,7 @@
  import com.project.harmonie_e_commerce.repository.ProductInCartRepository;
  import com.project.harmonie_e_commerce.repository.ProductRepository;
  import com.project.harmonie_e_commerce.repository.UserRepository;
- import com.project.harmonie_e_commerce.response.CartResponse;
- import com.project.harmonie_e_commerce.response.ProductInCartResponse;
- import com.project.harmonie_e_commerce.response.ProductResponse;
- import com.project.harmonie_e_commerce.response.StoreResponse;
+ import com.project.harmonie_e_commerce.response.*;
  import lombok.AllArgsConstructor;
  import org.springframework.stereotype.Service;
 
@@ -132,16 +129,27 @@
      }
 
      @Override
-     public ProductInCart updateQuantityProductinCart(Integer product_id, Integer userId, Integer newQuantity){
-         Product product = productRepository.findById(product_id).get();
+     public ProductInCart updateQuantityProductinCart(Integer id, Integer newQuantity){
+//         Product product = productRepository.findById(product_id).get();
+//
+//         User user = userRepository.findById(userId).orElseThrow(
+//                 () -> new DataNotFoundException("User not found")
+//         );
 
-         User user = userRepository.findById(userId).orElseThrow(
-                 () -> new DataNotFoundException("User not found")
+         ProductInCart product_to_add = productInCartRepository.findById(id).orElseThrow(
+                 () -> new DataNotFoundException("Not found product in cart")
          );
-
-         ProductInCart product_to_add = productInCartRepository.findByProductAndUser(product,user);
          product_to_add.setQuantity(newQuantity);
          return productInCartRepository.save(product_to_add);
      }
 
+
+     @Override
+     public StringResponse deleteProductInCartById(Integer id) {
+         ProductInCart productInCart = productInCartRepository.findById(id).orElseThrow(
+                 () -> new DataNotFoundException("Not found product in cart")
+         );
+         productInCartRepository.delete(productInCart);
+         return new StringResponse("Xoa thanh cong");
+     }
  }

@@ -1,10 +1,15 @@
 package com.project.harmonie_e_commerce.service;
 
 import com.project.harmonie_e_commerce.component.JwtTokenUtil;
+import com.project.harmonie_e_commerce.dto.ProfileDTO;
+import com.project.harmonie_e_commerce.dto.ResetPasswordDTO;
 import com.project.harmonie_e_commerce.dto.UserDTO;
 import com.project.harmonie_e_commerce.exception.DataNotFoundException;
 import com.project.harmonie_e_commerce.model.User;
 import com.project.harmonie_e_commerce.repository.UserRepository;
+import com.project.harmonie_e_commerce.response.GetUserResponse;
+import com.project.harmonie_e_commerce.response.StringResponse;
+import com.project.harmonie_e_commerce.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -82,5 +87,59 @@ public class UserService implements IUserService {
                 );
         authenticationManager.authenticate(authenticationToken);
         return jwtTokenUtil.generateToken(user);
+    }
+
+    @Override
+    public GetUserResponse getUser(String token) {
+        String email = JwtUtils.decodeWebToken(token).get("email");
+        System.out.println(email);
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new DataNotFoundException("User not found with email " + email)
+        );
+        return GetUserResponse.builder()
+                .full_name(user.getFullName())
+                .role(user.getRole())
+                .build();
+    }
+
+    @Override
+    public User getProfile(String token) {
+        String email = JwtUtils.decodeWebToken(token).get("email");
+        return userRepository.findByEmail(email).orElseThrow(
+                () -> new DataNotFoundException("User not found with email " + email)
+        );
+    }
+
+    @Override
+    public StringResponse updateProfile(ProfileDTO profileDTO, String token) {
+        String email = JwtUtils.decodeWebToken(token).get("email");
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new DataNotFoundException("User not found with email " + email)
+        );
+        user.setDob(profileDTO.getDob());
+        user.setPhone(profileDTO.getPhone());
+        user.setFullName(profileDTO.getFull_name());
+        user.setSex(profileDTO.getSex());
+
+        userRepository.save(user);
+
+        return new StringResponse("Cap nhat thanh cong");
+    }
+
+    @Override
+    public StringResponse updatePassword(ResetPasswordDTO resetPasswordDTO, String token) {
+        String email = JwtUtils.decodeWebToken(token).get("email");
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new DataNotFoundException("User not found with email " + email)
+        );
+
+        if (!passwordEncoder.matches(resetPasswordDTO.getOldPassword(), user.getPassword())) {
+            throw new BadCredentialsException("OldPassword is incorrect");
+        }
+
+        user.setPassword(passwordEncoder.encode(resetPasswordDTO.getNewPassword()));
+
+        userRepository.save(user);
+        return new StringResponse("Cap nhat mat khau thanh cong");
     }
 }

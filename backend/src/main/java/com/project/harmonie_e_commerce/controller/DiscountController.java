@@ -5,6 +5,8 @@ import com.project.harmonie_e_commerce.dto.StoreDiscountDTO;
 import com.project.harmonie_e_commerce.dto.SystemDiscountDTO;
 import com.project.harmonie_e_commerce.service.CartService;
 import com.project.harmonie_e_commerce.service.DiscountService;
+import com.project.harmonie_e_commerce.service.ExtractToken;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,8 @@ public class DiscountController {
     private final CartService cartService;
 
     private final DiscountService discountService;
+
+    private final ExtractToken extractToken;
 
     @GetMapping("shipping_discount")
     public ResponseEntity<?> getAllShippingDiscount(){
@@ -51,11 +55,12 @@ public class DiscountController {
             return new ResponseEntity<>(discountService.createShippingDiscount(shippingDiscountDTO), HttpStatus.OK);
     }
 
-    @PostMapping("add/store_discount/{store_id}")
+    @PostMapping("add/store_discount")
     public ResponseEntity<?> createStoreDiscount(
             @RequestBody StoreDiscountDTO dto,
-            @PathVariable Integer store_id
-            ){
+            HttpServletRequest request
+    ){
+            Integer store_id = extractToken.getIdFromToken(request);
             return new ResponseEntity<>(discountService.createStoreDiscount(store_id,dto), HttpStatus.OK);
     }
 }
