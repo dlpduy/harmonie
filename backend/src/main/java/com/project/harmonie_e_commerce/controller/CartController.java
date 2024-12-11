@@ -28,15 +28,15 @@
              return new ResponseEntity<>(cartService.getAllProductsInCart(user_id), HttpStatus.OK);
      }
 
-//     @DeleteMapping("/delete/{product_id}")
-//     public ResponseEntity<String> deleteItemInCart(
-//             @PathVariable Integer product_id,
-//             HttpServletRequest request
-//     ){
-//             Integer user_id = extractToken.getIdFromToken(request);
-//             cartService.deleteItemInCart(product_id,user_id);
-//             return new ResponseEntity<>("Delete successfully", HttpStatus.OK);
-//     }
+     @DeleteMapping("/delete/{product_id}")
+     public ResponseEntity<String> deleteItemInCart(
+             @PathVariable Integer product_id,
+             HttpServletRequest request
+     ){
+             Integer user_id = extractToken.getIdFromToken(request);
+             cartService.deleteItemInCart(product_id,user_id);
+             return new ResponseEntity<>("Delete successfully", HttpStatus.OK);
+     }
 
      @PostMapping("/add/{product_id}")
      public ResponseEntity<ProductInCart> addProductToCart(
@@ -47,22 +47,24 @@
              return new ResponseEntity<>(cartService.addProductToCart(product_id,user_id), HttpStatus.OK);
      }
 
-     @PutMapping("/update_quantity/{id}")
+     @PutMapping("/update_quantity/{product_id}")
      public ResponseEntity<ProductInCart> updateQuantityProductInCart(
-             @PathVariable Integer id,
-             @RequestParam Integer newQuantity
+             @PathVariable Integer product_id,
+             @RequestParam Integer newQuantity,
+             HttpServletRequest request
      ){
+            Integer user_id = extractToken.getIdFromToken(request);
              return new ResponseEntity<>(cartService.updateQuantityProductinCart(
-                     id,newQuantity
+                     product_id,user_id,newQuantity
              ), HttpStatus.OK);
      }
 
-     @DeleteMapping("/deletebyid/{id}")
-     public ResponseEntity<?> deleteProductInCartById(
-             @PathVariable Integer id
-     ){
-         return ResponseEntity.ok(cartService.deleteProductInCartById(id));
-     }
+//     @DeleteMapping("/deletebyid/{id}")
+//     public ResponseEntity<?> deleteProductInCartById(
+//             @PathVariable Integer id
+//     ){
+//         return ResponseEntity.ok(cartService.deleteProductInCartById(id));
+//     }
 
 //     @GetMapping("/price")
 //     public ResponseEntity<Float> getTotalPrice(

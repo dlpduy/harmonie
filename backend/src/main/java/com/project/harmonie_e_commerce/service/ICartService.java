@@ -22,7 +22,7 @@ public interface ICartService {
 
     ProductInCart addProductToCart(Integer product_id, Integer userId);
 
-    ProductInCart updateQuantityProductinCart(Integer id, Integer newQuantity);
+    ProductInCart updateQuantityProductinCart(Integer product_id,Integer userId, Integer newQuantity);
 
     StringResponse deleteProductInCartById(Integer id);
 
