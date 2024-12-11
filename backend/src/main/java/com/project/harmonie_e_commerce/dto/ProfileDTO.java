@@ -11,7 +11,6 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProfileDTO {
-    private String token;
     private String full_name;
     private Date dob;
     private String sex;

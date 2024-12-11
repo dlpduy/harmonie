@@ -8,6 +8,14 @@ public class JwtUtils {
         DecodedJWT jwt = JWT.decode(idToken);
         String email = jwt.getClaim("email").asString();
         String sub = jwt.getClaim("sub").asString();
+        String name = jwt.getClaim("name").asString();
+        return Map.of("email", email,"name",name, "sub", sub);
+    }
+
+    public static Map<String,String> decodeWebToken(String idToken) {
+        DecodedJWT jwt = JWT.decode(idToken);
+        String email = jwt.getClaim("email").asString();
+        String sub = jwt.getClaim("sub").asString();
         return Map.of("email", email, "sub", sub);
     }
 

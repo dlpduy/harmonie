@@ -1,5 +1,6 @@
 package com.project.harmonie_e_commerce.controller;
 
+import com.project.harmonie_e_commerce.service.ExtractToken;
 import com.project.harmonie_e_commerce.service.OrderService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -53,6 +54,8 @@ public class OrderController {
 
    private final OrderService orderService;
 
+   private final ExtractToken extractToken;
+
    @PostMapping("")
    public ResponseEntity<?> createOrder(HttpServletRequest request,
    @Valid @RequestBody OrderDTO orderRequest){
@@ -60,8 +63,9 @@ public class OrderController {
         return ResponseEntity.ok(respone);
    }
 
-   @GetMapping("/user/{user_id}")
-    public ResponseEntity<?> getOrdersByUserId(HttpServletRequest request, @PathVariable Integer user_id){
+   @GetMapping("/user")
+    public ResponseEntity<?> getOrdersByUserId(HttpServletRequest request){
+        Integer user_id = extractToken.getIdFromToken(request);
         return ResponseEntity.ok(orderService.getOrdersByUserId(request, user_id));
     }
 

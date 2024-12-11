@@ -61,29 +61,51 @@ public class UserController {
 
     @GetMapping("/get-user")
     public ResponseEntity<?> getUser(
-            @RequestParam String token
+            HttpServletRequest request
     ){
+        String token = request.getHeader("Authorization");
+        if(token == null || !token.startsWith("Bearer ")){
+            throw new AuthenticationException("Unauthorized") {};
+        }
+        token = token.substring(7);
         return ResponseEntity.ok(userService.getUser(token));
     }
 
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile(
-            @RequestParam String token
+            HttpServletRequest request
     ){
+        String token = request.getHeader("Authorization");
+        if(token == null || !token.startsWith("Bearer ")){
+            throw new AuthenticationException("Unauthorized") {};
+        }
+        token = token.substring(7);
         return ResponseEntity.ok(userService.getProfile(token));
     }
 
     @PutMapping("/profile")
     public ResponseEntity<?> updateProfile(
-            @RequestBody ProfileDTO profileDTO
+            @RequestBody ProfileDTO profileDTO,
+            HttpServletRequest request
     ){
-        return ResponseEntity.ok(userService.updateProfile(profileDTO));
+        String token = request.getHeader("Authorization");
+        if(token == null || !token.startsWith("Bearer ")){
+            throw new AuthenticationException("Unauthorized") {};
+        }
+        token = token.substring(7);
+        return ResponseEntity.ok(userService.updateProfile(profileDTO,token));
     }
 
     @PutMapping("/password")
     public ResponseEntity<?> updatePassword(
-            @RequestBody ResetPasswordDTO resetPasswordDTO
-            ){
-        return ResponseEntity.ok(userService.updatePassword(resetPasswordDTO));
+            @RequestBody ResetPasswordDTO resetPasswordDTO,
+            HttpServletRequest request
+    ){
+        String token = request.getHeader("Authorization");
+        if(token == null || !token.startsWith("Bearer ")){
+            throw new AuthenticationException("Unauthorized") {};
+        }
+        token = token.substring(7);
+        return ResponseEntity.ok(userService.updatePassword(resetPasswordDTO,token));
     }
 }

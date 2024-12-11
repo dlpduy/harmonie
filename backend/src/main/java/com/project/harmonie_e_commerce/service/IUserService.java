@@ -17,7 +17,7 @@ public interface IUserService {
 
     User getProfile(String token);
 
-    StringResponse updateProfile(ProfileDTO profileDTO);
+    StringResponse updateProfile(ProfileDTO profileDTO, String token);
 
-    StringResponse updatePassword(ResetPasswordDTO resetPasswordDTO);
+    StringResponse updatePassword(ResetPasswordDTO resetPasswordDTO,String token);
 }

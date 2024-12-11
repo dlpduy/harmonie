@@ -91,7 +91,7 @@ public class UserService implements IUserService {
 
     @Override
     public GetUserResponse getUser(String token) {
-        String email = JwtUtils.decodeIdToken(token).get("email");
+        String email = JwtUtils.decodeWebToken(token).get("email");
         System.out.println(email);
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new DataNotFoundException("User not found with email " + email)
@@ -104,15 +104,15 @@ public class UserService implements IUserService {
 
     @Override
     public User getProfile(String token) {
-        String email = JwtUtils.decodeIdToken(token).get("email");
+        String email = JwtUtils.decodeWebToken(token).get("email");
         return userRepository.findByEmail(email).orElseThrow(
                 () -> new DataNotFoundException("User not found with email " + email)
         );
     }
 
     @Override
-    public StringResponse updateProfile(ProfileDTO profileDTO) {
-        String email = JwtUtils.decodeIdToken(profileDTO.getToken()).get("email");
+    public StringResponse updateProfile(ProfileDTO profileDTO, String token) {
+        String email = JwtUtils.decodeWebToken(token).get("email");
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new DataNotFoundException("User not found with email " + email)
         );
@@ -127,8 +127,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public StringResponse updatePassword(ResetPasswordDTO resetPasswordDTO) {
-        String email = JwtUtils.decodeIdToken(resetPasswordDTO.getToken()).get("email");
+    public StringResponse updatePassword(ResetPasswordDTO resetPasswordDTO, String token) {
+        String email = JwtUtils.decodeWebToken(token).get("email");
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new DataNotFoundException("User not found with email " + email)
         );
