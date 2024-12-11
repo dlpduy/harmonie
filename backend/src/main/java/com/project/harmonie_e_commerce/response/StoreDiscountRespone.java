@@ -35,7 +35,7 @@ public class StoreDiscountRespone {
     static public StoreDiscountRespone fromStoreDiscount(StoreDiscount storeDiscount){
         return storeDiscount == null ? null :
             StoreDiscountRespone.builder()
-                .id(storeDiscount.getDiscount().getId())
+                .id(storeDiscount.getId())
                 .code(storeDiscount.getDiscount().getCode())
                 .quantity(storeDiscount.getDiscount().getQuantity())
                 .releaseDate(storeDiscount.getDiscount().getReleaseDate())

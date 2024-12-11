@@ -33,7 +33,7 @@ public class ShippingDiscountRespone {
     static public ShippingDiscountRespone fromShippingDiscount(ShippingDiscount shippingDiscount) {
         return shippingDiscount == null ? null :
             ShippingDiscountRespone.builder()
-                .id(shippingDiscount.getDiscount().getId())
+                .id(shippingDiscount.getId())
                 .code(shippingDiscount.getDiscount().getCode())
                 .quantity(shippingDiscount.getDiscount().getQuantity())
                 .releaseDate(shippingDiscount.getDiscount().getReleaseDate())
