@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from '../styles/Form.module.css';
 import backgroungImage from '../assets/images/background.jpg';
 import { Button, Col, DatePicker, Form, Input, notification, Radio, Row } from 'antd';
-import { loginAPI } from '../services/api.service1';
+import { loginAPI, loginGoogleAPI } from '../services/api.service1';
 import { Link, useNavigate } from 'react-router-dom';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
@@ -37,9 +37,26 @@ const LoginPage: React.FC = () => {
 
     }
 
-    const hanleLoginGoogle = (response: any) => {
+    const hanleLoginGoogle = async (response: any) => {
         const token = response.credential;
-        console.log(token);
+        const responseGoogle: any = await loginGoogleAPI(token);
+        console.log(responseGoogle);
+        if (responseGoogle.statusCode === 200) {
+            notification.success({
+                message: 'Success',
+                description: 'Login successfully'
+            })
+            localStorage.setItem('access_token', responseGoogle.data.token);
+            setTimeout(() => {
+                navigate('/');
+            }, 1000);
+        }
+        else {
+            notification.error({
+                message: `Lỗi ${responseGoogle.statusCode}`,
+                description: responseGoogle.message
+            })
+        }
     }
 
     return (

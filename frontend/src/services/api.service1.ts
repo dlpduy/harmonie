@@ -12,6 +12,15 @@ const loginAPI = (data: any) => {
     return axios.post(URL_BACKEND, data)
 }
 
+const loginGoogleAPI = (tokenGoogle: any) => {
+    const URL_BACKEND = "api/v1/users/login-social"
+    const config = {
+        headers: {
+            Authorization: `Bearer ${tokenGoogle}`,
+        },
+    }
+    return axios.post(URL_BACKEND, {}, config)
+}
 
 
 const logoutAPI = () => {
@@ -66,6 +75,6 @@ const fetchAllProductsinStore = async (store_id: number) => {
 
 
 export {
-    registerAPI, loginAPI, logoutAPI,
+    registerAPI, loginAPI, loginGoogleAPI, logoutAPI,
     createProductAPI, updateProductAPI, fetchAllProductsinStore,
 }
