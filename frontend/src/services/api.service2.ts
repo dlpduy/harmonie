@@ -1,117 +1,214 @@
 
 import axios from './axios.customize';
-const createUserAPI = (fullName: String, email: String, password: String, phoneNumber: String) => {
-    const URL_BACKEND = "/api/v1/user";
-    const data = {
-        fullName: fullName,
-        email: email,
-        password: password,
-        phone: phoneNumber
-    }
-    return axios.post(URL_BACKEND, data)
-}
+    const accessToken = localStorage.getItem('access_token'); 
 
-const updateUserAPI = (_id: Number, fullName: String, phone: String) => {
-    const URL_BACKEND = "/api/v1/user";
-    const data = {
-        _id: _id,
-        fullName: fullName,
-        phone: phone
-    }
-    return axios.put(URL_BACKEND, data)
-}
+const fetchCartItemsAPI = async () => {
+    const URL_BACKEND = "/api/v1/productincart/1";
 
-const deleteUserAPI = (_id: Number) => {
-    const URL_BACKEND = `/api/v1/user/${_id}`;
-    //console.log(URL_BACKEND)
-    return axios.delete(URL_BACKEND)
-}
-
-const uploadFileAPI = (file: File, folder: any) => {
-    const URL_BACKEND = "/api/v1/file/upload";
-    let config = {
-        headers: {
-            "upload-type": folder,
-            "Content-Type": "multipart/form-data"
-        }
-    }
-    const bodyFormData = new FormData();
-    bodyFormData.append("fileImg", file);
-    return axios.post(URL_BACKEND, bodyFormData, config)
-}
-
-const fetchAllUsersAPI = (current: Number, pageSize: Number) => {
-    const URL_BACKEND = `/api/v1/user?current=${current}&pageSize=${pageSize}`;
-    return axios.get(URL_BACKEND)
-}
-
-const updateUserAvatarAPI = (avatar: String, _id: Number, fullName: String, phone: String) => {
-    const URL_BACKEND = "/api/v1/user";
-    const data = {
-        _id: _id,
-        avatar: avatar,
-        fullName: fullName,
-        phone: phone
-    }
-    return axios.put(URL_BACKEND, data)
-}
-
-const registerUserAPI = (fullName: String, email: String, password: String, phoneNumber: String) => {
-    const URL_BACKEND = "/api/v1/user/register";
-    const data = {
-        fullName: fullName,
-        email: email,
-        password: password,
-        phone: phoneNumber
-    }
-    return axios.post(URL_BACKEND, data)
-}
-
-const loginUserAPI = (email: String, password: String) => {
-    const URL_BACKEND = "api/v1/auth/login"
-    const data = {
-        username: email,
-        password: password,
-        delay: 1000
-    }
-    return axios.post(URL_BACKEND, data)
-}
-
-const getAccountAPI = () => {
-    const URL_BACKEND = "api/v1/auth/get-user"
-    return axios.get(URL_BACKEND)
-}
-
-
-const getUserInfo = async () => {
     try {
-        const URL_BACKEND = "api/v1/user/get-user";
         const response = await axios.get(URL_BACKEND, {
-            // gui access token kem theo request
             headers: {
-                Authorization: `Bearer ${localStorage.getItem("access_token")}`
+                Authorization: `Bearer ${accessToken}`
             }
         });
+        console.log('API response:', response.data);
         return response;
     } catch (error) {
-        console.error("Error fetching user info:", error);
+        console.error('API error:', error);
+        throw error;
     }
 };
 
-const logoutAPI = () => {
-    const URL_BACKEND = "api/v1/auth/logout"
-    return axios.post(URL_BACKEND)
-}
+
+const fetchProductImagesAPI = async (productId: number, numImages: number) => {
+    const imageUrls = Array.from({ length: numImages }, (_, i) => 
+        `/images/${productId}/${i + 1}.jpg`
+    );
+
+    try {
+        const imagePromises = imageUrls.map(url => 
+            axios.get(url, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                responseType: 'blob' // Ensure the response is a blob (binary data)
+            })
+        );
+
+        const responses = await Promise.all(imagePromises);
+        const images = responses.map(response => response.data);
+        console.log('API ima responses:', images);
+        return images; // Return the array of image data
+    } catch (error) {
+        console.error('API error:', error);
+        throw error;
+    }
+};
+const deleteCartItemAPI = async (userId: number, productId: number) => {
+    const URL_BACKEND = `/api/v1/delete/${userId}/${productId}`;
 
 
+    try {
+        const response = await axios.delete(URL_BACKEND, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        console.log('API response:', response.data);
+        return response;
+    } catch (error) {
+        console.error('API error:', error);
+        throw error;
+    }
+};
+const fetchProductDetailAPI = async (productId: number) => {
+    const URL_BACKEND = `/api/v1/products/${productId}`;
+    
+    try {
+        const response = await axios.get(URL_BACKEND, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        console.log('API response:', response.data);
+        return response;
+    } catch (error) {
+        console.error('API error:', error);
+        throw error;
+    }
+};
+const fetchProductReviewsAPI = async (productId: number) => {
+    const URL_BACKEND = `/api/v1/review/all/${productId}`;
+   
+    try {
+        const response = await axios.get(URL_BACKEND, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        console.log('API response:', response.data);
+        return response.data; // Return the data directly
+    } catch (error) {
+        console.error('API error:', error);
+        throw error;
+    }
+};
+const addProductToCartAPI = async (userId: number, productId: number) => {
+    const URL_BACKEND = `/api/v1/add/${userId}/${productId}`;
 
+    try {
+        const response = await axios.post(URL_BACKEND, {}, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        console.log('API response:', response);
+        return response;
+    } catch (error) {
+        console.error('API error:', error);
+        throw error;
+    }
+};
 
+const fetchUserDeliveryAddressesAPI = async (userId: number) => {
+    const URL_BACKEND = `/api/v1/user/delivery/all/${userId}`;
 
+    try {
+        const response = await axios.get(URL_BACKEND, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        console.log('API response:', response.data);
+        return response; // Return the data directly
+    } catch (error) {
+        console.error('API error:', error);
+        throw error;
+    }
+};
+const fetchStoreDiscountAPI = async (storeId: number) => {
+    const URL_BACKEND = `/api/v1/store_discount/${storeId}`;
 
+    try {
+        const response = await axios.get(URL_BACKEND, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        console.log('API response:', response.data);
+        return response.data; // Return the data directly
+    } catch (error) {
+        console.error('API error:', error);
+        throw error;
+    }
+};
+const createOrderAPI = async (orderData: {
+    consignee_information_id: number;
+    system_discount_id: number | null;
+    pay_method: string;
+    products: { id: number; quantity: number }[];
+    store_discounts_ids: number[];
+    shipping_discounts_id: number | null;
+}) => {
+    const URL_BACKEND = `/api/v1/order`;
+
+    try {
+        const response = await axios.post(URL_BACKEND, orderData, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        console.log('API response:', response.data);
+        return response.data; // Return the data directly
+    } catch (error) {
+        console.error('API error:', error);
+        throw error;
+    }
+};
+const fetchShippingDiscountAPI = async () => {
+    const URL_BACKEND = `/api/v1/shipping_discount`;
+
+    try {
+        const response = await axios.get(URL_BACKEND, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        console.log('API response:', response.data);
+        return response.data; // Return the data directly
+    } catch (error) {
+        console.error('API error:', error);
+        throw error;
+    }
+};
+    const fetchSystemDiscountAPI = async () => {
+        const URL_BACKEND = `/api/v1/system_discount`;
+
+        try {
+            const response = await axios.get(URL_BACKEND, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log('API response:', response.data);
+            return response.data; // Return the data directly
+        } catch (error) {
+            console.error('API error:', error);
+            throw error;
+        }
+    };
 export {
-    createUserAPI, updateUserAPI,
-    fetchAllUsersAPI, deleteUserAPI,
-    uploadFileAPI, updateUserAvatarAPI,
-    registerUserAPI, loginUserAPI,
-    getAccountAPI, logoutAPI, getUserInfo
-}
+    fetchCartItemsAPI,
+    deleteCartItemAPI,
+    fetchProductDetailAPI,
+    fetchProductReviewsAPI,
+    addProductToCartAPI,
+    fetchUserDeliveryAddressesAPI,
+    fetchStoreDiscountAPI,
+    createOrderAPI,
+    fetchShippingDiscountAPI,
+    fetchSystemDiscountAPI,
+    fetchProductImagesAPI
+};
+

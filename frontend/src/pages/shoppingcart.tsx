@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styles from '../styles/ShoppingCart.module.css';
+import { fetchCartItemsAPI, deleteCartItemAPI } from '../services/api.service2.ts';
 
 interface CartItem {
     id: number;
@@ -10,8 +12,8 @@ interface CartItem {
     price: number;
     quantity: number;
     productURL: string;
-    storeID: number;
-    storeName: string;
+    store_id: number;
+    store_name: string;
 }
 
 const ShoppingCart: React.FC = () => {
@@ -23,13 +25,9 @@ const ShoppingCart: React.FC = () => {
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
-                const response = await fetch('https://d6e8b34e-4542-4f45-a933-74baa1d4d783.mock.pstmn.io/productincart');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                setCartItems(data.data);
-            } catch (error) {
+                const response = await fetchCartItemsAPI();
+                setCartItems(response.data || []);
+            } catch (error: any) {
                 setError('Error fetching cart items. Please try again later.');
                 console.error('Error fetching cart items:', error);
             }
@@ -46,9 +44,15 @@ const ShoppingCart: React.FC = () => {
         );
     };
 
-    const handleDelete = (id: number) => {
-        setCartItems(prevCartItems => prevCartItems.filter(item => item.id !== id));
-        setSelectedItems(prevSelectedItems => prevSelectedItems.filter(item => item !== id));
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteCartItemAPI(1, id); // Assuming user ID is 1, replace with actual user ID if needed
+            setCartItems(prevCartItems => prevCartItems.filter(item => item.id !== id));
+            setSelectedItems(prevSelectedItems => prevSelectedItems.filter(item => item !== id));
+        } catch (error: any) {
+            setError('Error deleting cart item. Please try again later.');
+            console.error('Error deleting cart item:', error);
+        }
     };
 
     const handleCheckout = () => {
@@ -58,12 +62,10 @@ const ShoppingCart: React.FC = () => {
 
     const selectedCartItems = cartItems.filter(item => selectedItems.includes(item.id));
 
-    // Tính tổng tiền của các sản phẩm được chọn
     const totalAmount = useMemo(() => {
         return selectedCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     }, [selectedCartItems]);
 
-    // Tính tổng tiền sau khi áp dụng voucher và phí vận chuyển
     const finalTotal = useMemo(() => {
         return totalAmount;
     }, [totalAmount]);
@@ -91,8 +93,7 @@ const ShoppingCart: React.FC = () => {
                                     <p className={styles.productName}>{item.name}</p>
                                     <p className={styles.productBrand}>{item.brand}</p>
                                     <p className={styles.productCategory}>{item.catogoryName}</p>
-                                    <p className={styles.storeName}>{item.storeName}</p>
-                                    
+                                    <p className={styles.storeName}>{item.store_name}</p>
                                 </div>
                             </div>
                             <div className={styles.productPricing}>
