@@ -1,4 +1,4 @@
-import { Menu, MenuProps } from "antd";
+import { Menu, MenuProps, notification } from "antd";
 import { AppstoreOutlined, BellOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, MenuOutlined, SettingOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import './header.css'
 import { Link, useNavigate } from "react-router-dom";
@@ -23,11 +23,20 @@ const Header = () => {
                     setUser(response.data);
                 }
                 else {
+                    // notification.error({
+                    //     message: "Lỗi",
+                    //     description: "Phiên đăng nhập hết hạn"
+                    // })
                     setUser(null);
                 }
             }
             catch (error) {
                 setUser(null);
+                notification.error({
+                    message: "Lỗi",
+                    description: "Có lỗi xảy ra khi lấy thông tin người dùng"
+                })
+                console.log("Error: ", error);
             }
         }
         getUserLogin();

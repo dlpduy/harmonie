@@ -64,6 +64,51 @@ const getProfileAPI = () => {
 }
 
 
+const createDeliveryAPI = (data: any) => {
+    const URL_BACKEND = "api/v1/user/delivery/create"
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    return axios.post(URL_BACKEND, data, config)
+}
+
+const getAllDelivery = () => {
+    const URL_BACKEND = "api/v1/user/delivery/all"
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    return axios.get(URL_BACKEND, config)
+}
+
+const updateDeliveryAPI = (id: number, data: any) => {
+    const URL_BACKEND = `api/v1/user/delivery/update/${id}`
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    return axios.put(URL_BACKEND, data, config)
+}
+
+const deleteDeliveryAPI = (id: number) => {
+    const URL_BACKEND = `api/v1/user/delivery/delete/${id}`
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    return axios.delete(URL_BACKEND, config)
+}
+
+
 interface ICreateProduct {
     name: string;
     brand: string;
@@ -101,13 +146,10 @@ const uploadImageAPI = async (data: any) => {
     console.log(URL_BACKEND)
     console.log(data.files)
     const files = new FormData();
-
-    // Thêm ID và danh sách file vào formData
     files.append('id', data.id.toString());
     data.files.forEach((file: any) => {
-        files.append('files', file); // Key phải trùng với @RequestParam("files") ở Spring Boot
+        files.append('files', file);
     });
-
     const token = getAccessToken()
     const config = {
         headers: {
@@ -151,5 +193,6 @@ const fetchAllProductsinStore = async () => {
 export {
     registerAPI, loginAPI, loginGoogleAPI, logoutAPI,
     getUserLoginAPI, forgotPasswordAPI, updatePasswordAPI, getProfileAPI,
+    getAllDelivery, createDeliveryAPI, updateDeliveryAPI, deleteDeliveryAPI,
     createProductAPI, updateProductAPI, fetchAllProductsinStore, uploadImageAPI, getImageProductAPI
 }

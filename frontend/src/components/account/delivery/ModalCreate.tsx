@@ -1,8 +1,57 @@
-import { Input, Modal } from "antd"
+import { Input, Modal, notification } from "antd"
+import { useState } from "react";
+import { createDeliveryAPI } from "../../../services/api.service1";
 
 export const ModalCreate = (props: any) => {
 
-    const { isModalCreateOpen, handleOkCreate, handleCancelCreate } = props;
+    const { isModalCreateOpen, setIsModalCreateOpen } = props;
+    const [consigneeName, setConsigneeName] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [roadNumber, setRoadNumber] = useState("");
+    const [ward, setWard] = useState("");
+    const [district, setDistrict] = useState("");
+    const [city, setCity] = useState("");
+
+    const handleOkCreate = async () => {
+        try {
+            const response: any = await createDeliveryAPI({ consignee_name: consigneeName, phone_number: phoneNumber, road_number: roadNumber, ward: ward, district: district, city: city });
+            if (response.statusCode === 200) {
+                notification.success({
+                    message: "Thành công",
+                    description: response.message
+                })
+                resetForm();
+                setIsModalCreateOpen(false);
+            }
+            else {
+                notification.error({
+                    message: "Lỗi",
+                    description: response.message
+                })
+            }
+        }
+        catch (error) {
+            notification.error({
+                message: "Lỗi",
+                description: "Có lỗi xảy ra khi tạo địa chỉ nhận hàng"
+            })
+            console.log("Error: ", error);
+        }
+    }
+
+    const handleCancelCreate = () => {
+        setIsModalCreateOpen(false);
+        resetForm();
+    }
+
+    const resetForm = () => {
+        setConsigneeName("");
+        setPhoneNumber("");
+        setRoadNumber("");
+        setWard("");
+        setDistrict("");
+        setCity("");
+    }
 
     return (
         <>
@@ -17,15 +66,45 @@ export const ModalCreate = (props: any) => {
                 <div style={{ display: "flex", gap: "15px", flexDirection: "column" }}>
                     <div>
                         <span>Tên người nhận</span>
-                        <Input />
+                        <Input
+                            value={consigneeName}
+                            onChange={(e) => setConsigneeName(e.target.value)}
+                        />
                     </div>
                     <div>
                         <span>Số điện thoại</span>
-                        <Input />
+                        <Input
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                        />
                     </div>
                     <div>
-                        <span>Địa chỉ</span>
-                        <Input />
+                        <span>Số đường</span>
+                        <Input
+                            value={roadNumber}
+                            onChange={(e) => setRoadNumber(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <span>Phường, xã</span>
+                        <Input
+                            value={ward}
+                            onChange={(e) => setWard(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <span>Quận, huyện</span>
+                        <Input
+                            value={district}
+                            onChange={(e) => setDistrict(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <span>Tỉnh, thành phố</span>
+                        <Input
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                        />
                     </div>
                 </div>
             </Modal>

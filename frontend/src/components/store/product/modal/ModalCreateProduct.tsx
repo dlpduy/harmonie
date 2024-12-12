@@ -29,8 +29,11 @@ export const ModalCreate = (props: any) => {
         setFileList([]);
     }
 
+    const [loading, setLoading] = useState(false);
+
     const handleOkCreate = async () => {
         try {
+            setLoading(true);
             const data = {
                 name: productName,
                 brand: brand,
@@ -45,13 +48,14 @@ export const ModalCreate = (props: any) => {
             if (response.statusCode === 200) {
 
                 const responseUpload: any = await uploadImageAPI({ id: response.data.id, files: fileList.map((file: any) => file.originFileObj) });
-                if (responseUpload.statusCode === 200) {
+                if (responseUpload.statusCode === 200 || responseUpload.data === "Upload successfully!") {
                     notification.success({
                         message: 'Thành công',
                         description: 'Tạo sản phẩm thành công'
                     })
                     resetModal();
                     setIsModalCreateOpen(false);
+
                 }
                 else {
                     notification.error({
@@ -69,10 +73,12 @@ export const ModalCreate = (props: any) => {
             }
         }
         catch (error) {
-            console.log(error);
-
+            notification.error({
+                message: 'Lỗi',
+                description: 'Đã có lỗi xảy ra'
+            })
         }
-
+        setLoading(false);
     }
 
     const handleCancelCreate = () => {
@@ -152,7 +158,9 @@ export const ModalCreate = (props: any) => {
                             onChange={(info) => handleFileChange(info.fileList)}
                             multiple
                         >
-                            <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
+                            <Button
+                                icon={<UploadOutlined />}
+                            >Chọn ảnh</Button>
                         </Upload>
                     </div>
                 </div>
