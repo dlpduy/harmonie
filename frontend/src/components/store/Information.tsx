@@ -1,7 +1,7 @@
 import { InforStore } from './product/InformationStore';
 import { Order } from './product/Order';
 import { Product } from './product/Product';
-import { Promotion } from './product/Promotion';
+import { Promotion } from './promotion/Promotion';
 import { Revenue } from './product/Revenue';
 
 

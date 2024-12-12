@@ -1,4 +1,5 @@
 
+import { Button } from 'antd';
 import styles from '../../../styles/Management.module.css';
 
 const disburses = [
@@ -38,7 +39,8 @@ export const Disburse = () => {
                                 <td>{disburse.date}</td>
                                 <td>{disburse.totalCost}</td>
                                 <td>
-                                    <button
+                                    <Button
+
                                         style={{
                                             textDecoration: 'underline',
                                             border: 'none',
@@ -46,8 +48,9 @@ export const Disburse = () => {
                                             fontSize: '16px',
                                             cursor: 'pointer',
                                             fontWeight: 'bold',
+                                            color: '#000000'
                                         }}
-                                    >Chi tiết</button>
+                                    >Chi tiết</Button>
                                 </td>
                             </tr>
                         ))}

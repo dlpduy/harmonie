@@ -12,26 +12,36 @@ const LoginPage: React.FC = () => {
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState(false);
     const handleSubmit = async () => {
-        setLoading(true);
-        const data = { email, password }
-        const response: any = await loginAPI(data);
-        if (response.statusCode === 200) {
-            notification.success({
-                message: 'Success',
-                description: 'Login successfully'
-            })
-            localStorage.setItem('access_token', response.data.token);
-            setLoading(false);
-            setTimeout(() => {
-                navigate('/');
-            }, 1000);
+        try {
+            setLoading(true);
+            const data = { email, password }
+            const response: any = await loginAPI(data);
+            if (response.statusCode === 200) {
+                notification.success({
+                    message: 'Success',
+                    description: 'Login successfully'
+                })
+                localStorage.setItem('access_token', response.data.token);
+                setLoading(false);
+                setTimeout(() => {
+                    navigate('/');
+                }, 1000);
+            }
+            else {
+                notification.error({
+                    message: `Lỗi ${response.statusCode}`,
+                    description: response.message
+                })
+                setLoading(false);
+
+            }
         }
-        else {
-            notification.error({
-                message: `Lỗi ${response.statusCode}`,
-                description: response.message
-            })
+        catch (error) {
             setLoading(false);
+            notification.error({
+                message: `Lỗi`,
+                description: `Đã có lỗi xảy ra`
+            })
 
         }
 

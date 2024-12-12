@@ -1,42 +1,75 @@
 import styles from '../../../styles/Management.module.css';
 import { Button, message, notification, Popconfirm, PopconfirmProps } from "antd";
 import { ModalUpdate } from "./ModalUpdate";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ModalCreate } from './ModalCreate';
+import { deleteDeliveryAPI, getAllDelivery } from '../../../services/api.service1';
 
-const recipients = [
-    {
-        id: 1,
-        name: 'Nguyễn Văn A',
-        phone: '0901234567',
-        address: '123 Đường Lý Thường Kiệt, Quận 10, TP.HCM',
-    },
-    {
-        id: 2,
-        name: 'Trần Thị B',
-        phone: '0912345678',
-        address: '456 Đường Nguyễn Thị Minh Khai, Quận 1, TP.HCM',
-    },
-    {
-        id: 3,
-        name: 'Lê Văn C',
-        phone: '0923456789',
-        address: '789 Đường Hoàng Sa, Quận 3, TP.HCM',
-    },
-    {
-        id: 4,
-        name: 'Phạm Thị D',
-        phone: '0934567890',
-        address: '101 Đường Hàm Nghi, Quận 4, TP.HCM',
-    }
-];
+// const recipients = [
+//     {
+//         id: 1,
+//         consignee_name: "Nguyễn Văn A",
+//         phone_number: "0901234567",
+//         road_number: "123A",
+//         ward: "Phường 1",
+//         district: "Quận 1",
+//         city: "Hồ Chí Minh"
+//     },
+//     {
+//         id: 2,
+//         consignee_name: "Trần Thị B",
+//         phone_number: "0912345678",
+//         road_number: "456B",
+//         ward: "Phường 2",
+//         district: "Quận 2",
+//         city: "Hà Nội"
+//     },
+//     {
+//         id: 3,
+//         consignee_name: "Lê Minh C",
+//         phone_number: "0923456789",
+//         road_number: "789C",
+//         ward: "Phường 3",
+//         district: "Quận 3",
+//         city: "Đà Nẵng"
+//     },
+//     {
+//         id: 4,
+//         consignee_name: "Phạm Thị D",
+//         phone_number: "0934567890",
+//         road_number: "101D",
+//         ward: "Phường 4",
+//         district: "Quận 4",
+//         city: "Cần Thơ"
+//     }
+// ]
+
+
 
 export const Delivery = () => {
-    const confirm: PopconfirmProps['onConfirm'] = (e) => {
-        notification.success({
-            message: "Xoa dia chi thanh cong",
-            description: "Xoa dia chi thanh cong"
-        });
+    const confirm: PopconfirmProps['onConfirm'] = async (e) => {
+        try {
+            const response: any = await deleteDeliveryAPI(Number(e));
+            if (response.statusCode === 200 || response.data === "Delete successfully") {
+                notification.success({
+                    message: "Xoa dia chi thanh cong",
+                    description: "Xoa dia chi thanh cong"
+                });
+            }
+            else {
+                notification.error({
+                    message: "Xoa dia chi that bai",
+                    description: "Xoa dia chi that bai"
+                });
+            }
+        }
+        catch (error) {
+            notification.error({
+                message: "Lỗi",
+                description: "Có lỗi xảy ra khi xóa địa chỉ nhận hàng"
+            })
+            console.log("Error: ", error);
+        }
 
     };
 
@@ -46,40 +79,48 @@ export const Delivery = () => {
             description: "Xoa dia chi that bai"
         });
     };
+
+    const [allInfo, setAllInfo] = useState([])
+    const [dataDelivery, setDataDelivery] = useState({});
+
     const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
     const showModalCreate = () => {
         setIsModalCreateOpen(true);
     };
-    const handleOkCreate = () => {
-        setIsModalCreateOpen(false);
-        message.success('Thêm địa chỉ thành công');
-    };
-    const handleCancelCreate = () => {
-        setIsModalCreateOpen(false);
-    };
 
-    interface Recipient {
-        id: number;
-        name: string;
-        phone: string;
-        address: string;
-    }
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
-    const [selectedRecipient, setSelectedRecipient] = useState<Recipient>();
-    const handleClickEdit = (recipient: Recipient) => {
-        setSelectedRecipient(recipient);
+    const showModalUpdate = () => {
         setIsModalUpdateOpen(true);
     };
-    const handleOkUpdate = () => {
-        setIsModalUpdateOpen(false);
-        notification.success({
-            message: "Cap nhat thanh cong",
-            description: "Cap nhat dia chi thanh cong"
-        });
-    };
-    const handleCancelUpdate = () => {
-        setIsModalUpdateOpen(false);
-    }
+
+    useEffect(() => {
+        const getDataDelivery = async () => {
+            try {
+                const response: any = await getAllDelivery();
+                if (response.statusCode === 200) {
+                    setAllInfo(response.data);
+                }
+                else {
+                    notification.error({
+                        message: "Lỗi",
+                        description: "Lấy thông tin vận chuyển thất bại"
+                    })
+                }
+            }
+            catch (error) {
+                notification.error({
+                    message: "Lỗi",
+                    description: "Có lỗi xảy ra khi lấy thông tin vận chuyển"
+                })
+            }
+        }
+        getDataDelivery();
+    }, []);
+
+    useEffect(() => {
+        console.log(dataDelivery);
+    }, [dataDelivery]);
+
 
     return (
         <>
@@ -107,8 +148,7 @@ export const Delivery = () => {
                         </Button>
                         <ModalCreate
                             isModalCreateOpen={isModalCreateOpen}
-                            handleOkCreate={handleOkCreate}
-                            handleCancelCreate={handleCancelCreate}
+                            setIsModalCreateOpen={setIsModalCreateOpen}
                         />
                     </div>
                     <table className={styles.Table}>
@@ -122,21 +162,24 @@ export const Delivery = () => {
                             </tr>
                         </thead>
                         <tbody className={styles.TableBody}>
-                            {recipients.map((recipient) => (
+                            {allInfo.map((recipient: any, index) => (
                                 <tr key={recipient.id}>
-                                    <td>{recipient.id}</td>
-                                    <td>{recipient.name}</td>
-                                    <td>{recipient.phone}</td>
-                                    <td>{recipient.address}</td>
+                                    <td>{index + 1}</td>
+                                    <td>{recipient.consignee_name}</td>
+                                    <td>{recipient.phone_number}</td>
+                                    <td>{`${recipient.road_number}, ${recipient.ward}, ${recipient.district}, ${recipient.city}`}</td>
                                     <td>
 
-                                        <Button type="primary" onClick={() => handleClickEdit(recipient)}>
+                                        <Button type="primary" onClick={() => {
+                                            showModalUpdate();
+                                            setDataDelivery(recipient);
+                                        }}>
                                             Edit
                                         </Button>
                                         <Popconfirm
                                             title="Delete the task"
                                             description="Bạn có chắc muốn xóa địa chỉ này?"
-                                            onConfirm={confirm}
+                                            onConfirm={confirm.bind(null, recipient.id)}
                                             onCancel={cancel}
                                             okText="Yes"
                                             cancelText="No"
@@ -156,11 +199,8 @@ export const Delivery = () => {
 
             <ModalUpdate
                 isModalUpdateOpen={isModalUpdateOpen}
-                handleOkUpdate={handleOkUpdate}
-                handleCancelUpdate={handleCancelUpdate}
-                name={selectedRecipient ? selectedRecipient.name : ''}
-                phone={selectedRecipient ? selectedRecipient.phone : ''}
-                address={selectedRecipient ? selectedRecipient.address : ''}
+                setIsModalUpdateOpen={setIsModalUpdateOpen}
+                dataDelivery={dataDelivery}
             />
 
         </>
