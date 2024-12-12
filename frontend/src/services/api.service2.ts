@@ -1,3 +1,4 @@
+
 import axios from './axios.customize';
     const accessToken = localStorage.getItem('access_token'); 
 
@@ -210,3 +211,4 @@ export {
     fetchSystemDiscountAPI,
     fetchProductImagesAPI
 };
+
