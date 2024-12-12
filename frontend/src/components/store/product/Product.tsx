@@ -3,7 +3,7 @@ import styles from '../../../styles/Management.module.css';
 import { useEffect, useState } from 'react';
 import { ModalCreate } from './modal/ModalCreateProduct';
 import { ModalUpdate } from './modal/ModalUpdateProduct';
-import { fetchAllProductsinStore } from '../../../services/api.service1';
+import { fetchAllProductsinStore, getImageProductAPI } from '../../../services/api.service1';
 import { AxiosResponse } from 'axios';
 const products = [
     {
@@ -78,7 +78,7 @@ export const Product = () => {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const response: any = await fetchAllProductsinStore(1);
+            const response: any = await fetchAllProductsinStore();
             if (response.statusCode === 200) {
                 setListProducts(response.data);
             }
@@ -90,6 +90,9 @@ export const Product = () => {
             }
         }
         fetchProducts();
+
+
+
     }, []);
 
     useEffect(() => {

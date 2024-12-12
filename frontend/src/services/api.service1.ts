@@ -65,7 +65,6 @@ const getProfileAPI = () => {
 
 
 interface ICreateProduct {
-    store_id: number;
     name: string;
     brand: string;
     price: number;
@@ -97,14 +96,47 @@ const createProductAPI = async (data: ICreateProduct) => {
     return await axios.post(URL_BACKEND, data, config);
 }
 
+const uploadImageAPI = async (data: any) => {
+    const URL_BACKEND = `api/v1/products/uploads/${data.id}`
+    console.log(URL_BACKEND)
+    console.log(data.files)
+    const files = new FormData();
+
+    // Thêm ID và danh sách file vào formData
+    files.append('id', data.id.toString());
+    data.files.forEach((file: any) => {
+        files.append('files', file); // Key phải trùng với @RequestParam("files") ở Spring Boot
+    });
+
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    return await axios.post(URL_BACKEND, files, config);
+}
+
+const getImageProductAPI = async (id: number) => {
+    const URL_BACKEND = `api/v1/products/images/${id}`
+    return await axios.get(URL_BACKEND);
+}
+
 const updateProductAPI = async (data: IUpdateProduct) => {
-    const URL_BACKEND = "api/v1/products/1"
-    return await axios.put(URL_BACKEND, data);
+    const URL_BACKEND = "api/v1/products"
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    return await axios.put(URL_BACKEND, data, config);
 }
 
 
-const fetchAllProductsinStore = async (store_id: number) => {
-    const URL_BACKEND = `api/v1/store/${store_id}/all/product`
+const fetchAllProductsinStore = async () => {
+    const URL_BACKEND = `api/v1/store/all/product`
     const token = getAccessToken()
     const config = {
         headers: {
@@ -119,5 +151,5 @@ const fetchAllProductsinStore = async (store_id: number) => {
 export {
     registerAPI, loginAPI, loginGoogleAPI, logoutAPI,
     getUserLoginAPI, forgotPasswordAPI, updatePasswordAPI, getProfileAPI,
-    createProductAPI, updateProductAPI, fetchAllProductsinStore
+    createProductAPI, updateProductAPI, fetchAllProductsinStore, uploadImageAPI, getImageProductAPI
 }

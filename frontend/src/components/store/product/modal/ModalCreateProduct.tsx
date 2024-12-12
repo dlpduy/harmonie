@@ -1,7 +1,7 @@
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Input, message, Modal, notification, Upload } from "antd"
 import { useState } from "react";
-import { createProductAPI } from "../../../../services/api.service1";
+import { createProductAPI, uploadImageAPI } from "../../../../services/api.service1";
 
 export const ModalCreate = (props: any) => {
 
@@ -32,7 +32,6 @@ export const ModalCreate = (props: any) => {
     const handleOkCreate = async () => {
         try {
             const data = {
-                store_id: 12,
                 name: productName,
                 brand: brand,
                 price: price,
@@ -41,15 +40,26 @@ export const ModalCreate = (props: any) => {
                 description: description
                 // images: fileList.map((file: any) => file.originFileObj)
             }
-
             const response: any = await createProductAPI(data);
+            console.log(response);
             if (response.statusCode === 200) {
-                notification.success({
-                    message: 'Thành công',
-                    description: 'Tạo sản phẩm thành công'
-                })
-                resetModal();
-                setIsModalCreateOpen(false);
+
+                const responseUpload: any = await uploadImageAPI({ id: response.data.id, files: fileList.map((file: any) => file.originFileObj) });
+                if (responseUpload.statusCode === 200) {
+                    notification.success({
+                        message: 'Thành công',
+                        description: 'Tạo sản phẩm thành công'
+                    })
+                    resetModal();
+                    setIsModalCreateOpen(false);
+                }
+                else {
+                    notification.error({
+                        message: `Lỗi ${responseUpload.statusCode}`,
+                        description: responseUpload.message
+                    })
+                    console.log(responseUpload);
+                }
             }
             else {
                 notification.error({
