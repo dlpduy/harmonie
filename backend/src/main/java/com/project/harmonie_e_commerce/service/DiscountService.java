@@ -151,4 +151,25 @@ public class DiscountService implements IDiscountService{
         }
         return shippingDiscountResponeList;
     }
+
+    @Override
+//    @Transactional
+    public StoreDiscountRespone updateStoreDiscount(Integer id, StoreDiscountDTO dto) {
+        StoreDiscount storeDiscount = storeDiscountRepository.findById(id).orElseThrow(
+                () -> new DataNotFoundException("Store discount khong ton tai voi id " +id)
+        );
+        Discount discount = storeDiscount.getDiscount();
+
+        discount.setCode(dto.getCode());
+        discount.setQuantity(dto.getQuantity());
+        discount.setExpirationDate(dto.getExpiration_date());
+        discount.setStartDate(dto.getStart_date());
+
+        storeDiscount.setAmount(dto.getAmount());
+
+        discountRepository.save(discount);
+        storeDiscountRepository.save(storeDiscount);
+
+        return StoreDiscountRespone.fromStoreDiscount(storeDiscount);
+    }
 }

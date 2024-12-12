@@ -24,4 +24,6 @@ public interface IStoreService{
 
     StringResponse deleteStore(Integer store_id);
 
+    Store getInfo(Integer store_id);
+
 }

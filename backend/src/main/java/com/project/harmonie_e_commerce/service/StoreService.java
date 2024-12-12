@@ -159,4 +159,11 @@ public class StoreService implements IStoreService {
         storeRepository.delete(store);
         return new StringResponse("Delete successfully");
     }
+
+    @Override
+    public Store getInfo(Integer store_id) {
+        return storeRepository.findById(store_id).orElseThrow(
+                () -> new DataNotFoundException("Store not found by id " + store_id)
+        );
+    }
 }
