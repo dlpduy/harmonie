@@ -8,6 +8,7 @@ import com.project.harmonie_e_commerce.model.*;
 import com.project.harmonie_e_commerce.repository.*;
 import com.project.harmonie_e_commerce.response.ShippingDiscountRespone;
 import com.project.harmonie_e_commerce.response.StoreDiscountRespone;
+import com.project.harmonie_e_commerce.response.StringResponse;
 import com.project.harmonie_e_commerce.response.SystemDiscountResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -153,7 +154,7 @@ public class DiscountService implements IDiscountService{
     }
 
     @Override
-//    @Transactional
+    @Transactional
     public StoreDiscountRespone updateStoreDiscount(Integer id, StoreDiscountDTO dto) {
         StoreDiscount storeDiscount = storeDiscountRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("Store discount khong ton tai voi id " +id)
@@ -171,5 +172,19 @@ public class DiscountService implements IDiscountService{
         storeDiscountRepository.save(storeDiscount);
 
         return StoreDiscountRespone.fromStoreDiscount(storeDiscount);
+    }
+
+    @Override
+    @Transactional
+    public StringResponse deleteStoreDiscount(Integer id) {
+        StoreDiscount storeDiscount = storeDiscountRepository.findById(id).orElseThrow(
+                () -> new DataNotFoundException("Store discount khong ton tai voi id " +id)
+        );
+        Discount discount = storeDiscount.getDiscount();
+
+        storeDiscountRepository.delete(storeDiscount);
+        discountRepository.delete(discount);
+
+        return new StringResponse("Xoa thanh cong");
     }
 }

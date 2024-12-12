@@ -80,4 +80,11 @@ public class DiscountController {
         return new ResponseEntity<>(discountService.updateStoreDiscount(id,dto), HttpStatus.OK);
     }
 
+    @DeleteMapping("store_discount/{id}")
+    public ResponseEntity<?> deleteStoreDiscount(
+            @PathVariable Integer id
+    ){
+        return new ResponseEntity<>(discountService.deleteStoreDiscount(id), HttpStatus.OK);
+    }
+
 }

@@ -37,10 +37,11 @@ public class StoreController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteStore(
-            HttpServletRequest request
+            HttpServletRequest request,
+            @RequestParam String password
     ){
         Integer store_id = extractToken.getIdFromToken(request);
-        return new ResponseEntity<>(storeService.deleteStore(store_id), HttpStatus.OK);
+        return new ResponseEntity<>(storeService.deleteStore(store_id,password), HttpStatus.OK);
     }
 
     @GetMapping("/info")

@@ -24,4 +24,6 @@ public interface IDiscountService {
     List<ShippingDiscountRespone> getAllShippingDiscount();
 
     StoreDiscountRespone updateStoreDiscount(Integer id, StoreDiscountDTO dto);
+
+    StringResponse deleteStoreDiscount(Integer id);
 }
