@@ -42,6 +42,10 @@ public class WebSecurityConfig {
                             .requestMatchers("/api/v1/users/**").permitAll()
                             .requestMatchers(HttpMethod.GET,"/api/v1/products").permitAll()
                             .requestMatchers(HttpMethod.GET,"/api/v1/categories").permitAll()
+                            //image
+                            .requestMatchers(HttpMethod.GET,"/images/**").permitAll()
+                            .requestMatchers(HttpMethod.GET,"/images/").permitAll()
+                            .requestMatchers(HttpMethod.GET,"/images").permitAll()
 
                             .requestMatchers("/api/v1/**").hasAuthority("ROLE_USER")
 //                            .requestMatchers("**").permitAll();
