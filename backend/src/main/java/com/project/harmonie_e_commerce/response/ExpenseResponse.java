@@ -1,5 +1,6 @@
 package com.project.harmonie_e_commerce.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class ExpenseResponse {
+    @JsonProperty("order_id")
     private Integer id;
     private LocalDate date;
     private BigDecimal amount;
