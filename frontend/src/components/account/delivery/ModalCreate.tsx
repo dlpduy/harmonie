@@ -1,19 +1,22 @@
-import { Input, Modal, notification } from "antd"
+import { Button, Input, Modal, notification } from "antd"
 import { useState } from "react";
 import { createDeliveryAPI } from "../../../services/api.service1";
 
 export const ModalCreate = (props: any) => {
 
-    const { isModalCreateOpen, setIsModalCreateOpen } = props;
+    const { isModalCreateOpen, setIsModalCreateOpen, getDataDelivery } = props;
     const [consigneeName, setConsigneeName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [roadNumber, setRoadNumber] = useState("");
     const [ward, setWard] = useState("");
     const [district, setDistrict] = useState("");
     const [city, setCity] = useState("");
+    const [loading, setLoading] = useState(false);
+
 
     const handleOkCreate = async () => {
         try {
+            setLoading(true);
             const response: any = await createDeliveryAPI({ consignee_name: consigneeName, phone_number: phoneNumber, road_number: roadNumber, ward: ward, district: district, city: city });
             if (response.statusCode === 200) {
                 notification.success({
@@ -22,6 +25,7 @@ export const ModalCreate = (props: any) => {
                 })
                 resetForm();
                 setIsModalCreateOpen(false);
+                getDataDelivery();
             }
             else {
                 notification.error({
@@ -37,6 +41,7 @@ export const ModalCreate = (props: any) => {
             })
             console.log("Error: ", error);
         }
+        setLoading(false);
     }
 
     const handleCancelCreate = () => {
@@ -60,7 +65,14 @@ export const ModalCreate = (props: any) => {
                 onOk={() => handleOkCreate()}
                 onCancel={() => handleCancelCreate()}
                 maskClosable={false}
-                okText="Create"
+                footer={[
+                    <Button key="back" onClick={handleCancelCreate}>
+                        Hủy
+                    </Button>,
+                    <Button key="submit" type="primary" loading={loading} onClick={handleOkCreate}>
+                        Thêm
+                    </Button>,
+                ]}
 
             >
                 <div style={{ display: "flex", gap: "15px", flexDirection: "column" }}>

@@ -4,48 +4,55 @@ import './header.css'
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getUserLoginAPI } from "../../services/api.service1";
-const Header = () => {
+
+import logo from '../../assets/images/logo2.jpg';
+const Header = (props: any) => {
     type MenuItem = Required<MenuProps>['items'][number];
-    //const { isLogin } = props;
     const navigate = useNavigate();
-    //const [isLogin, setIsLogin] = useState(true);
-    const [user, setUser] = useState<any>({});
+    const { user, setUser, setIsSpinning } = props;
     const handleLogout = () => {
         localStorage.removeItem("access_token"); // Xóa token
         //setIsLogin(false);
         navigate('/login');
     };
-    useEffect(() => {
-        const getUserLogin = async () => {
-            try {
-                const response: any = await getUserLoginAPI();
-                if (response.statusCode === 200) {
-                    setUser(response.data);
-                }
-                else {
-                    // notification.error({
-                    //     message: "Lỗi",
-                    //     description: "Phiên đăng nhập hết hạn"
-                    // })
-                    setUser(null);
-                }
+    const getUserLogin = async () => {
+        try {
+            const response: any = await getUserLoginAPI();
+            if (response.statusCode === 200) {
+                setUser(response.data);
             }
-            catch (error) {
+            else {
                 setUser(null);
-                notification.error({
-                    message: "Lỗi",
-                    description: "Có lỗi xảy ra khi lấy thông tin người dùng"
-                })
-                console.log("Error: ", error);
             }
+            setIsSpinning(false);
+
         }
+        catch (error) {
+            setUser(null);
+            notification.error({
+                message: "Lỗi",
+                description: "Có lỗi xảy ra khi lấy thông tin người dùng"
+            })
+            console.log("Error: ", error);
+        }
+    }
+    useEffect(() => {
         getUserLogin();
     }, []);
     const items: MenuItem[] = [
         {
-            label: 'logo',
+
             key: 'logo',
-            icon: <MenuOutlined />,
+            icon: <img
+                src={logo}  // Đường dẫn đến logo của bạn
+                alt="Logo"
+                style={{
+                    position: 'relative',
+                    top: '5px',
+                    width: '40px',
+                    height: '30px',
+                }}
+            />,
 
         },
         {

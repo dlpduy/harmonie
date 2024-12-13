@@ -5,48 +5,8 @@ import { useEffect, useState } from "react";
 import { ModalCreate } from './ModalCreate';
 import { deleteDeliveryAPI, getAllDelivery } from '../../../services/api.service1';
 
-// const recipients = [
-//     {
-//         id: 1,
-//         consignee_name: "Nguyễn Văn A",
-//         phone_number: "0901234567",
-//         road_number: "123A",
-//         ward: "Phường 1",
-//         district: "Quận 1",
-//         city: "Hồ Chí Minh"
-//     },
-//     {
-//         id: 2,
-//         consignee_name: "Trần Thị B",
-//         phone_number: "0912345678",
-//         road_number: "456B",
-//         ward: "Phường 2",
-//         district: "Quận 2",
-//         city: "Hà Nội"
-//     },
-//     {
-//         id: 3,
-//         consignee_name: "Lê Minh C",
-//         phone_number: "0923456789",
-//         road_number: "789C",
-//         ward: "Phường 3",
-//         district: "Quận 3",
-//         city: "Đà Nẵng"
-//     },
-//     {
-//         id: 4,
-//         consignee_name: "Phạm Thị D",
-//         phone_number: "0934567890",
-//         road_number: "101D",
-//         ward: "Phường 4",
-//         district: "Quận 4",
-//         city: "Cần Thơ"
-//     }
-// ]
-
-
-
-export const Delivery = () => {
+export const Delivery = (props: any) => {
+    const { setIsSpinning } = props;
     const confirm: PopconfirmProps['onConfirm'] = async (e) => {
         try {
             const response: any = await deleteDeliveryAPI(Number(e));
@@ -55,6 +15,7 @@ export const Delivery = () => {
                     message: "Xoa dia chi thanh cong",
                     description: "Xoa dia chi thanh cong"
                 });
+                getDataDelivery()
             }
             else {
                 notification.error({
@@ -73,13 +34,6 @@ export const Delivery = () => {
 
     };
 
-    const cancel: PopconfirmProps['onCancel'] = (e) => {
-        notification.error({
-            message: "Xoa dia chi that bai",
-            description: "Xoa dia chi that bai"
-        });
-    };
-
     const [allInfo, setAllInfo] = useState([])
     const [dataDelivery, setDataDelivery] = useState({});
 
@@ -92,28 +46,30 @@ export const Delivery = () => {
     const showModalUpdate = () => {
         setIsModalUpdateOpen(true);
     };
-
-    useEffect(() => {
-        const getDataDelivery = async () => {
-            try {
-                const response: any = await getAllDelivery();
-                if (response.statusCode === 200) {
-                    setAllInfo(response.data);
-                }
-                else {
-                    notification.error({
-                        message: "Lỗi",
-                        description: "Lấy thông tin vận chuyển thất bại"
-                    })
-                }
+    const getDataDelivery = async () => {
+        try {
+            setIsSpinning(true);
+            const response: any = await getAllDelivery();
+            if (response.statusCode === 200) {
+                setAllInfo(response.data);
             }
-            catch (error) {
+            else {
                 notification.error({
                     message: "Lỗi",
-                    description: "Có lỗi xảy ra khi lấy thông tin vận chuyển"
+                    description: "Lấy thông tin vận chuyển thất bại"
                 })
             }
         }
+        catch (error) {
+            notification.error({
+                message: "Lỗi",
+                description: "Có lỗi xảy ra khi lấy thông tin vận chuyển"
+            })
+        }
+        setIsSpinning(false);
+    }
+
+    useEffect(() => {
         getDataDelivery();
     }, []);
 
@@ -149,9 +105,10 @@ export const Delivery = () => {
                         <ModalCreate
                             isModalCreateOpen={isModalCreateOpen}
                             setIsModalCreateOpen={setIsModalCreateOpen}
+                            getDataDelivery={getDataDelivery}
                         />
                     </div>
-                    <table className={styles.Table}>
+                    {/* <table className={styles.Table}>
                         <thead className={styles.TableHeader}>
                             <tr>
                                 <th>STT</th>
@@ -180,7 +137,6 @@ export const Delivery = () => {
                                             title="Delete the task"
                                             description="Bạn có chắc muốn xóa địa chỉ này?"
                                             onConfirm={confirm.bind(null, recipient.id)}
-                                            onCancel={cancel}
                                             okText="Yes"
                                             cancelText="No"
                                         >
@@ -193,7 +149,59 @@ export const Delivery = () => {
                                 </tr>
                             ))}
                         </tbody>
+                    </table> */}
+                    <table className={styles.Table}>
+                        <thead className={styles.TableHeader}>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên người nhận</th>
+                                <th>Số điện thoại</th>
+                                <th>Địa chỉ</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody className={styles.TableBody}>
+                            {allInfo.length > 0 ? (
+                                allInfo.map((recipient: any, index) => (
+                                    <tr key={recipient.id}>
+                                        <td>{index + 1}</td>
+                                        <td>{recipient.consignee_name}</td>
+                                        <td>{recipient.phone_number}</td>
+                                        <td>{`${recipient.road_number}, ${recipient.ward}, ${recipient.district}, ${recipient.city}`}</td>
+                                        <td>
+                                            <Button
+                                                type="primary"
+                                                onClick={() => {
+                                                    showModalUpdate();
+                                                    setDataDelivery(recipient);
+                                                }}
+                                            >
+                                                Edit
+                                            </Button>
+                                            <Popconfirm
+                                                title="Delete the task"
+                                                description="Bạn có chắc muốn xóa địa chỉ này?"
+                                                onConfirm={confirm.bind(null, recipient.id)}
+                                                okText="Yes"
+                                                cancelText="No"
+                                            >
+                                                <Button danger style={{ marginTop: '10px' }}>
+                                                    Delete
+                                                </Button>
+                                            </Popconfirm>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={5} style={{ textAlign: 'center', padding: '10px' }}>
+                                        <p style={{ textAlign: 'center', padding: '10px' }}>Không có dữ liệu</p>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
                     </table>
+
                 </div>
             </section>
 
@@ -201,6 +209,7 @@ export const Delivery = () => {
                 isModalUpdateOpen={isModalUpdateOpen}
                 setIsModalUpdateOpen={setIsModalUpdateOpen}
                 dataDelivery={dataDelivery}
+                getDataDelivery={getDataDelivery}
             />
 
         </>

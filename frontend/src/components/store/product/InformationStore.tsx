@@ -1,8 +1,10 @@
 
-import { Button, DatePicker, Form, Input } from 'antd';
+import { Button, DatePicker, Form, Input, notification, Spin } from 'antd';
 import styles from '../../../styles/Management.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TextArea from 'antd/es/input/TextArea';
+import { getInforStoreAPI, updateInforStoreAPI } from '../../../services/api.service1';
+import moment from 'moment';
 
 
 export const InforStore = () => {
@@ -17,62 +19,75 @@ export const InforStore = () => {
 
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = () => {
-        console.log({ nameStore, address, creationDate, taxId, description });
+    const getInforStore = async () => {
+        try {
+            setLoading(true);
+            const response: any = await getInforStoreAPI();
+            if (response.statusCode === 200) {
+                form.setFieldsValue({
+                    nameStore: response.data.name,
+                    address: response.data.address,
+                    creationDate: moment(response.data.creation_date, 'YYYY-MM-DD'),
+                    taxId: response.data.tax_id,
+                    description: response.data.description
+                });
+                setNameStore(response.data.name);
+                setAddress(response.data.address);
+                setCreationDate(response.data.creation_date);
+                setTaxId(response.data.tax_id);
+                setDescription(response.data.description);
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+        setLoading(false);
+    }
+
+    useEffect(() => {
+        getInforStore();
+
+    }, []);
+
+
+    const handleSubmit = async () => {
+        try {
+            setLoading(true);
+            const response: any = await updateInforStoreAPI({
+                name: nameStore,
+                address: address,
+                tax_id: taxId,
+                description: description
+            })
+            if (response.statusCode === 200) {
+                notification.success({
+                    message: 'Success',
+                    description: 'Cập nhật thông tin thành công'
+                });
+            }
+            else {
+                notification.error({
+                    message: 'Error',
+                    description: 'Đã có lỗi xảy ra'
+                });
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+        setLoading(false);
     }
 
     return (
         <section className={styles.mainSection}>
             <div className={styles.infoCard}>
                 <h2 className={styles.infoTitle}>Thông tin</h2>
-                {/* <form>
-                    <div className={styles.infoRow}>
-                        <label htmlFor="nameStore" className={styles.infoLabel}>Tên cửa hàng:</label>
-                        <input
-                            type="text"
-                            name="nameStore"
-                            className={styles.infoValue}
-                            placeholder="Tên cửa hàng"
-                            style={{ outline: 'none' }}
-                        />
-                    </div>
-                    <div className={styles.infoRow}>
-                        <label htmlFor="Email" className={styles.infoLabel}>Email:</label>
-                        <input
-                            type="email"
-                            name="email"
-                            className={styles.infoValue}
-                            placeholder="Email"
-                            style={{ outline: 'none' }}
-                        />
-                    </div>
-                    <div className={styles.infoRow}>
-                        <label htmlFor="Phone" className={styles.infoLabel}>Số điện thoại:</label>
-                        <input
-                            type="text"
-                            name="phone"
-                            className={styles.infoValue}
-                            placeholder="Số điện thoại"
-                            style={{ outline: 'none' }}
-                        />
-                    </div>
-                    <div className={styles.infoRow}>
-                        <label htmlFor="address" className={styles.infoLabel}>Địa chỉ:</label>
-                        <input
-                            type="text"
-                            name="address"
-                            className={styles.infoValue}
-                            placeholder="Địa chỉ"
-                            style={{ outline: 'none' }}
-                        />
-                    </div>
-                    <button type="submit" className={styles.submitButton}>Hoàn tất</button>
-                </form> */}
                 <Form
                     form={form}
                     name="basic"
                     labelCol={{ span: 7 }}
                     wrapperCol={{ span: 32 }}
+                    onLoad={getInforStore}
                     //   onFinish={onFinish}
                     //   onFinishFailed={onFinishFailed}
                     autoComplete="off"

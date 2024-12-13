@@ -64,6 +64,28 @@ const getProfileAPI = () => {
 }
 
 
+const updateProfileAPI = (data: any) => {
+    const URL_BACKEND = "api/v1/users/profile"
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    return axios.put(URL_BACKEND, data, config)
+}
+
+const changePasswordAPI = (data: any) => {
+    const URL_BACKEND = "api/v1/users/password"
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    return axios.put(URL_BACKEND, data, config)
+}
+
 const createDeliveryAPI = (data: any) => {
     const URL_BACKEND = "api/v1/user/delivery/create"
     const token = getAccessToken()
@@ -106,6 +128,18 @@ const deleteDeliveryAPI = (id: number) => {
         },
     }
     return axios.delete(URL_BACKEND, config)
+}
+
+
+const getOrderAPI = async () => {
+    const URL_BACKEND = `api/v1/order/user`
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    return await axios.get(URL_BACKEND, config)
 }
 
 
@@ -188,11 +222,35 @@ const fetchAllProductsinStore = async () => {
     return await axios.get(URL_BACKEND, config);
 }
 
+const getInforStoreAPI = async () => {
+    const URL_BACKEND = `api/v1/store/info`
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    return await axios.get(URL_BACKEND, config)
+}
+
+const updateInforStoreAPI = async (data: any) => {
+    const URL_BACKEND = `api/v1/store/update`
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    return await axios.put(URL_BACKEND, data, config)
+}
+
 
 
 export {
-    registerAPI, loginAPI, loginGoogleAPI, logoutAPI,
-    getUserLoginAPI, forgotPasswordAPI, updatePasswordAPI, getProfileAPI,
+    registerAPI, loginAPI, loginGoogleAPI, logoutAPI, changePasswordAPI,
+    getUserLoginAPI, forgotPasswordAPI, updatePasswordAPI, getProfileAPI, updateProfileAPI,
     getAllDelivery, createDeliveryAPI, updateDeliveryAPI, deleteDeliveryAPI,
+    getInforStoreAPI, updateInforStoreAPI,
+    getOrderAPI,
     createProductAPI, updateProductAPI, fetchAllProductsinStore, uploadImageAPI, getImageProductAPI
 }

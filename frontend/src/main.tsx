@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
@@ -20,73 +20,92 @@ import AccountManagement from './pages/AccountDetail'
 import StorePage from './pages/store'
 import App from './App'
 import ErrorPage from './pages/error'
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        index: true,
-        element: <HomePage />
-      },
-      {
-        path: "/product/:id",
-        element: <ProductDetailPage />
-      },
-      {
-        path: "/cart",
-        element: <ShoppingCart />
-      },
-      {
-        path: "/payment",
-        element: <PaymentPage />
-      }
-      , {
-        path: "/store/create",
-        element: <CreateStore />
-      },
-      {
-        path: "/store/manage",
-        element: <StoreManagement />
-      },
-      {
-        path: "/store/delete",
-        element: <StoreDeletion />
-      },
-      {
-        path: "/admin",
-        element: <AdminPage />
-      },
-      {
-        path: "/account",
-        element: <AccountManagement />
-      },
-      {
-        path: "/store",
-        element: <StorePage />
-      }
-    ]
-  },
-  {
 
-    path: "/login",
-    element: <LoginPage />
-  },
-  {
-    path: "/register",
-    element: <RegisterPage />
 
-  },
-  {
-    path: "/forgot-password",
-    element: <ForgotPassWordPage />
-  },
+const Root = () => {
+  const [user, setUser] = useState<any>({});
+  const [isSpinning, setIsSpinning] = useState(true);
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <App
+        user={user}
+        setUser={setUser}
+        isSpinning={isSpinning}
+        setIsSpinning={setIsSpinning}
+      />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          index: true,
+          element: <HomePage
+          />
+        },
+        {
+          path: "/product/:id",
+          element: <ProductDetailPage />
+        },
+        {
+          path: "/cart",
+          element: <ShoppingCart />
+        },
+        {
+          path: "/payment",
+          element: <PaymentPage />
+        }
+        , {
+          path: "/store/create",
+          element: <CreateStore />
+        },
+        {
+          path: "/store/manage",
+          element: <StoreManagement />
+        },
+        {
+          path: "/store/delete",
+          element: <StoreDeletion />
+        },
+        {
+          path: "/admin",
+          element: <AdminPage />
+        },
+        {
+          path: "/account",
+          element: <AccountManagement
+            user={user}
+            setUser={setUser}
+            setIsSpinning={setIsSpinning}
+          />
+        },
+        {
+          path: "/store",
+          element: <StorePage />
+        }
+      ]
+    },
+    {
 
-])
+      path: "/login",
+      element: <LoginPage />
+    },
+    {
+      path: "/register",
+      element: <RegisterPage />
+
+    },
+    {
+      path: "/forgot-password",
+      element: <ForgotPassWordPage />
+    },
+
+  ])
+  return (
+    <RouterProvider router={router} />
+  )
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <Root />
   </StrictMode>,
 )

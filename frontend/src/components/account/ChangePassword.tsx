@@ -1,6 +1,7 @@
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, notification } from 'antd';
 import styles from '../../styles/Management.module.css';
 import { useState } from 'react';
+import { changePasswordAPI } from '../../services/api.service1';
 
 
 export const ChangePassword = () => {
@@ -9,8 +10,35 @@ export const ChangePassword = () => {
     const [newPassword, setNewPassword] = useState<string>('');
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = () => {
-        console.log({ oldPassword, newPassword });
+    const handleSubmit = async () => {
+        try {
+            setLoading(true);
+            const response: any = await changePasswordAPI({
+                oldPassword: oldPassword,
+                newPassword: newPassword
+            })
+            if (response.statusCode === 200) {
+                notification.success({
+                    message: "Thành công",
+                    description: "Cập nhật mật khẩu thành công"
+                })
+            }
+            else {
+                notification.error({
+                    message: "Lỗi",
+                    description: response.message
+                })
+            }
+        }
+        catch (error) {
+            notification.error({
+                message: "Lỗi",
+                description: "Có lỗi xảy ra khi cập nhật mật khẩu"
+            })
+            console.log("Error: ", error);
+        }
+        setLoading(false);
+
     }
 
     return (

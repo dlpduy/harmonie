@@ -1,17 +1,19 @@
-import { Input, Modal, notification } from "antd"
+import { Button, Input, Modal, notification } from "antd"
 import { useEffect, useState } from "react";
 import { updateDeliveryAPI } from "../../../services/api.service1";
 export const ModalUpdate = (props: any) => {
-    const { isModalUpdateOpen, setIsModalUpdateOpen, dataDelivery } = props;
+    const { isModalUpdateOpen, setIsModalUpdateOpen, dataDelivery, getDataDelivery } = props;
     const [consigneeName, setConsigneeName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [roadNumber, setRoadNumber] = useState("");
     const [ward, setWard] = useState("");
     const [district, setDistrict] = useState("");
     const [city, setCity] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleOkUpdate = async () => {
         try {
+            setLoading(true);
             const response: any = await updateDeliveryAPI(dataDelivery.id, { consignee_name: consigneeName, phone_number: phoneNumber, road_number: roadNumber, ward: ward, district: district, city: city });
             if (response.statusCode === 200) {
                 notification.success({
@@ -19,6 +21,7 @@ export const ModalUpdate = (props: any) => {
                     description: response.message
                 })
                 setIsModalUpdateOpen(false);
+                getDataDelivery();
             }
             else {
                 notification.error({
@@ -34,6 +37,7 @@ export const ModalUpdate = (props: any) => {
             })
             console.log("Error: ", error);
         }
+        setLoading(false);
     }
     const handleCancelUpdate = () => {
         setIsModalUpdateOpen(false);
@@ -53,12 +57,17 @@ export const ModalUpdate = (props: any) => {
         <>
             <Modal title="Chỉnh sửa địa chỉ nhận hàng"
                 open={isModalUpdateOpen}
-                onOk={() => handleOkUpdate()}
-                onCancel={() => handleCancelUpdate()}
                 maskClosable={false}
                 mask={true} // Bật mask
-                style={{ mask: 'rgba(0, 0, 0, 0.1)' }} // Thêm style trực tiếp
-                okText="Update"
+                style={{ mask: 'rgba(0, 0, 0, 0.1)' }}
+                footer={[
+                    <Button key="back" onClick={handleCancelUpdate}>
+                        Hủy
+                    </Button>,
+                    <Button key="submit" type="primary" loading={loading} onClick={handleOkUpdate}>
+                        Cập nhật
+                    </Button>,
+                ]}
 
             >
                 <div style={{ display: "flex", gap: "15px", flexDirection: "column" }}>

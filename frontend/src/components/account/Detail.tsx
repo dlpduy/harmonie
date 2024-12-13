@@ -4,26 +4,28 @@ import { Disburse } from './disburse/Disburse';
 import { ChangePassword } from './ChangePassword';
 import { InformationAccount } from './InformationAccount';
 
-interface InformationProps {
-    activeIndex: Number;
-}
-
-
-
-export const Information = (props: InformationProps) => {
-    const { activeIndex } = props;
+export const Information = (props: any) => {
+    const { activeIndex, user, setUser, setIsSpinning } = props;
     {
         switch (activeIndex) {
             case 0:
                 return <Disburse />;
             case 1:
-                return <Order />;
+                return <Order
+                    setIsSpinning={setIsSpinning}
+                />;
             case 2:
                 return <ChangePassword />;
             case 3:
-                return <InformationAccount />;
+                return <InformationAccount
+                    user={user}
+                    setUser={setUser}
+                    setIsSpinning={setIsSpinning}
+                />;
             default:
-                return <Delivery />;
+                return <Delivery
+                    setIsSpinning={setIsSpinning}
+                />;
         }
     }
 };

@@ -2,41 +2,56 @@ import { Button, DatePicker, Form, Input, notification, Radio } from 'antd';
 import styles from '../../styles/Management.module.css';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
-import { getProfileAPI } from '../../services/api.service1';
+import { getProfileAPI, updateProfileAPI } from '../../services/api.service1';
 
 
 
-export const InformationAccount = () => {
-
+export const InformationAccount = (props: any) => {
+    const { user, setUser, setIsSpinning } = props;
     const [form] = Form.useForm();
-
-    let info: any = {}
-
-    useEffect(() => {
-        info = {
-            fullName: 'Nguyễnkjn Văn A',
-            birthdate: '2004-01-01',
-            gender: 'M',
-            phone: '123456789',
-            email: 'nguyenvana@gmail.com'
-        }
-    }, []);
-
-    const [fullName, setFullName] = useState<string>(info.fullName);
-    const [birthdate, setBirthdate] = useState<string>(info.birthdate);
+    const [fullName, setFullName] = useState<string>('');
+    const [birthdate, setBirthdate] = useState<string>('');
     const [gender, setGender] = useState<string>('');
     const [phone, setPhone] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [loading, setLoading] = useState(false);
+    const handleUpdateProfile = async () => {
+        try {
+            setLoading(true);
+            const response: any = await updateProfileAPI({
+                full_name: fullName,
+                dob: birthdate,
+                sex: gender,
+                phone: phone,
+                email: email
+            });
+            if (response.statusCode === 200) {
+                notification.success({
+                    message: 'Success',
+                    description: 'Cập nhật thông tin thành công'
+                });
+                setUser({ full_name: fullName, role: response.data.role });
+            }
+            else {
+                notification.error({
+                    message: 'Error',
+                    description: 'Đã có lỗi xảy ra'
+                });
+            }
 
-    const handleSubmit = () => {
-        console.log({ fullName, birthdate, gender, phone, email });
+        }
+        catch (error) {
+            console.log(error);
+        }
+        setLoading(false);
     }
+
 
     useEffect(() => {
 
         const getInformation = async () => {
             try {
+                setIsSpinning(true);
                 const response: any = await getProfileAPI();
                 if (response.statusCode === 200) {
                     form.setFieldsValue({
@@ -62,7 +77,7 @@ export const InformationAccount = () => {
             catch (error) {
                 console.log(error);
             }
-
+            setIsSpinning(false);
         }
 
 
@@ -166,7 +181,7 @@ export const InformationAccount = () => {
                             type="primary"
                             formAction='submit'
                             loading={loading}
-                            onClick={() => handleSubmit()}
+                            onClick={() => handleUpdateProfile()}
                             style={{ width: '100%', height: '60px' }}
                         >
                             Lưu thay đổi

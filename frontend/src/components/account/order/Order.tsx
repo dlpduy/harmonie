@@ -1,69 +1,48 @@
 
 import { Button } from 'antd';
 import styles from '../../../styles/Management.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ModalDetail } from './ModalOrderDetail';
-const orders = [
-    {
-        id: 1,
-        code: 'KH13249',
-        date: '06/11/2024',
-        totalCost: 100202,
-        status: 'Đã giao',
-        boxes: [
-            { productName: 'Áo thun', quantity: 2, price: '50.000' },
-            { productName: 'Quần jean', quantity: 1, price: '100.000' }
-        ]
-    },
-    {
-        id: 2,
-        code: 'KH13523',
-        date: '07/11/2024',
-        totalCost: 100423,
-        status: 'Chưa giao',
-        boxes: [
-            { productName: 'Giày thể thao', quantity: 1, price: '120.000' },
-            { productName: 'Mũ lưỡi trai', quantity: 2, price: '40.000' }
-        ]
-    },
-    {
-        id: 3,
-        code: 'KH10232',
-        date: '08/11/2024',
-        totalCost: 248348,
-        status: 'Chưa giao',
-        boxes: [
-            { productName: 'Laptop', quantity: 1, price: '200.000' },
-            { productName: 'Chuột không dây', quantity: 1, price: '48.348' }
-        ]
-    },
-    {
-        id: 4,
-        code: 'KH14548',
-        date: '09/11/2024',
-        totalCost: 358248,
-        status: 'Đã giao',
-        boxes: [
-            { productName: 'Điện thoại', quantity: 1, price: '300.000' },
-            { productName: 'Bao da', quantity: 1, price: '58.248' }
-        ]
-    },
-]
+import { getOrderAPI } from '../../../services/api.service1';
+import moment from 'moment';
 
 const NumberToCurrency = (money: any) => {
     const formattedAmount = new Intl.NumberFormat('vi-VN').format(money);
     return `${formattedAmount} VNĐ`;
 };
 
-export const Order = () => {
+export const Order = (props: any) => {
+    const { setIsSpinning } = props;
 
     const [isModalDetailOpen, setIsModalDetailOpen] = useState(false);
 
     const [dataOrder, setDataOrder] = useState<Object>({});
 
+    const [listOrder, setListOrder] = useState<any>([]);
+
     const showModalDetail = () => {
         setIsModalDetailOpen(true);
     };
+
+    const getAllOrder = async () => {
+        try {
+            setIsSpinning(true);
+            const response: any = await getOrderAPI();
+            if (response.statusCode === 200) {
+                setListOrder(response.data);
+            }
+            else {
+                console.log(response.message);
+            }
+        }
+        catch (error) {
+            console.log("Error: ", error);
+        }
+        setIsSpinning(false);
+    }
+    useEffect(() => {
+        getAllOrder();
+    }, []);
 
     return (
         <section className={styles.mainSection}>
@@ -85,19 +64,19 @@ export const Order = () => {
                             <th>Mã đơn hàng</th>
                             <th>Ngày tạo đơn</th>
                             <th>Giá tiền</th>
-                            <th>Trạng thái</th>
+                            <th>Thanh toán</th>
                             <th>Thống kê</th>
                         </tr>
                     </thead>
                     <tbody className={styles.TableBody}>
-                        {orders.map((order, index) => (
+                        {listOrder.map((order: any, index: number) => (
 
                             <tr key={order.id}>
                                 <td>{index + 1}</td>
-                                <td>{order.code}</td>
-                                <td>{order.date}</td>
-                                <td>{NumberToCurrency(order.totalCost)}</td>
-                                <td>{order.status}</td>
+                                <td>{`SHOPEE${order.order_id}`}</td>
+                                <td>{moment(order.created_date).format('YYYY-MM-DD')}</td>
+                                <td>{NumberToCurrency(Math.round(order.total_price))}</td>
+                                <td>{order.pay_method}</td>
                                 <td>
                                     <Button
                                         style={{
@@ -107,16 +86,19 @@ export const Order = () => {
                                             fontSize: '16px',
                                             cursor: 'pointer',
                                             fontWeight: 'bold',
-                                            color: '#000000'
+                                            color: '#000000',
+                                            position: 'relative',
+                                            top: '-5px'
                                         }}
                                         onClick={() => {
                                             setDataOrder({
-                                                id: order.id,
-                                                code: order.code,
-                                                date: order.date,
-                                                totalCost: NumberToCurrency(order.totalCost),
-                                                status: order.status,
-                                                boxes: order.boxes
+                                                id: order.order_id,
+                                                code: `SHOPEE${order.order_id}`,
+                                                date: moment(order.created_date).format('YYYY-MM-DD'),
+                                                totalCost: NumberToCurrency(Math.round(order.total_price)),
+                                                payment: order.pay_method,
+                                                delivery: order.delivery_information,
+                                                boxes: order.boxes,
                                             });
                                             showModalDetail()
                                         }}
