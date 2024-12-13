@@ -1,9 +1,9 @@
 
 import axios from './axios.customize';
-    const accessToken = localStorage.getItem('access_token'); 
+const accessToken = localStorage.getItem('access_token');
 
 const fetchCartItemsAPI = async () => {
-    const URL_BACKEND = "/api/v1/productincart/1";
+    const URL_BACKEND = "/api/v1/productincart";
 
     try {
         const response = await axios.get(URL_BACKEND, {
@@ -21,12 +21,12 @@ const fetchCartItemsAPI = async () => {
 
 
 const fetchProductImagesAPI = async (productId: number, numImages: number) => {
-    const imageUrls = Array.from({ length: numImages }, (_, i) => 
+    const imageUrls = Array.from({ length: numImages }, (_, i) =>
         `/images/${productId}/${i + 1}.jpg`
     );
 
     try {
-        const imagePromises = imageUrls.map(url => 
+        const imagePromises = imageUrls.map(url =>
             axios.get(url, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
@@ -63,7 +63,7 @@ const deleteCartItemAPI = async (userId: number, productId: number) => {
 };
 const fetchProductDetailAPI = async (productId: number) => {
     const URL_BACKEND = `/api/v1/products/${productId}`;
-    
+
     try {
         const response = await axios.get(URL_BACKEND, {
             headers: {
@@ -79,7 +79,7 @@ const fetchProductDetailAPI = async (productId: number) => {
 };
 const fetchProductReviewsAPI = async (productId: number) => {
     const URL_BACKEND = `/api/v1/review/all/${productId}`;
-   
+
     try {
         const response = await axios.get(URL_BACKEND, {
             headers: {
@@ -182,22 +182,22 @@ const fetchShippingDiscountAPI = async () => {
         throw error;
     }
 };
-    const fetchSystemDiscountAPI = async () => {
-        const URL_BACKEND = `/api/v1/system_discount`;
+const fetchSystemDiscountAPI = async () => {
+    const URL_BACKEND = `/api/v1/system_discount`;
 
-        try {
-            const response = await axios.get(URL_BACKEND, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            });
-            console.log('API response:', response.data);
-            return response.data; // Return the data directly
-        } catch (error) {
-            console.error('API error:', error);
-            throw error;
-        }
-    };
+    try {
+        const response = await axios.get(URL_BACKEND, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        console.log('API response:', response.data);
+        return response.data; // Return the data directly
+    } catch (error) {
+        console.error('API error:', error);
+        throw error;
+    }
+};
 export {
     fetchCartItemsAPI,
     deleteCartItemAPI,
