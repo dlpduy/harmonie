@@ -1,5 +1,4 @@
-
-
+package com.project.harmonie_e_commerce.service;
 
 import com.project.harmonie_e_commerce.configuaration.VNPAYConfig;
 import com.project.harmonie_e_commerce.model.Order;
@@ -17,7 +16,7 @@ public class PaymentService {
     private final VNPAYConfig vnPayConfig;
     private final OrderRepository orderRepository;
 
-    public String createVnPayPayment(HttpServletRequest request, Float amount, Long orderId) {
+    public String createVnPayPayment(HttpServletRequest request, Float amount, Integer orderId) {
         // change float to long
         Long amountLong = amount.longValue() * 100L;
         String bankCode = "VNPAY";
@@ -37,10 +36,10 @@ public class PaymentService {
         return paymentUrl;
     }
 
-    public void handlePaymentOrder(Long orderId) {
+    public void handlePaymentOrder(Integer orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found with id " + orderId));
-        order.setStatus(OrderStatus.PAID);
+        order.setStatus("Paid");
         order.setPaymentUrl("");
         orderRepository.save(order);
     }

@@ -2,9 +2,11 @@
 package com.project.harmonie_e_commerce.controller;
 
 import com.project.harmonie_e_commerce.dto.PaymentDTO;
+import com.project.harmonie_e_commerce.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,25 +25,23 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @GetMapping("/vn-pay")
-    public ResponseObject<String> pay(HttpServletRequest request) {
-        return new ResponseObject<>(HttpStatus.OK, "Success",
-                paymentService.createVnPayPayment(request, 1000000.2F, 1L));
+    public ResponseEntity<?> pay(HttpServletRequest request) {
+//        return new ResponseObject<>(HttpStatus.OK, "Success",
+//                paymentService.createVnPayPayment(request, 1000000.2F, 1L));
+        return ResponseEntity.ok(paymentService.createVnPayPayment(request, 1000000.2F, 1));
     }
 
     @GetMapping("/vn-pay-callback")
-    public ResponseObject<PaymentDTO.VNPayResponse> payCallbackHandler(HttpServletRequest request) {
-        try {
-            String status = request.getParameter("vnp_ResponseCode");
-            if (status.equals("00")) {
-                Long orderId = Long.parseLong(request.getParameter("vnp_OrderInfo"));
-                paymentService.handlePaymentOrder(orderId);
-                return new ResponseObject<>(HttpStatus.OK, "Success",
-                        new PaymentDTO.VNPayResponse("00", "Payment success for order " + orderId));
-            } else {
-                return new ResponseObject<>(HttpStatus.BAD_REQUEST, "Failed", null);
-            }
-        } catch (Exception e) {
-            return new ResponseObject<>(HttpStatus.BAD_REQUEST, "This URL is not valid", null);
+    public ResponseEntity<PaymentDTO.VNPayResponse> payCallbackHandler(HttpServletRequest request) {
+        String status = request.getParameter("vnp_ResponseCode");
+        if (status.equals("00")) {
+            Integer orderId = Integer.parseInt(request.getParameter("vnp_OrderInfo"));
+            paymentService.handlePaymentOrder(orderId);
+//                return new ResponseObject<>(HttpStatus.OK, "Success",
+//                        new PaymentDTO.VNPayResponse("00", "Payment success for order " + orderId));
+            return ResponseEntity.ok(new PaymentDTO.VNPayResponse("00", "Payment success for order " + orderId));
+        } else {
+            throw new RuntimeException("Payment failed");
         }
     }
 }
