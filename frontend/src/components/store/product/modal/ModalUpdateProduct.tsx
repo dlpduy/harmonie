@@ -1,11 +1,11 @@
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Input, Modal, notification, Select, Upload } from "antd"
 import { useEffect, useState } from "react";
-import { updateProductAPI } from "../../../../services/api.service1";
+import { updateProductAPI, uploadImageAPI } from "../../../../services/api.service1";
 
 export const ModalUpdate = (props: any) => {
 
-    const { isModalUpdateOpen, setIsModalUpdateOpen, dataProduct, fetchProducts } = props;
+    const { isModalUpdateOpen, setIsModalUpdateOpen, dataProduct, fetchProducts, listCategories } = props;
     const [id, setId] = useState<number>(0);
     const [productName, setProductName] = useState<string>('');
     const [brand, setBrand] = useState<string>('');
@@ -53,17 +53,20 @@ export const ModalUpdate = (props: any) => {
                 price: price,
                 quantity: quantity,
                 description: description,
-                category_id: dataProduct.product.category_id,
+                category_id: category_id,
                 buying_count: dataProduct.product.buying_count,
                 avg_rating: dataProduct.product.avg_rating,
                 rating_count: dataProduct.product.rating_count,
                 status: status,
             }, dataProduct.product.id);
             if (response.statusCode === 200 || response.data === `Product with id ${id} is updated`) {
-                notification.success({
-                    message: "Thành công",
-                    description: "Cập nhật sản phẩm thành công"
-                });
+                const responseUpload: any = await uploadImageAPI({ id, files: fileList.map((file: any) => file.originFileObj) });
+                if (responseUpload.statusCode === 200 || responseUpload.data === "Upload successfully!") {
+                    notification.success({
+                        message: "Thành công",
+                        description: "Cập nhật sản phẩm thành công"
+                    });
+                }
                 setIsModalUpdateOpen(false);
                 resetModal();
                 fetchProducts();
@@ -141,13 +144,29 @@ export const ModalUpdate = (props: any) => {
                         />
                     </div>
 
-                    <div>
+                    {/* <div>
                         <span>Danh mục</span>
                         <Input
                             value={category_name}
                             onChange={(e) => setCategoryName(e.target.value)}
                             disabled={true}
                         />
+                    </div> */}
+
+                    <div>
+                        <span>Danh mục</span>
+                        <Select
+                            value={category_id}
+                            onChange={(e) => setCategoryId(Number(e))}
+                            style={{ width: '100%' }}
+                        >
+                            <Select.Option value={0}>Chọn danh mục</Select.Option>
+                            {listCategories.map((category: any, index: number) => (
+                                <Select.Option key={index + 1} value={category.id}>
+                                    {category.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
                     </div>
 
                     <div>

@@ -25,17 +25,12 @@ const Header = (props: any) => {
             else {
                 setUser(null);
             }
-            setIsSpinning(false);
 
         }
         catch (error) {
             setUser(null);
-            notification.error({
-                message: "Lỗi",
-                description: "Có lỗi xảy ra khi lấy thông tin người dùng"
-            })
-            console.log("Error: ", error);
         }
+        //setIsSpinning(false);
     }
     useEffect(() => {
         getUserLogin();

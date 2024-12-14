@@ -7,8 +7,8 @@ import { getInforStoreAPI, updateInforStoreAPI } from '../../../services/api.ser
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 
-export const InforStore = () => {
-
+export const InforStore = (props: any) => {
+    const { setIsSpinning } = props;
     const navigate = useNavigate();
     const [form] = Form.useForm();
 
@@ -22,7 +22,7 @@ export const InforStore = () => {
 
     const getInforStore = async () => {
         try {
-            setLoading(true);
+            setIsSpinning(true);
             const response: any = await getInforStoreAPI();
             if (response.statusCode === 200) {
                 form.setFieldsValue({
@@ -49,7 +49,7 @@ export const InforStore = () => {
         catch (error) {
             console.log(error);
         }
-        setLoading(false);
+        setIsSpinning(false);
     }
 
     useEffect(() => {

@@ -5,24 +5,28 @@ import { Promotion } from './promotion/Promotion';
 import { Revenue } from './product/Revenue';
 
 
-interface InformationProps {
-    activeIndex: Number;
-}
 
 
-
-export const Information = (props: InformationProps) => {
-    const { activeIndex } = props;
+export const Information = (props: any) => {
+    const { activeIndex, setIsSpinning } = props;
     {
         switch (activeIndex) {
             case 0:
-                return <Product />;
+                return <Product
+                    setIsSpinning={setIsSpinning}
+                />;
             case 1:
-                return <Boxes />;
+                return <Boxes
+                    setIsSpinning={setIsSpinning}
+                />;
             case 2:
-                return <Promotion />;
+                return <Promotion
+                    setIsSpinning={setIsSpinning}
+                />;
             default:
-                return <InforStore />;
+                return <InforStore
+                    setIsSpinning={setIsSpinning}
+                />;
         }
     }
 };

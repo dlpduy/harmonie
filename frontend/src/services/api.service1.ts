@@ -308,12 +308,22 @@ const getStoreBoxesAPI = async () => {
     return await axios.get(URL_BACKEND, config)
 }
 
+const getAllCategoryAPI = async () => {
+    const URL_BACKEND = `api/v1/categories`
+    return await axios.get(URL_BACKEND)
+}
+
+const getAllProductAPI = async () => {
+    const URL_BACKEND = `api/v1/products`
+    return await axios.get(URL_BACKEND)
+}
+
 export {
     registerAPI, loginAPI, loginGoogleAPI, logoutAPI, changePasswordAPI,
     getUserLoginAPI, forgotPasswordAPI, updatePasswordAPI, getProfileAPI, updateProfileAPI,
     getAllDelivery, createDeliveryAPI, updateDeliveryAPI, deleteDeliveryAPI,
     getInforStoreAPI, updateInforStoreAPI, createStoreAPI, deleteStoreAPI,
     createStoreDiscountAPI, getStoreDiscountAPI, updateStoreDiscountAPI, getStoreBoxesAPI,
-    getOrderAPI, deleteStoreDiscountAPI,
+    getOrderAPI, deleteStoreDiscountAPI, getAllCategoryAPI, getAllProductAPI,
     createProductAPI, updateProductAPI, fetchAllProductsinStore, uploadImageAPI, deleteProductAPI
 }

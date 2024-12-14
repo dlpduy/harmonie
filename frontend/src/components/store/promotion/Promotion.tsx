@@ -53,7 +53,8 @@ const promotions = [
         expiration_date: "31/12/2024"
     }
 ];
-export const Promotion = () => {
+export const Promotion = (props: any) => {
+    const { setIsSpinning } = props;
     const [isModalCreateOpen, setIsModalCreateOpen] = useState<boolean>(false);
     const showModalCreate = () => {
         setIsModalCreateOpen(true);
@@ -89,24 +90,13 @@ export const Promotion = () => {
     };
     const [listPromotions, setListPromotions] = useState<any[]>([]);
     const getDiscounts = async () => {
-        try {
-            const response: any = await getStoreDiscountAPI();
-            if (response.statusCode === 200) {
-                setListPromotions(response.data);
-            }
-            else {
-                notification.error({
-                    message: 'Thất bại',
-                    description: 'Lấy danh sách mã giảm giá thất bại'
-                })
-            }
+        setIsSpinning(true);
+        const response: any = await getStoreDiscountAPI();
+        if (response.statusCode === 200) {
+            setListPromotions(response.data);
         }
-        catch (err) {
-            notification.error({
-                message: 'Thất bại',
-                description: 'Có lỗi xảy ra'
-            })
-        }
+        setIsSpinning(false);
+
     }
 
     useEffect(() => {

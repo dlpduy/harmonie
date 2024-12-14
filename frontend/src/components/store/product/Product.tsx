@@ -3,7 +3,7 @@ import styles from '../../../styles/Management.module.css';
 import { useEffect, useState } from 'react';
 import { ModalCreate } from './modal/ModalCreateProduct';
 import { ModalUpdate } from './modal/ModalUpdateProduct';
-import { deleteProductAPI, fetchAllProductsinStore } from '../../../services/api.service1';
+import { deleteProductAPI, fetchAllProductsinStore, getAllCategoryAPI } from '../../../services/api.service1';
 
 
 const NumberToCurrency = (money: any) => {
@@ -11,9 +11,9 @@ const NumberToCurrency = (money: any) => {
     return `${formattedAmount} VNĐ`;
 };
 
-export const Product = () => {
+export const Product = (props: any) => {
 
-
+    const { setIsSpinning } = props;
     const [listProducts, setListProducts] = useState<any[]>([]);
     const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
     const showModalCreate = () => {
@@ -27,13 +27,15 @@ export const Product = () => {
     };
     const [dataProduct, setDataProduct] = useState<Object>({})
 
+    const [listCategories, setListCategories] = useState<any[]>([]);
+
     const confirm: PopconfirmProps['onConfirm'] = async (e) => {
         try {
             const response: any = await deleteProductAPI(Number(e));
             if (response.statusCode === 200 || response.data === `Product deleted with id ${Number(e)}`) {
                 notification.success({
-                    message: 'Xóa sản phẩm thành công',
-                    description: response.data
+                    message: 'Thành công',
+                    description: 'Xóa sản phẩm thành công'
                 });
                 fetchProducts();
             }
@@ -66,20 +68,23 @@ export const Product = () => {
         return fileLists;
     }
 
+    const getAllCategories = async () => {
+        const response: any = await getAllCategoryAPI();
+        if (response.statusCode === 200) {
+            setListCategories(response.data);
+        }
+    }
     const fetchProducts = async () => {
+        setIsSpinning(true);
         const response: any = await fetchAllProductsinStore();
         if (response.statusCode === 200) {
             setListProducts(response.data);
         }
-        else {
-            notification.error({
-                message: `Lỗi ${response.statusCode}`,
-                description: response.data.message
-            });
-        }
+        setIsSpinning(false);
     }
     useEffect(() => {
         fetchProducts();
+        getAllCategories();
     }, []);
 
     useEffect(() => {
@@ -196,12 +201,14 @@ export const Product = () => {
                 isModalCreateOpen={isModalCreateOpen}
                 setIsModalCreateOpen={setIsModalCreateOpen}
                 fetchProducts={fetchProducts}
+                listCategories={listCategories}
             />
             <ModalUpdate
                 isModalUpdateOpen={isModalUpdateOpen}
                 setIsModalUpdateOpen={setIsModalUpdateOpen}
                 dataProduct={dataProduct}
                 fetchProducts={fetchProducts}
+                listCategories={listCategories}
             />
 
 

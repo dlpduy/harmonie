@@ -1,11 +1,11 @@
 import { UploadOutlined } from "@ant-design/icons";
-import { Button, Input, message, Modal, notification, Upload } from "antd"
-import { useState } from "react";
-import { createProductAPI, uploadImageAPI } from "../../../../services/api.service1";
+import { Button, Input, message, Modal, notification, Select, Upload } from "antd"
+import { useEffect, useState } from "react";
+import { createProductAPI, getAllCategoryAPI, uploadImageAPI } from "../../../../services/api.service1";
 
 export const ModalCreate = (props: any) => {
 
-    const { isModalCreateOpen, setIsModalCreateOpen, fetchProducts } = props;
+    const { isModalCreateOpen, setIsModalCreateOpen, fetchProducts, listCategories } = props;
 
     const [productName, setProductName] = useState<string>('');
     const [brand, setBrand] = useState<string>('');
@@ -88,6 +88,7 @@ export const ModalCreate = (props: any) => {
     }
 
 
+
     return (
         <>
             <Modal title="Thêm sản phẩm"
@@ -139,10 +140,18 @@ export const ModalCreate = (props: any) => {
 
                     <div>
                         <span>Danh mục</span>
-                        <Input
+                        <Select
                             value={category}
-                            onChange={(e) => setCategory(Number(e.target.value))}
-                        />
+                            onChange={(e) => setCategory(Number(e))}
+                            style={{ width: '100%' }}
+                        >
+                            <Select.Option value={0}>Chọn danh mục</Select.Option>
+                            {listCategories.map((category: any, index: number) => (
+                                <Select.Option key={index + 1} value={category.id}>
+                                    {category.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
                     </div>
 
                     <div>

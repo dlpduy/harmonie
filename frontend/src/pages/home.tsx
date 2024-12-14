@@ -2,13 +2,14 @@ import { ProductGird } from "../components/products/ProductGrid"
 
 
 const HomePage = (props: any) => {
-    const { isSpinning, setIsSpinning } = props;
+    const { setIsSpinning } = props;
 
-    console.log(isSpinning)
 
     return (
         <>
-            <ProductGird />
+            <ProductGird
+                setIsSpinning={setIsSpinning}
+            />
         </>
     )
 }

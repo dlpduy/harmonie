@@ -23,7 +23,7 @@ import ErrorPage from './pages/error'
 
 
 const Root = () => {
-  const [user, setUser] = useState<any>({});
+  const [user, setUser] = useState<any>(null);
   const [isSpinning, setIsSpinning] = useState(true);
   const router = createBrowserRouter([
     {
@@ -37,8 +37,9 @@ const Root = () => {
       errorElement: <ErrorPage />,
       children: [
         {
-          index: true,
+          path: "/",
           element: <HomePage
+            setIsSpinning={setIsSpinning}
           />
         },
         {
@@ -59,7 +60,9 @@ const Root = () => {
         },
         {
           path: "/store/manage",
-          element: <StoreManagement />
+          element: <StoreManagement
+            setIsSpinning={setIsSpinning}
+          />
         },
         {
           path: "/store/delete",
