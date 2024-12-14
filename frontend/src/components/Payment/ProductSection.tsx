@@ -115,8 +115,8 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
     const storeProducts = groupedProducts[store_id];
     const storeTotalCost = storeProducts.reduce((acc, product) => acc + product.price * product.quantity, 0);
     const storeFinalCost = storeTotalCost - storeProducts.reduce((acc, product) => acc + (selectedVouchers[product.id] ?? voucherDiscount), 0);
-    return acc + storeFinalCost + shippingCost - (selectedShippingDiscount ? shippingDiscounts.find(discount => discount.id === selectedShippingDiscount)?.max_amount ?? 0 : 0);
-  }, 0);
+    return acc + storeFinalCost  ;
+  }, 0) + shippingCost - (selectedShippingDiscount ? shippingDiscounts.find(discount => discount.id === selectedShippingDiscount)?.max_amount ?? 0 : 0);
 
   const toggleModal = (productID: number) => {
     if (productID !== null) {
@@ -217,10 +217,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
               );
             })}
 
-            <div className={styles.shippingRow}>
-              <span>Phí vận chuyển</span>
-              <span>{shippingCost.toLocaleString()} VND</span>
-            </div>
+            
 
             <div className={styles.totalCostRow}>
               <span className={styles.totalCostText}>Tổng chi phí cửa hàng {storeProducts[0].store_name}:</span>
@@ -254,7 +251,12 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
           ))}
         </select>
       </div>
+      <div className={styles.shippingRow}>
+              <span className={styles.totalCostText}>Phí vận chuyển</span>
+              <span className={styles.totalCostAmount}>{shippingCost.toLocaleString()} VND</span>
+            </div>
       <div className={styles.totalCostRow}>
+        
         <span className={styles.totalCostText}>Tổng chi phí giỏ hàng: </span>
         <span className={styles.totalCostAmount}>{totalCost.toLocaleString()} VND</span>
       </div>
@@ -278,12 +280,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
           </div>
         </div>
       )}
-      {orderResponse && (
-        <div className={styles.orderResponse}>
-          <h3>Order Response:</h3>
-          <pre>{JSON.stringify(orderResponse, null, 2)}</pre>
-        </div>
-      )}
+      
     </section>
   );
 };
