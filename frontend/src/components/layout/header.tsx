@@ -30,7 +30,7 @@ const Header = (props: any) => {
         catch (error) {
             setUser(null);
         }
-        //setIsSpinning(false);
+        setIsSpinning(false);
     }
     useEffect(() => {
         getUserLogin();

@@ -20,6 +20,7 @@ import AccountManagement from './pages/AccountDetail'
 import StorePage from './pages/store'
 import App from './App'
 import ErrorPage from './pages/error'
+import SuccessPage from './pages/success'
 
 
 const Root = () => {
@@ -83,6 +84,10 @@ const Root = () => {
         {
           path: "/store",
           element: <StorePage />
+        },
+        {
+          path: "/success",
+          element: <SuccessPage />
         }
       ]
     },
