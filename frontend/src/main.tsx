@@ -86,11 +86,15 @@ const Root = () => {
     {
 
       path: "/login",
-      element: <LoginPage />
+      element: <LoginPage
+        user={user}
+      />
     },
     {
       path: "/register",
-      element: <RegisterPage />
+      element: <RegisterPage
+        user={user}
+      />
 
     },
     {

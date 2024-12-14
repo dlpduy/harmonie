@@ -5,10 +5,11 @@ import { useEffect, useState } from 'react';
 import TextArea from 'antd/es/input/TextArea';
 import { getInforStoreAPI, updateInforStoreAPI } from '../../../services/api.service1';
 import moment from 'moment';
-
+import { useNavigate } from 'react-router-dom';
 
 export const InforStore = () => {
 
+    const navigate = useNavigate();
     const [form] = Form.useForm();
 
     const [nameStore, setNameStore] = useState<string>('');
@@ -36,6 +37,13 @@ export const InforStore = () => {
                 setCreationDate(response.data.creation_date);
                 setTaxId(response.data.tax_id);
                 setDescription(response.data.description);
+            }
+            else {
+                notification.error({
+                    message: 'Lỗi',
+                    description: 'Bạn chưa tạo cửa hàng'
+                });
+                navigate('/store/create');
             }
         }
         catch (error) {

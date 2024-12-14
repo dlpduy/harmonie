@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../styles/Form.module.css';
 import backgroungImage from '../assets/images/background.jpg';
 import { Button, Checkbox, DatePicker, Form, Input, notification, Radio } from 'antd';
@@ -7,7 +7,7 @@ import { registerAPI } from '../services/api.service1';
 import { Link, useNavigate } from 'react-router-dom';
 //import { registerAPI } from '../services/api.service1';
 
-const RegisterPage: React.FC = () => {
+const RegisterPage = (props: any) => {
     const [fullName, setFullName] = useState<string>('');
     const [birthdate, setBirthdate] = useState<string>('');
     const [gender, setGender] = useState('');
@@ -17,7 +17,15 @@ const RegisterPage: React.FC = () => {
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
+    const { user } = props;
+    useEffect(() => {
+        const handleNavigate = () => {
+            if (user) {
+                navigate('/');
+            }
+        }
+        handleNavigate();
+    }, []);
     const handleSubmit = async () => {
         try {
             setLoading(true);

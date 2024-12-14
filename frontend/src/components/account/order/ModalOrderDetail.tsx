@@ -42,18 +42,7 @@ export const ModalDetail = (props: any) => {
             okText="Xác nhận"
             cancelText="Hủy"
             width={900}
-
         >
-            {/* <p style={{ color: 'red' }}>Mã đơn hàng: <span style={{ fontWeight: 'bold' }}>{dataOrder.code}</span></p>
-            <p style={{ color: 'red' }}>Ngày tạo đơn: <span style={{ fontWeight: 'bold' }}>{dataOrder.date}</span></p>
-            <p style={{ color: 'red' }}>Giá tiền: <span style={{ fontWeight: 'bold' }}>{dataOrder.totalCost}</span></p>
-            <p style={{ color: 'red' }}>Phương thức thanh toán: <span style={{ fontWeight: 'bold' }}>{dataOrder.payment}</span></p>
-            <p style={{ color: 'red' }}>Thông tin người nhận: <span style={{ fontWeight: 'bold' }}>
-                <p style={{ marginLeft: '5%', color: 'black' }}>Họ và tên: <span style={{ fontWeight: 'bold' }}>{dataOrder.delivery.consignee_name}</span></p>
-                <p style={{ marginLeft: '5%', color: 'black' }}>Số điện thoại: <span style={{ fontWeight: 'bold' }}>{dataOrder.delivery.phone_number}</span></p>
-                <p style={{ marginLeft: '5%', color: 'black' }}>Địa chỉ: <span style={{ fontWeight: 'bold' }}>{`${dataOrder.delivery.road_number},${dataOrder.delivery.ward}, ${dataOrder.delivery.district}, ${dataOrder.delivery.city} `}</span></p>
-            </span></p> */}
-
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '8px', border: '1px solid #ddd' }}>
                 <div style={{ flex: 1 }}>
                     {/* Các phần tử bên trái */}
@@ -95,6 +84,7 @@ export const ModalDetail = (props: any) => {
                         <th style={{ textAlign: 'left', padding: '10px', borderBottom: '2px solid #ddd' }}>SĐT shipper</th>
                         <th style={{ textAlign: 'left', padding: '10px', borderBottom: '2px solid #ddd' }}>Phí ship</th>
                         <th style={{ textAlign: 'left', padding: '10px', borderBottom: '2px solid #ddd' }}>Giá tiền</th>
+                        <th style={{ textAlign: 'left', padding: '10px', borderBottom: '2px solid #ddd' }}>Trạng thái</th>
                         <th style={{ textAlign: 'left', padding: '10px', borderBottom: '2px solid #ddd' }}>Sản phẩm</th>
 
 
@@ -130,6 +120,9 @@ export const ModalDetail = (props: any) => {
                                         <td style={{ padding: '10px', borderBottom: '1px solid #ddd', fontWeight: 'bold' }}>
                                             {NumberToCurrency(Math.round(box.total_price))}
                                         </td>
+                                        <td style={{ padding: '10px', borderBottom: '1px solid #ddd', fontWeight: 'bold' }}>
+                                            {box.status}
+                                        </td>
                                         <td style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>
                                             <Button
                                                 style={{
@@ -150,10 +143,10 @@ export const ModalDetail = (props: any) => {
                                     </tr>
                                     {isExpanded && (
                                         <tr>
-                                            <td colSpan={8} style={{ padding: '10px', borderBottom: '1px solid #ddd', backgroundColor: '#f9f9f9' }}>
+                                            <td colSpan={10} style={{ padding: '10px', borderBottom: '1px solid #ddd', backgroundColor: '#f9f9f9' }}>
                                                 <div>
                                                     {box.products && box.products.length > 0 ? (
-                                                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                                        <table style={{ width: '100%', borderCollapse: 'collapse', }}>
                                                             <thead>
                                                                 <tr>
                                                                     <th style={{ padding: '10px', borderBottom: '1px solid #ddd', textAlign: 'center' }}>STT</th>
@@ -199,7 +192,7 @@ export const ModalDetail = (props: any) => {
                         })
                     ) : (
                         <tr>
-                            <td colSpan={8} style={{ textAlign: 'center', padding: '10px' }}>
+                            <td colSpan={10} style={{ textAlign: 'center', padding: '10px' }}>
                                 Không có dữ liệu
                             </td>
                         </tr>

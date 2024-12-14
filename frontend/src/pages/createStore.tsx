@@ -1,23 +1,72 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../styles/StoreCreation.module.css';
+import { Button, Form, Input, notification } from 'antd';
+import TextArea from 'antd/es/input/TextArea';
+import { createStoreAPI, getInforStoreAPI } from '../services/api.service1';
+import { useNavigate } from 'react-router-dom';
 const CreateStore: React.FC = () => {
     const [nameStore, setNameStore] = useState<string>('');
     const [address, setAddress] = useState<string>('');
-    const [tax, setTax] = useState<string>('');
+    const [taxId, setTaxId] = useState<string>('');
     const [description, setDescription] = useState<string>('');
 
-    const handleChangeDescription = (e: any) => {
-        setDescription(e.target.value);
-        const textarea = e.target;
-        textarea.style.height = 'auto';
-        textarea.style.height = `${textarea.scrollHeight - 60}px`;
-    };
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const getInforStore = async () => {
+        try {
+            const response: any = await getInforStoreAPI();
+            if (response.statusCode === 200) {
+                notification.warning({
+                    message: 'Thông báo',
+                    description: `Bạn đã tạo cửa hàng rồi!`
+                })
+                navigate('/store/manage');
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+    useEffect(() => {
+        getInforStore();
+    }, []);
+
+    const handleSubmit = async () => {
+        try {
+            setLoading(true);
+            const response: any = await createStoreAPI({
+                name: nameStore,
+                address: address,
+                tax_id: taxId,
+                description: description
+            })
+
+            if (response.statusCode === 200) {
+                notification.success({
+                    message: 'Thông báo',
+                    description: `Tạo cửa hàng thành công!`
+                })
+                navigate('/store/manage');
+            }
+            else {
+                notification.error({
+                    message: 'Thông báo',
+                    description: `Tạo cửa hàng thất bại!`
+                })
+            }
+        }
+        catch (error) {
+            console.log(error);
+            notification.error({
+                message: 'Thông báo',
+                description: `Tạo cửa hàng thất bại!`
+            })
+        }
+        setLoading(false);
+    }
 
     return (
-
-
-
-
         <div
             style={{
                 backgroundColor: '#f5f5f5',
@@ -41,69 +90,84 @@ const CreateStore: React.FC = () => {
                     <div className={styles.formGroup}>
                         <h2 className={styles.sectionTitle}>Thông tin cửa hàng</h2>
                     </div>
-                    <form style={{
-                        position: 'relative',
-                        left: '40%',
-                        top: '-60px',
-                    }}>
-                        <div className={styles.infoRow}>
-                            <label htmlFor="nameStore" className={styles.infoLabel}>Tên cửa hàng:</label>
-                            <input
-                                type="text"
-                                name="nameStore"
-                                className={styles.infoValue}
-                                placeholder="Tên cửa hàng"
-                                style={{ outline: 'none' }}
-                            />
-                        </div>
-                        <div className={styles.infoRow}>
-                            <label htmlFor="address" className={styles.infoLabel}>Địa chỉ:</label>
-                            <input
-                                type="text"
-                                name="address"
-                                className={styles.infoValue}
-                                placeholder="Địa chỉ"
-                                style={{ outline: 'none' }}
-                            />
-                        </div>
-                        <div className={styles.infoRow}>
-                            <label htmlFor="tax" className={styles.infoLabel}>Mã số thuế:</label>
-                            <input
-                                type="text"
-                                name="tax"
-                                className={styles.infoValue}
-                                placeholder="Mã số thuế"
-                                style={{ outline: 'none' }}
-                            />
-                        </div>
-
-                        <div className={styles.infoRow}>
-                            <label htmlFor="description" className={styles.infoLabel}>Mô tả:</label>
-                            <textarea
-                                name="description"
-                                className={styles.infoValue}
-                                value={description}
-                                onChange={(e) => handleChangeDescription(e)}
-                                placeholder="Mô tả"
-
-                                style={{
-                                    fontFamily: 'Lato, sans-serif',
-                                    height: '25px',
-                                }}
-
-                            />
-                        </div>
-                    </form>
-                    <button
-                        type="button"
-                        className={styles.submitButton}
+                    <Form
+                        name="basic"
+                        labelCol={{ span: 7 }}
+                        wrapperCol={{ span: 16 }}
+                        initialValues={{ remember: true }}
+                        //   onFinish={onFinish}
+                        //   onFinishFailed={onFinishFailed}
+                        autoComplete="off"
+                        className={styles.loginFormContainer}
                         style={{
+                            height: '100%',
+                            width: '80%',
+                            scale: '1.5',
+                            marginTop: '8.6%',
+                            marginBottom: '8.6%',
                             position: 'relative',
-                            top: '-60px',
-                        }}
 
-                        onClick={() => { alert('Đã tạo cửa hàng thành công!') }}
-                    >Hoàn tất</button>
+                        }}
+                    >
+
+                        <Form.Item
+
+                            label="Tên cửa hàng"
+                            name="nameStore"
+                            rules={[{ required: true, message: 'Please input your store name!' }]}
+                        >
+                            <Input
+                                value={nameStore}
+                                onChange={(e) => setNameStore(e.target.value)}
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Địa chỉ"
+                            name="address"
+                            rules={[{ required: true, message: 'Please input your store address!' }]}
+                        >
+                            <Input
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Mã số thuế"
+                            name="taxId"
+                            rules={[{ required: true, message: 'Please input your tax ID!' }]}
+                        >
+                            <Input
+                                value={taxId}
+                                onChange={(e) => setTaxId(e.target.value)}
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Mô tả"
+                            name="description"
+                            rules={[{ required: true, message: 'Please input your store description!' }]}
+                        >
+                            <TextArea
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                            />
+                        </Form.Item>
+
+                        <Form.Item wrapperCol={{ offset: 16, span: 16 }}>
+                            <Button
+                                type="primary"
+                                loading={loading}
+                                onClick={() => handleSubmit()}
+                                style={{ width: '70%', height: '40px' }}
+
+
+                            >
+                                Tạo cửa hàng
+                            </Button>
+                        </Form.Item>
+                    </Form>
                 </section>
             </main>
         </div>

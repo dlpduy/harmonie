@@ -222,6 +222,17 @@ const fetchAllProductsinStore = async () => {
     return await axios.get(URL_BACKEND, config);
 }
 
+const createStoreAPI = async (data: any) => {
+    const URL_BACKEND = `api/v1/store/create`
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    return await axios.post(URL_BACKEND, data, config)
+}
+
 const getInforStoreAPI = async () => {
     const URL_BACKEND = `api/v1/store/info`
     const token = getAccessToken()
@@ -243,14 +254,23 @@ const updateInforStoreAPI = async (data: any) => {
     }
     return await axios.put(URL_BACKEND, data, config)
 }
-
+const deleteStoreAPI = async (password: string) => {
+    const URL_BACKEND = `api/v1/store/delete?password=${encodeURIComponent(password)}`;
+    const token = getAccessToken();
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    return await axios.delete(URL_BACKEND, config);
+};
 
 
 export {
     registerAPI, loginAPI, loginGoogleAPI, logoutAPI, changePasswordAPI,
     getUserLoginAPI, forgotPasswordAPI, updatePasswordAPI, getProfileAPI, updateProfileAPI,
     getAllDelivery, createDeliveryAPI, updateDeliveryAPI, deleteDeliveryAPI,
-    getInforStoreAPI, updateInforStoreAPI,
+    getInforStoreAPI, updateInforStoreAPI, createStoreAPI, deleteStoreAPI,
     getOrderAPI,
     createProductAPI, updateProductAPI, fetchAllProductsinStore, uploadImageAPI, getImageProductAPI
 }

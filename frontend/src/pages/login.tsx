@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../styles/Form.module.css';
 import backgroungImage from '../assets/images/background.jpg';
 import { Button, Col, DatePicker, Form, Input, notification, Radio, Row } from 'antd';
@@ -6,8 +6,17 @@ import { loginAPI, loginGoogleAPI } from '../services/api.service1';
 import { Link, useNavigate } from 'react-router-dom';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
-const LoginPage: React.FC = () => {
+const LoginPage = (props: any) => {
+    const { user } = props;
     const navigate = useNavigate();
+    useEffect(() => {
+        const handleNavigate = () => {
+            if (user) {
+                navigate('/');
+            }
+        }
+        handleNavigate();
+    }, []);
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState(false);
@@ -48,9 +57,9 @@ const LoginPage: React.FC = () => {
     }
 
     const hanleLoginGoogle = async (response: any) => {
+        localStorage.removeItem("access_token"); // Xóa token
         const token = response.credential;
         const responseGoogle: any = await loginGoogleAPI(token);
-        console.log(responseGoogle);
         if (responseGoogle.statusCode === 200) {
             notification.success({
                 message: 'Success',

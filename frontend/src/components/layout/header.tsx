@@ -14,6 +14,7 @@ const Header = (props: any) => {
         localStorage.removeItem("access_token"); // Xóa token
         //setIsLogin(false);
         navigate('/login');
+        setUser(null);
     };
     const getUserLogin = async () => {
         try {

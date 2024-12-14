@@ -89,7 +89,7 @@ export const Delivery = (props: any) => {
                                 position: 'relative',
                                 left: '-30%'
                             }}
-                        >Thông tin vận chuyển</h2>
+                        >Thông tin giao hàng</h2>
                         <Button
                             type="primary"
                             onClick={showModalCreate}
@@ -108,48 +108,6 @@ export const Delivery = (props: any) => {
                             getDataDelivery={getDataDelivery}
                         />
                     </div>
-                    {/* <table className={styles.Table}>
-                        <thead className={styles.TableHeader}>
-                            <tr>
-                                <th>STT</th>
-                                <th>Tên người nhận</th>
-                                <th>Số điện thoại</th>
-                                <th>Địa chỉ</th>
-                                <th>Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody className={styles.TableBody}>
-                            {allInfo.map((recipient: any, index) => (
-                                <tr key={recipient.id}>
-                                    <td>{index + 1}</td>
-                                    <td>{recipient.consignee_name}</td>
-                                    <td>{recipient.phone_number}</td>
-                                    <td>{`${recipient.road_number}, ${recipient.ward}, ${recipient.district}, ${recipient.city}`}</td>
-                                    <td>
-
-                                        <Button type="primary" onClick={() => {
-                                            showModalUpdate();
-                                            setDataDelivery(recipient);
-                                        }}>
-                                            Edit
-                                        </Button>
-                                        <Popconfirm
-                                            title="Delete the task"
-                                            description="Bạn có chắc muốn xóa địa chỉ này?"
-                                            onConfirm={confirm.bind(null, recipient.id)}
-                                            okText="Yes"
-                                            cancelText="No"
-                                        >
-                                            <Button
-                                                danger
-                                                style={{ marginTop: '10px' }}
-                                            >Delete</Button>
-                                        </Popconfirm>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table> */}
                     <table className={styles.Table}>
                         <thead className={styles.TableHeader}>
                             <tr>
@@ -195,7 +153,7 @@ export const Delivery = (props: any) => {
                             ) : (
                                 <tr>
                                     <td colSpan={5} style={{ textAlign: 'center', padding: '10px' }}>
-                                        <p style={{ textAlign: 'center', padding: '10px' }}>Không có dữ liệu</p>
+                                        <p style={{ textAlign: 'center', padding: '10px' }}>Chưa có dữ liệu</p>
                                     </td>
                                 </tr>
                             )}
