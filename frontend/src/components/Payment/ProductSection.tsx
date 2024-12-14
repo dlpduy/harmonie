@@ -53,6 +53,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
   const [shippingDiscounts, setShippingDiscounts] = useState<Discount[]>([]);
   const [selectedSystemDiscount, setSelectedSystemDiscount] = useState<number | null>(null);
   const [systemDiscounts, setSystemDiscounts] = useState<Discount[]>([]);
+  const [productImages, setProductImages] = useState<{ [productID: number]: string }>({});
   const shippingCost = 15000;
   const voucherDiscount = 0;
 
@@ -100,6 +101,27 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
     fetchSystemDiscounts();
   }, []);
 
+  useEffect(() => {
+    const fetchProductImages = async () => {
+      const imagesData: { [key: number]: string } = {};
+      for (const product of products) {
+        try {
+          const response = await fetch(`http://localhost:9091/images/${product.id}/1.jpg`);
+          if (response.ok) {
+            imagesData[product.id] = response.url;
+          } else {
+            console.error(`Error fetching image for product ${product.id}`);
+          }
+        } catch (error) {
+          console.error(`Error fetching image for product ${product.id}:`, error);
+        }
+      }
+      setProductImages(imagesData);
+    };
+
+    fetchProductImages();
+  }, [products]);
+
   if (!products || products.length === 0) {
     return <div>Không có sản phẩm trong giỏ hàng.</div>;
   }
@@ -115,8 +137,8 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
     const storeProducts = groupedProducts[store_id];
     const storeTotalCost = storeProducts.reduce((acc, product) => acc + product.price * product.quantity, 0);
     const storeFinalCost = storeTotalCost - storeProducts.reduce((acc, product) => acc + (selectedVouchers[product.id] ?? voucherDiscount), 0);
-    return acc + storeFinalCost + shippingCost - (selectedShippingDiscount ? shippingDiscounts.find(discount => discount.id === selectedShippingDiscount)?.max_amount ?? 0 : 0);
-  }, 0);
+    return acc + storeFinalCost  ;
+  }, 0) + shippingCost - (selectedShippingDiscount ? shippingDiscounts.find(discount => discount.id === selectedShippingDiscount)?.max_amount ?? 0 : 0);
 
   const toggleModal = (productID: number) => {
     if (productID !== null) {
@@ -164,6 +186,9 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
       console.log('Order created successfully:', orderData);
       const response = await createOrderAPI(orderData);
       setOrderResponse(response);
+      if (response?.url) {
+        window.location.href = response.url;
+      }
     } catch (error) {
       console.error('Error creating order:', error);
     }
@@ -189,7 +214,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
                 <div key={product.id} className={styles.productContainer}>
                   <div className={styles.productRow}>
                     <div className={styles.productInfo}>
-                      <img src={product.productURL} alt={product.name} className={styles.productImage} />
+                      <img src={productImages[product.id] || product.productURL} alt={product.name} className={styles.productImage} />
                       <div className={styles.productDetails}>
                         <h3 className={styles.productName}>{product.name}</h3>
                       </div>
@@ -216,11 +241,6 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
                 </div>
               );
             })}
-
-            <div className={styles.shippingRow}>
-              <span>Phí vận chuyển</span>
-              <span>{shippingCost.toLocaleString()} VND</span>
-            </div>
 
             <div className={styles.totalCostRow}>
               <span className={styles.totalCostText}>Tổng chi phí cửa hàng {storeProducts[0].store_name}:</span>
@@ -254,7 +274,12 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
           ))}
         </select>
       </div>
+      <div className={styles.shippingRow}>
+              <span className={styles.totalCostText}>Phí vận chuyển</span>
+              <span className={styles.totalCostAmount}>{shippingCost.toLocaleString()} VND</span>
+            </div>
       <div className={styles.totalCostRow}>
+        
         <span className={styles.totalCostText}>Tổng chi phí giỏ hàng: </span>
         <span className={styles.totalCostAmount}>{totalCost.toLocaleString()} VND</span>
       </div>
@@ -278,12 +303,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
           </div>
         </div>
       )}
-      {orderResponse && (
-        <div className={styles.orderResponse}>
-          <h3>Order Response:</h3>
-          <pre>{JSON.stringify(orderResponse, null, 2)}</pre>
-        </div>
-      )}
+      
     </section>
   );
 };
