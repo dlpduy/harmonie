@@ -143,28 +143,8 @@ const getOrderAPI = async () => {
 }
 
 
-interface ICreateProduct {
-    name: string;
-    brand: string;
-    price: number;
-    quantity: number;
-    category_id: number;
-    description: string;
-}
 
-interface IUpdateProduct {
-    id: number;
-    name: string;
-    brand: string;
-    price: number;
-    quantity: number;
-    category_id: number;
-    description: string;
-}
-
-
-
-const createProductAPI = async (data: ICreateProduct) => {
+const createProductAPI = async (data: any) => {
     const URL_BACKEND = "api/v1/products"
     const token = getAccessToken()
     const config = {
@@ -194,13 +174,8 @@ const uploadImageAPI = async (data: any) => {
     return await axios.post(URL_BACKEND, files, config);
 }
 
-const getImageProductAPI = async (id: number) => {
-    const URL_BACKEND = `api/v1/products/images/${id}`
-    return await axios.get(URL_BACKEND);
-}
-
-const updateProductAPI = async (data: IUpdateProduct) => {
-    const URL_BACKEND = "api/v1/products"
+const updateProductAPI = async (data: any, id: number) => {
+    const URL_BACKEND = `api/v1/products/${id}`
     const token = getAccessToken()
     const config = {
         headers: {
@@ -208,6 +183,17 @@ const updateProductAPI = async (data: IUpdateProduct) => {
         },
     };
     return await axios.put(URL_BACKEND, data, config);
+}
+
+const deleteProductAPI = async (id: number) => {
+    const URL_BACKEND = `api/v1/products/${id}`
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    return await axios.delete(URL_BACKEND, config);
 }
 
 
@@ -221,6 +207,7 @@ const fetchAllProductsinStore = async () => {
     };
     return await axios.get(URL_BACKEND, config);
 }
+
 
 const createStoreAPI = async (data: any) => {
     const URL_BACKEND = `api/v1/store/create`
@@ -266,11 +253,67 @@ const deleteStoreAPI = async (password: string) => {
 };
 
 
+const createStoreDiscountAPI = async (data: any) => {
+    const URL_BACKEND = `api/v1/add/store_discount`
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    return await axios.post(URL_BACKEND, data, config)
+}
+
+const getStoreDiscountAPI = async () => {
+    const URL_BACKEND = `api/v1/store_discount`
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    return await axios.get(URL_BACKEND, config)
+}
+
+const updateStoreDiscountAPI = async (data: any, id: number) => {
+    const URL_BACKEND = `api/v1/store_discount/${id}`
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    return await axios.put(URL_BACKEND, data, config)
+}
+
+const deleteStoreDiscountAPI = async (id: number) => {
+    const URL_BACKEND = `api/v1/store_discount/${id}`
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    return await axios.delete(URL_BACKEND, config)
+}
+
+const getStoreBoxesAPI = async () => {
+    const URL_BACKEND = `api/v1/store/all/box`
+    const token = getAccessToken()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    return await axios.get(URL_BACKEND, config)
+}
+
 export {
     registerAPI, loginAPI, loginGoogleAPI, logoutAPI, changePasswordAPI,
     getUserLoginAPI, forgotPasswordAPI, updatePasswordAPI, getProfileAPI, updateProfileAPI,
     getAllDelivery, createDeliveryAPI, updateDeliveryAPI, deleteDeliveryAPI,
     getInforStoreAPI, updateInforStoreAPI, createStoreAPI, deleteStoreAPI,
-    getOrderAPI,
-    createProductAPI, updateProductAPI, fetchAllProductsinStore, uploadImageAPI, getImageProductAPI
+    createStoreDiscountAPI, getStoreDiscountAPI, updateStoreDiscountAPI, getStoreBoxesAPI,
+    getOrderAPI, deleteStoreDiscountAPI,
+    createProductAPI, updateProductAPI, fetchAllProductsinStore, uploadImageAPI, deleteProductAPI
 }

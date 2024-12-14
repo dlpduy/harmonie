@@ -3,40 +3,13 @@ import styles from '../../../styles/Management.module.css';
 import { useEffect, useState } from 'react';
 import { ModalCreate } from './modal/ModalCreateProduct';
 import { ModalUpdate } from './modal/ModalUpdateProduct';
-import { fetchAllProductsinStore, getImageProductAPI } from '../../../services/api.service1';
-import { AxiosResponse } from 'axios';
-const products = [
-    {
-        "id": 1,
-        "name": "Sản phẩm A",
-        "brand": "Thương hiệu A",
-        "price": 250000,
-        "quantity": 150,
-        "description": "Mô tả chi tiết về sản phẩm A.",
-        "category_id": 1,
-        "countImage": 3
-    },
-    {
-        "id": 2,
-        "name": "Sản phẩm B",
-        "brand": "Thương hiệu B",
-        "price": 350000,
-        "quantity": 80,
-        "description": "Mô tả chi tiết về sản phẩm B.",
-        "category_id": 2,
-        "countImage": 3
-    },
-    {
-        "id": 3,
-        "name": "Sản phẩm C",
-        "brand": "Thương hiệu C",
-        "price": 150000,
-        "quantity": 200,
-        "description": "Mô tả chi tiết về sản phẩm C.",
-        "category_id": 3,
-        "countImage": 3
-    }
-]
+import { deleteProductAPI, fetchAllProductsinStore } from '../../../services/api.service1';
+
+
+const NumberToCurrency = (money: any) => {
+    const formattedAmount = new Intl.NumberFormat('vi-VN').format(money);
+    return `${formattedAmount} VNĐ`;
+};
 
 export const Product = () => {
 
@@ -54,12 +27,29 @@ export const Product = () => {
     };
     const [dataProduct, setDataProduct] = useState<Object>({})
 
-    const confirm: PopconfirmProps['onConfirm'] = (e) => {
-        notification.success({
-            message: "Xoa dia chi thanh cong",
-            description: "Xoa dia chi thanh cong"
-        });
-
+    const confirm: PopconfirmProps['onConfirm'] = async (e) => {
+        try {
+            const response: any = await deleteProductAPI(Number(e));
+            if (response.statusCode === 200 || response.data === `Product deleted with id ${Number(e)}`) {
+                notification.success({
+                    message: 'Xóa sản phẩm thành công',
+                    description: response.data
+                });
+                fetchProducts();
+            }
+            else {
+                notification.error({
+                    message: `Lỗi ${response.statusCode}`,
+                    description: response.data.message
+                });
+            }
+        }
+        catch (error) {
+            notification.error({
+                message: 'Lỗi',
+                description: 'Có lỗi xảy ra khi xóa sản phẩm'
+            });
+        }
     };
     const fileLists: any[] = [];
     const handleFileList = (product: any) => {
@@ -76,27 +66,25 @@ export const Product = () => {
         return fileLists;
     }
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            const response: any = await fetchAllProductsinStore();
-            if (response.statusCode === 200) {
-                setListProducts(response.data);
-            }
-            else {
-                notification.error({
-                    message: `Lỗi ${response.statusCode}`,
-                    description: response.data.message
-                });
-            }
+    const fetchProducts = async () => {
+        const response: any = await fetchAllProductsinStore();
+        if (response.statusCode === 200) {
+            setListProducts(response.data);
         }
+        else {
+            notification.error({
+                message: `Lỗi ${response.statusCode}`,
+                description: response.data.message
+            });
+        }
+    }
+    useEffect(() => {
         fetchProducts();
-
-
-
     }, []);
 
     useEffect(() => {
         //console.log(handleFileList(products[0]));
+        console.log(listProducts);
     }, [dataProduct, listProducts, fileLists]);
 
     return (
@@ -137,70 +125,83 @@ export const Product = () => {
                             </tr>
                         </thead>
                         <tbody className={styles.TableBody}>
-                            {listProducts.map((product, index) => (
-                                <tr key={product.id}>
-
-                                    <td>{index + 1}</td>
-                                    <td>{product.name}</td>
-                                    <td>
-                                        {Array.from({ length: product.num_image }, (_, i) => (
-                                            <img
-                                                key={i} // Thêm key cho mỗi phần tử trong danh sách
-                                                src={`http://localhost:9091/images/${product.id}/${i + 1}.jpg`} // Đảm bảo index bắt đầu từ 1
-                                                alt={`Image ${i + 1}`}
-                                                className={styles.productImage}
-                                            />
-                                        ))}
-                                    </td>
-                                    <td>{product.brand}</td>
-                                    <td>{product.price}</td>
-                                    <td>{product.quantity}</td>
-                                    <td>{product.description}</td>
-                                    <td>{product.category_id}</td>
-                                    <td>
-                                        <Button
-                                            type='primary'
-                                            onClick={() => {
-                                                setDataProduct({
-                                                    id: product.id,
-                                                    name: product.name,
-                                                    brand: product.brand,
-                                                    description: product.description,
-                                                    price: product.price,
-                                                    quantity: product.quantity,
-                                                    category_id: product.category_id,
-                                                    fileList: handleFileList(product)
-                                                });
-                                                showModalUpdate();
-                                            }}
-                                        >Edit</Button>
-                                        <Popconfirm
-                                            title="Delete product"
-                                            description="Bạn có chắc muốn xóa sản phẩm này?"
-                                            onConfirm={confirm}
-                                            okText="Yes"
-                                            cancelText="No"
-                                        >
-                                            <Button
-                                                danger
-                                                style={{ marginTop: '10px' }}
-                                            >Delete</Button>
-                                        </Popconfirm>
+                            {listProducts.length === 0 ? (
+                                <tr>
+                                    <td colSpan={9} style={{ textAlign: 'center' }}>
+                                        Chưa có dữ liệu
                                     </td>
                                 </tr>
-                            ))}
+                            ) : (
+                                listProducts.map((product, index) => (
+                                    <tr key={product.id}>
+                                        <td>{index + 1}</td>
+                                        <td>{product.name}</td>
+                                        <td>
+                                            {/* {Array.from({ length: product.num_image }, (_, i) => (
+                                                <img
+                                                    key={i} // Thêm key cho mỗi phần tử trong danh sách
+                                                    src={`http://localhost:9091/images/${product.id}/${i + 1}.jpg`} // Đảm bảo index bắt đầu từ 1
+                                                    alt={`Image ${i + 1}`}
+                                                    className={styles.productImage}
+                                                />
+                                            ))} */}
+                                            <img
+                                                src={`http://localhost:9091/images/${product.id}/1.jpg`} // Đảm bảo index bắt đầu từ 1
+                                                alt={`Image`}
+                                                className={styles.productImage}
+                                            />
+                                        </td>
+                                        <td>{product.brand}</td>
+                                        <td>{NumberToCurrency(product.price)}</td>
+                                        <td>{product.quantity}</td>
+                                        <td>{product.description}</td>
+                                        <td>{product.category_name}</td>
+                                        <td>
+                                            <Button
+                                                type="primary"
+                                                onClick={() => {
+                                                    setDataProduct({
+                                                        product: product,
+                                                        fileList: handleFileList(product)
+                                                    });
+                                                    showModalUpdate();
+                                                }}
+                                            >
+                                                Edit
+                                            </Button>
+                                            <Popconfirm
+                                                title="Delete product"
+                                                description="Bạn có chắc muốn xóa sản phẩm này?"
+                                                onConfirm={confirm.bind(null, product.id)}
+                                                okText="Yes"
+                                                cancelText="No"
+                                            >
+                                                <Button
+                                                    danger
+                                                    style={{ marginTop: '10px' }}
+                                                >
+                                                    Delete
+                                                </Button>
+                                            </Popconfirm>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
+
                 </div>
             </section>
             <ModalCreate
                 isModalCreateOpen={isModalCreateOpen}
                 setIsModalCreateOpen={setIsModalCreateOpen}
+                fetchProducts={fetchProducts}
             />
             <ModalUpdate
                 isModalUpdateOpen={isModalUpdateOpen}
                 setIsModalUpdateOpen={setIsModalUpdateOpen}
                 dataProduct={dataProduct}
+                fetchProducts={fetchProducts}
             />
 
 

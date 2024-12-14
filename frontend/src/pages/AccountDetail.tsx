@@ -4,7 +4,7 @@ import Sidebar from '../components/account/Sidebar';
 import { Information } from '../components/account/Detail';
 
 const AccountManagement = (props: any) => {
-    const [activeIndex, setActiveIndex] = useState<Number>(3);
+    const [activeIndex, setActiveIndex] = useState<Number>(2);
     const { user, setUser, setIsSpinning } = props;
     return (
         <div className={styles.storeManagement}>

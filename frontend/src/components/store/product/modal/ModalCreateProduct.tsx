@@ -5,7 +5,7 @@ import { createProductAPI, uploadImageAPI } from "../../../../services/api.servi
 
 export const ModalCreate = (props: any) => {
 
-    const { isModalCreateOpen, setIsModalCreateOpen } = props;
+    const { isModalCreateOpen, setIsModalCreateOpen, fetchProducts } = props;
 
     const [productName, setProductName] = useState<string>('');
     const [brand, setBrand] = useState<string>('');
@@ -55,6 +55,7 @@ export const ModalCreate = (props: any) => {
                     })
                     resetModal();
                     setIsModalCreateOpen(false);
+                    fetchProducts();
 
                 }
                 else {
@@ -91,14 +92,19 @@ export const ModalCreate = (props: any) => {
         <>
             <Modal title="Thêm sản phẩm"
                 open={isModalCreateOpen}
-                onOk={() => {
-                    handleOkCreate()
-                }}
                 onCancel={() => {
                     handleCancelCreate()
                 }}
                 maskClosable={false}
                 okText="Create"
+                footer={[
+                    <Button key="back" onClick={handleCancelCreate}>
+                        Cancel
+                    </Button>,
+                    <Button key="submit" type="primary" loading={loading} onClick={handleOkCreate}>
+                        Create
+                    </Button>,
+                ]}
 
             >
                 <div style={{ display: "flex", gap: "15px", flexDirection: "column" }}>

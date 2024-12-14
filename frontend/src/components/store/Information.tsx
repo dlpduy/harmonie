@@ -1,5 +1,5 @@
-import { InforStore } from './product/InformationStore';
-import { Order } from './product/Order';
+import { InforStore } from './infor/InformationStore';
+import { Boxes } from './order/Boxes';
 import { Product } from './product/Product';
 import { Promotion } from './promotion/Promotion';
 import { Revenue } from './product/Revenue';
@@ -16,12 +16,10 @@ export const Information = (props: InformationProps) => {
     {
         switch (activeIndex) {
             case 0:
-                return <Revenue />;
-            case 2:
-                return <Order />;
-            case 1:
                 return <Product />;
-            case 3:
+            case 1:
+                return <Boxes />;
+            case 2:
                 return <Promotion />;
             default:
                 return <InforStore />;

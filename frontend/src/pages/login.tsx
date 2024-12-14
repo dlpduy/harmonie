@@ -59,6 +59,7 @@ const LoginPage = (props: any) => {
     const hanleLoginGoogle = async (response: any) => {
         localStorage.removeItem("access_token"); // Xóa token
         const token = response.credential;
+        console.log(token);
         const responseGoogle: any = await loginGoogleAPI(token);
         if (responseGoogle.statusCode === 200) {
             notification.success({

@@ -1,37 +1,65 @@
 import { UploadOutlined } from "@ant-design/icons";
-import { Button, Input, message, Modal, notification, Upload } from "antd"
+import { Button, DatePicker, Form, Input, message, Modal, notification, Upload } from "antd"
 import { useState } from "react";
-import { createProductAPI } from "../../../../services/api.service1";
+import { createProductAPI, createStoreDiscountAPI } from "../../../../services/api.service1";
 
 export const ModalCreate = (props: any) => {
 
-    const { isModalCreateOpen, setIsModalCreateOpen } = props;
+    const { isModalCreateOpen, setIsModalCreateOpen, getDiscounts } = props;
 
     const [code, setCode] = useState('');
     const [quantity, setQuantity] = useState(0);
     const [amount, setAmount] = useState(0);
-    const [releaseDate, setReleaseDate] = useState('');
     const [startDate, setStartDate] = useState('');
     const [expirationDate, setExpirationDate] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const resetModal = () => {
         setCode('');
         setQuantity(0);
         setAmount(0);
-        setReleaseDate('');
         setStartDate('');
         setExpirationDate('');
     }
 
     const handleOkCreate = async () => {
-        console.log({ code, quantity, releaseDate, startDate, expirationDate });
-
-
+        try {
+            setLoading(true);
+            const response: any = await createStoreDiscountAPI({
+                code: code,
+                quantity: quantity,
+                amount: amount,
+                start_date: startDate,
+                expiration_date: expirationDate
+            })
+            if (response.statusCode === 200) {
+                notification.success({
+                    message: 'Thành công',
+                    description: 'Tạo mã giảm giá thành công'
+                })
+                setIsModalCreateOpen(false);
+                resetModal();
+                getDiscounts();
+            }
+            else {
+                notification.error({
+                    message: 'Thất bại',
+                    description: 'Tạo mã giảm giá thất bại'
+                })
+            }
+        }
+        catch (err) {
+            notification.error({
+                message: 'Thất bại',
+                description: 'Có lỗi xảy ra'
+            })
+        }
+        setLoading(false);
     }
 
     const handleCancelCreate = () => {
         setIsModalCreateOpen(false);
-        console.log({ code, quantity, releaseDate, startDate, expirationDate });
+        console.log({ code, quantity, startDate, expirationDate });
         //resetModal();
     }
 
@@ -40,61 +68,78 @@ export const ModalCreate = (props: any) => {
         <>
             <Modal title="Thêm mã giảm giá"
                 open={isModalCreateOpen}
-                onOk={() => {
-                    handleOkCreate()
-                }}
-                onCancel={() => {
-                    handleCancelCreate()
-                }}
                 maskClosable={false}
                 okText="Create"
+                footer={[
+                    <Button key="back" onClick={handleCancelCreate}>
+                        Cancel
+                    </Button>,
+                    <Button key="submit" type="primary" loading={loading} onClick={handleOkCreate}>
+                        Create
+                    </Button>,
+                ]}
 
             >
-                <div style={{ display: "flex", gap: "15px", flexDirection: "column" }}>
-                    <div>
-                        <span>Mã khuyến mãi</span>
+                <Form
+                    name="basic"
+                    labelCol={{ span: 6 }}
+                    wrapperCol={{ span: 32 }}
+                    autoComplete="off"
+                >
+                    <Form.Item
+                        label="Mã giảm giá"
+                        name="code"
+                        rules={[{ required: true, message: 'Please input your creation date!' }]}
+                    >
                         <Input
                             value={code}
                             onChange={(e) => setCode(e.target.value)}
                         />
-                    </div>
-                    <div>
-                        <span>Số lượng</span>
+                    </Form.Item>
+                    <Form.Item
+                        label="Số lượng"
+                        name="quantity"
+                        rules={[{ required: true, message: 'Please input your creation date!' }]}
+                    >
                         <Input
                             value={quantity}
                             onChange={(e) => !isNaN(quantity) ? setQuantity(Number(e.target.value)) : setQuantity(0)}
                         />
-                    </div>
-                    <div>
-                        <span>Số tiền giảm</span>
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Số tiền giảm"
+                        name="amount"
+                        rules={[{ required: true, message: 'Please input your creation date!' }]}
+                    >
                         <Input
                             value={amount}
                             onChange={(e) => !isNaN(amount) ? setAmount(Number(e.target.value)) : setAmount(0)}
                         />
-                    </div>
-                    <div>
-                        <span>Ngày phát hành</span>
-                        <Input
-                            value={releaseDate}
-                            onChange={(e) => setReleaseDate(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <span>Ngày bắt đầu</span>
-                        <Input
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                        />
-                    </div>
+                    </Form.Item>
 
-                    <div>
-                        <span>Ngày hết hạn</span>
-                        <Input
-                            value={expirationDate}
-                            onChange={(e) => setExpirationDate(e.target.value)}
+                    <Form.Item
+                        label="Ngày bắt đầu"
+                        name="startDate"
+                        rules={[{ required: true, message: 'Please input your creation date!' }]}
+                    >
+                        <DatePicker
+                            format="YYYY-MM-DD" // Đảm bảo định dạng đúng
+                            onChange={(date, dateString: any) => setStartDate(dateString)}
                         />
-                    </div>
-                </div>
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Ngày hết hạn"
+                        name="expirationDate"
+                        rules={[{ required: true, message: 'Please input your creation date!' }]}
+                    >
+                        <DatePicker
+                            format="YYYY-MM-DD" // Đảm bảo định dạng đúng
+                            onChange={(date, dateString: any) => setExpirationDate(dateString)}
+                        />
+                    </Form.Item>
+                </Form>
             </Modal>
         </>
     )

@@ -9,14 +9,12 @@ export const Information = (props: any) => {
     {
         switch (activeIndex) {
             case 0:
-                return <Disburse />;
-            case 1:
                 return <Order
                     setIsSpinning={setIsSpinning}
                 />;
-            case 2:
+            case 1:
                 return <ChangePassword />;
-            case 3:
+            case 2:
                 return <InformationAccount
                     user={user}
                     setUser={setUser}

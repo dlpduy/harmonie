@@ -1,24 +1,27 @@
-import { Button, Input, message, Modal, notification, Upload } from "antd"
+import { Button, DatePicker, Input, message, Modal, notification, Upload } from "antd"
+import moment from "moment";
 import { useEffect, useState } from "react";
+import { updateStoreDiscountAPI } from "../../../../services/api.service1";
 
 export const ModalUpdate = (props: any) => {
 
-    const { isModalUpdateOpen, setIsModalUpdateOpen, dataPromotion } = props;
+    const { isModalUpdateOpen, setIsModalUpdateOpen, dataPromotion, getDiscounts } = props;
 
     const [code, setCode] = useState('');
     const [quantity, setQuantity] = useState(0);
     const [amount, setAmount] = useState(0);
-    const [releaseDate, setReleaseDate] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [expirationDate, setExpirationDate] = useState('');
+    const [releaseDate, setReleaseDate] = useState<string>('');
+    const [startDate, setStartDate] = useState<string>('');
+    const [expirationDate, setExpirationDate] = useState<string>('');
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         setCode(dataPromotion.code);
         setQuantity(dataPromotion.quantity);
         setAmount(dataPromotion.amount);
-        setReleaseDate(dataPromotion.releaseDate);
-        setStartDate(dataPromotion.startDate);
-        setExpirationDate(dataPromotion.expirationDate);
+        setReleaseDate(dataPromotion.release_date);
+        setStartDate(dataPromotion.start_date);
+        setExpirationDate(dataPromotion.expiration_date);
     }, [dataPromotion]);
 
     const resetModal = () => {
@@ -31,30 +34,61 @@ export const ModalUpdate = (props: any) => {
     }
 
     const handleOkUpdate = async () => {
-        setIsModalUpdateOpen(false);
-        resetModal();
-
-
+        try {
+            setLoading(true);
+            const response: any = await updateStoreDiscountAPI({
+                code: code,
+                quantity: quantity,
+                amount: amount,
+                start_date: startDate,
+                expiration_date: expirationDate
+            }, dataPromotion.id)
+            if (response.statusCode === 200) {
+                notification.success({
+                    message: 'Thành công',
+                    description: 'Cập nhật mã giảm giá thành công'
+                })
+                setIsModalUpdateOpen(false);
+                resetModal();
+                getDiscounts();
+            }
+            else {
+                notification.error({
+                    message: 'Thất bại',
+                    description: 'Cập nhật mã giảm giá thất bại'
+                })
+            }
+            setLoading(false);
+        }
+        catch (err) {
+            notification.error({
+                message: 'Thất bại',
+                description: 'Có lỗi xảy ra'
+            })
+        }
     }
 
     const handleCancelUpdate = () => {
         setIsModalUpdateOpen(false);
         resetModal();
     }
-
-
     return (
         <>
             <Modal title="Cập nhật mã giảm giá"
                 open={isModalUpdateOpen}
-                onOk={() => {
-                    handleOkUpdate()
-                }}
                 onCancel={() => {
                     handleCancelUpdate()
                 }}
                 maskClosable={false}
                 okText="Update"
+                footer={[
+                    <Button key="back" onClick={handleCancelUpdate}>
+                        Cancel
+                    </Button>,
+                    <Button key="submit" type="primary" loading={loading} onClick={handleOkUpdate}>
+                        Update
+                    </Button>,
+                ]}
 
             >
                 <div style={{ display: "flex", gap: "15px", flexDirection: "column" }}>
@@ -81,24 +115,32 @@ export const ModalUpdate = (props: any) => {
                     </div>
                     <div>
                         <span>Ngày phát hành</span>
-                        <Input
-                            value={releaseDate}
-                            onChange={(e) => setReleaseDate(e.target.value)}
+                        <DatePicker
+                            style={{ width: '100%' }}
+                            value={releaseDate?.length > 0 ? moment(releaseDate) : undefined}
+                            format="YYYY-MM-DD" // Đảm bảo định dạng đúng
+                            onChange={(date, dateString: any) => setReleaseDate(dateString)}
+                            disabled
                         />
                     </div>
                     <div>
                         <span>Ngày bắt đầu</span>
-                        <Input
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
+                        <DatePicker
+                            style={{ width: '100%' }}
+                            value={startDate?.length > 0 ? moment(startDate) : undefined}
+                            format="YYYY-MM-DD" // Đảm bảo định dạng đúng
+                            onChange={(date, dateString: any) => setStartDate(dateString)}
+
                         />
                     </div>
 
                     <div>
                         <span>Ngày hết hạn</span>
-                        <Input
-                            value={expirationDate}
-                            onChange={(e) => setExpirationDate(e.target.value)}
+                        <DatePicker
+                            style={{ width: '100%' }}
+                            value={expirationDate?.length > 0 ? moment(expirationDate) : undefined}
+                            format="YYYY-MM-DD" // Đảm bảo định dạng đúng
+                            onChange={(date, dateString: any) => setExpirationDate(dateString)}
                         />
                     </div>
                 </div>
