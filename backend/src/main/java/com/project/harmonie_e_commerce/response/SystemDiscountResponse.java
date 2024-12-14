@@ -17,6 +17,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @NoArgsConstructor
 @Builder
 public class SystemDiscountResponse {
+    @JsonProperty("id")
+    Integer id;
     String code;
     Integer quantity;
     @JsonProperty("release_date")
@@ -35,6 +37,7 @@ public class SystemDiscountResponse {
     public static SystemDiscountResponse fromSystemDiscount(SystemDiscount systemDiscount) {
         return systemDiscount == null ? null :
                 SystemDiscountResponse.builder()
+                .id(systemDiscount.getId())
                 .code(systemDiscount.getDiscount().getCode())
                 .quantity(systemDiscount.getDiscount().getQuantity())
                 .releaseDate(systemDiscount.getDiscount().getReleaseDate())

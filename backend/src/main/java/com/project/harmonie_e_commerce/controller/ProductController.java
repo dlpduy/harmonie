@@ -6,7 +6,9 @@ import com.project.harmonie_e_commerce.response.ProductListResponse;
 import com.project.harmonie_e_commerce.response.ProductResponse;
 import com.project.harmonie_e_commerce.model.Product;
 import com.project.harmonie_e_commerce.model.ProductImage;
+import com.project.harmonie_e_commerce.service.ExtractToken;
 import com.project.harmonie_e_commerce.service.IProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.bind.DefaultValue;
@@ -35,10 +37,13 @@ import java.util.*;
 public class ProductController {
     private final IProductService productService;
 
+    private final ExtractToken extractToken;
+
     @PostMapping("")
     public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDTO productDTO,
+                                           HttpServletRequest request,
                                            BindingResult result) {
-        try {
+            Integer store_id = extractToken.getIdFromToken(request);
             if (result.hasErrors()) {
                 List<String> errorMessages = result.getFieldErrors()
                         .stream()
@@ -46,59 +51,18 @@ public class ProductController {
                         .toList();
                 return ResponseEntity.badRequest().body(errorMessages);
             }
-            ProductResponse newProduct = productService.createProduct(productDTO);
+            ProductResponse newProduct = productService.createProduct(productDTO,store_id);
             return ResponseEntity.ok(newProduct);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
 
     }
 
     @PostMapping(value = "uploads/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadImages(@PathVariable int id,
-                                          @RequestParam("files") List<MultipartFile> files) {
-        try {
+    public ResponseEntity<?> uploadImages(@PathVariable Integer id,
+                                          @RequestParam("files") List<MultipartFile> files) throws Exception{
             List<ProductImage> productImages = new ArrayList<>();
-            for (MultipartFile file : files) {
-                if (file.getSize() == 0)
-                    continue;
-                // check the size and format of file
-                if (file.getSize() > 10 * 1024 * 1024) {
-                    return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
-                            .body("File is too large! Max size is 10MB");
-                }
-                // Get the format of file
-                String contentType = file.getContentType();
-                if (contentType == null || !contentType.startsWith("image/")) {
-                    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("File must be an image");
-                }
+            return ResponseEntity.ok(productService.uploadImages(id, files));
+    }
 
-                 String filename = storeFile(file,id);
-//                 productImages.add(productService.createProductImage(ProductImageDTO.builder()
-//                         .productId(id)
-//                         .url(filename)
-//                         .build()));
-            }
-            return ResponseEntity.ok("Images uploaded successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-    // store file to public/images/{product id} folder
-    private String storeFile(MultipartFile file, long productId) throws IOException {
-        String filename = StringUtils.cleanPath(file.getOriginalFilename());
-        // Add UUID in forward of file name to make it unique
-        // Path to folder storing file
-        java.nio.file.Path uploadDir = Paths.get("./src/main/resources/public/images/" + (char)(productId+'0'));
-        // Check and create folder if it doesnt exist
-        if (!Files.exists(uploadDir)) {
-            Files.createDirectories(uploadDir);
-        }
-        // path to destination file
-        java.nio.file.Path destination = Paths.get(uploadDir.toString(), filename);
-        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
-        return filename;
-    }
 
 
 //     private String storeFile(MultipartFile file) throws IOException {
@@ -152,12 +116,13 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable("id") int productId) {
-        try {
+//        try {
+            Product product = productService.getProductById(productId);
             return ResponseEntity.ok(ProductResponse
-                    .fromProduct(productService.getProductById(productId)));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+                    .fromProduct(product));
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
 
     }
 
@@ -168,34 +133,39 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable int id, @Valid @RequestBody ProductDTO productDTO) {
-        try {
-            productService.updateProduct(id, productDTO);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<?> updateProduct(@PathVariable int id,
+                                           @Valid @RequestBody ProductDTO productDTO
+    ) throws Exception{
+        productService.updateProduct(id, productDTO);
         return ResponseEntity.ok("Product with id " + id + " is updated");
     }
 
-    @PostMapping("/generateFakeProducts")
-    public ResponseEntity<String> generateFakeProducts() {
-        Faker faker = new Faker();
-        for (int i = 0; i < 5000; i++) {
-            String productName = faker.commerce().productName();
-            if (productService.existsByName(productName)) {
-                continue;
-            }
-            ProductDTO productDTO = ProductDTO.builder()
-                    .name(productName)
-                    .price((float) faker.number().numberBetween(50_000, 50_000_000))
-                    .description(faker.lorem().sentence())
-                    .build();
-            try {
-                productService.createProduct(productDTO);
-            } catch (Exception e) {
-                return ResponseEntity.badRequest().body(e.getMessage());
-            }
-        }
-        return ResponseEntity.ok("Fake products generated successfully");
+//    @PostMapping("/generateFakeProducts")
+//    public ResponseEntity<String> generateFakeProducts() {
+//        Faker faker = new Faker();
+//        for (int i = 0; i < 5000; i++) {
+//            String productName = faker.commerce().productName();
+//            if (productService.existsByName(productName)) {
+//                continue;
+//            }
+//            ProductDTO productDTO = ProductDTO.builder()
+//                    .name(productName)
+//                    .price((float) faker.number().numberBetween(50_000, 50_000_000))
+//                    .description(faker.lorem().sentence())
+//                    .build();
+//            try {
+//                productService.createProduct(productDTO);
+//            } catch (Exception e) {
+//                return ResponseEntity.badRequest().body(e.getMessage());
+//            }
+//        }
+//        return ResponseEntity.ok("Fake products generated successfully");
+//    }
+
+    @GetMapping("/category/{category_id}")
+    public ResponseEntity<?> getAllProductsByCategoryId(
+            @PathVariable Integer category_id
+    ){
+        return ResponseEntity.ok(productService.getProductsByCategoryId(category_id));
     }
 }

@@ -16,6 +16,8 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Builder
 public class ShippingDiscountRespone {
+    @JsonProperty("id")
+    private Integer id;
     private String code;
     private Integer quantity;
     @JsonProperty("release_date")
@@ -31,6 +33,7 @@ public class ShippingDiscountRespone {
     static public ShippingDiscountRespone fromShippingDiscount(ShippingDiscount shippingDiscount) {
         return shippingDiscount == null ? null :
             ShippingDiscountRespone.builder()
+                .id(shippingDiscount.getId())
                 .code(shippingDiscount.getDiscount().getCode())
                 .quantity(shippingDiscount.getDiscount().getQuantity())
                 .releaseDate(shippingDiscount.getDiscount().getReleaseDate())

@@ -10,10 +10,7 @@
  import com.project.harmonie_e_commerce.repository.ProductInCartRepository;
  import com.project.harmonie_e_commerce.repository.ProductRepository;
  import com.project.harmonie_e_commerce.repository.UserRepository;
- import com.project.harmonie_e_commerce.response.CartResponse;
- import com.project.harmonie_e_commerce.response.ProductInCartResponse;
- import com.project.harmonie_e_commerce.response.ProductResponse;
- import com.project.harmonie_e_commerce.response.StoreResponse;
+ import com.project.harmonie_e_commerce.response.*;
  import lombok.AllArgsConstructor;
  import org.springframework.stereotype.Service;
 
@@ -36,7 +33,7 @@
      private final ProductImageRepository productImageRepository;
 
      @Override
-     public List<ProductInCartResponse> getAllProductsInCart(Integer userId) throws Exception {
+     public List<ProductInCartResponse> getAllProductsInCart(Integer userId){
 
          User user = userRepository.findById(userId).orElseThrow(
                  () -> new DataNotFoundException("User not found")
@@ -58,7 +55,7 @@
                  }
 
                  ProductInCartResponse productInCartResponse = ProductInCartResponse.builder()
-                         .id(p.getId())
+                         .id(product.getId())//id bên bảng product gốc
                          .name(product.getName())
                          .brand(product.getBrand())
                          .price(product.getPrice() * p.getQuantity())
@@ -76,7 +73,7 @@
      }
 
      @Override
-     public void deleteItemInCart(Integer product_id, Integer userId) throws Exception {
+     public void deleteItemInCart(Integer product_id, Integer userId){
 
          Product product = productRepository.findById(product_id).get();
 
@@ -104,7 +101,7 @@
 //     }
 
      @Override
-     public ProductInCart addProductToCart(Integer product_id, Integer userId) throws Exception{
+     public ProductInCart addProductToCart(Integer product_id, Integer userId){
          //nếu tồn tại sản phẩm rồi thì + quantity
          Product product = productRepository.findById(product_id).get();
 
@@ -132,7 +129,7 @@
      }
 
      @Override
-     public ProductInCart updateQuantityProductinCart(Integer product_id, Integer userId, Integer newQuantity) throws  Exception {
+     public ProductInCart updateQuantityProductinCart(Integer product_id, Integer userId, Integer newQuantity){
          Product product = productRepository.findById(product_id).get();
 
          User user = userRepository.findById(userId).orElseThrow(
@@ -144,4 +141,13 @@
          return productInCartRepository.save(product_to_add);
      }
 
+
+     @Override
+     public StringResponse deleteProductInCartById(Integer id) {
+         ProductInCart productInCart = productInCartRepository.findById(id).orElseThrow(
+                 () -> new DataNotFoundException("Not found product in cart")
+         );
+         productInCartRepository.delete(productInCart);
+         return new StringResponse("Xoa thanh cong");
+     }
  }

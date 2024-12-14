@@ -1,5 +1,7 @@
 package com.project.harmonie_e_commerce.controller;
 
+import com.project.harmonie_e_commerce.response.PaymentResponse;
+import com.project.harmonie_e_commerce.service.ExtractToken;
 import com.project.harmonie_e_commerce.service.OrderService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,6 +10,7 @@ import jakarta.validation.Valid;
 import com.project.harmonie_e_commerce.dto.OrderDTO;
 import com.project.harmonie_e_commerce.response.OrderResponse;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -22,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 
+import java.util.HashMap;
+import java.util.Map;
 
 // {
 //     "consignee_information_id": 5,
@@ -51,43 +56,36 @@ public class OrderController {
 
    private final OrderService orderService;
 
+   private final ExtractToken extractToken;
+
    @PostMapping("")
    public ResponseEntity<?> createOrder(HttpServletRequest request,
    @Valid @RequestBody OrderDTO orderRequest){
-       try {
-           String respone = orderService.createOrder(request, orderRequest);
-           return ResponseEntity.ok(respone);
-       } catch (Exception e) {
-           return ResponseEntity.badRequest().body(e.getMessage());
-       }
+        PaymentResponse respone = orderService.createOrder(request, orderRequest);
+        if(respone.getUrl().isEmpty()){
+            String redirectUrl = "http://localhost:5173/success";
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .header("Location", redirectUrl)
+                    .body(null);
+        }
+        return ResponseEntity.ok(respone);
    }
 
-   @GetMapping("/user/{user_id}")
-    public ResponseEntity<?> getOrdersByUserId(HttpServletRequest request, @PathVariable Integer user_id){
-        try {
-            return ResponseEntity.ok(orderService.getOrdersByUserId(request, user_id));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+   @GetMapping("/user")
+    public ResponseEntity<?> getOrdersByUserId(HttpServletRequest request){
+        Integer user_id = extractToken.getIdFromToken(request);
+        return ResponseEntity.ok(orderService.getOrdersByUserId(request, user_id));
     }
 
    @GetMapping("/{id}")
    public ResponseEntity<?> getOrder(HttpServletRequest request, @PathVariable Integer id){
-       try {
-           OrderResponse orderResponse = orderService.getOrderById(request, id);
-           return ResponseEntity.ok(orderResponse);
-       } catch (Exception e) {
-           return ResponseEntity.badRequest().body(e.getMessage());
-       }
+        OrderResponse orderResponse = orderService.getOrderById(request, id);
+        return ResponseEntity.ok(orderResponse);
    }
 
    @GetMapping("/all")
     public ResponseEntity<?> getAllOrders(HttpServletRequest request){
-        try {
-            return ResponseEntity.ok(orderService.getAll(request));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(orderService.getAll(request));
     }
 
     
