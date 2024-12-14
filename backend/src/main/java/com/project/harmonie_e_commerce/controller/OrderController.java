@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import com.project.harmonie_e_commerce.dto.OrderDTO;
 import com.project.harmonie_e_commerce.response.OrderResponse;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -61,6 +62,12 @@ public class OrderController {
    public ResponseEntity<?> createOrder(HttpServletRequest request,
    @Valid @RequestBody OrderDTO orderRequest){
         PaymentResponse respone = orderService.createOrder(request, orderRequest);
+        if(respone.getUrl().isEmpty()){
+            String redirectUrl = "http://localhost:5173/success";
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .header("Location", redirectUrl)
+                    .body(null);
+        }
         return ResponseEntity.ok(respone);
    }
 

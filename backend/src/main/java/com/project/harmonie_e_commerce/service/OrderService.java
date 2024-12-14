@@ -185,9 +185,14 @@ public class OrderService {
         //    return OrderResponse.fromOrder(orderRepository.saveAndFlush(order), boxRepository, productInBoxRepository);
         Map<String, Integer> result = new HashMap<>();
         result.put("id", orderRepository.saveAndFlush(order).getId());
-        String url = paymentService.createVnPayPayment(request, totalPrice, order.getId());
 
-        return new PaymentResponse(result,url);
+        if(order.getPayMethod() == PayMethod.Cash) {
+            return new PaymentResponse(result, "");
+        } else {
+            String url = paymentService.createVnPayPayment(request, totalPrice, order.getId());
+            return new PaymentResponse(result, url);
+        }
+
     }
 
     public OrderResponse getOrderById(HttpServletRequest request, Integer id) {
