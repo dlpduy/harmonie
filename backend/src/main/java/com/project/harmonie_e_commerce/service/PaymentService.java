@@ -40,7 +40,6 @@ public class PaymentService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found with id " + orderId));
         order.setStatus("Paid");
-        order.setPaymentUrl("");
         orderRepository.save(order);
     }
 }

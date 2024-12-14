@@ -39,7 +39,10 @@ public class PaymentController {
             paymentService.handlePaymentOrder(orderId);
 //                return new ResponseObject<>(HttpStatus.OK, "Success",
 //                        new PaymentDTO.VNPayResponse("00", "Payment success for order " + orderId));
-            return ResponseEntity.ok(new PaymentDTO.VNPayResponse("00", "Payment success for order " + orderId));
+            String redirectUrl = "http://localhost:5173/success";
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .header("Location", redirectUrl)
+                    .body(null);
         } else {
             throw new RuntimeException("Payment failed");
         }
