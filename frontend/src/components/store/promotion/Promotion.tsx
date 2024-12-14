@@ -5,54 +5,10 @@ import { ModalUpdate } from './modal/ModalUpdate';
 import { Button, notification, Popconfirm, PopconfirmProps } from 'antd';
 import { deleteStoreDiscountAPI, getStoreDiscountAPI } from '../../../services/api.service1';
 
-
-const promotions = [
-    {
-        id: 1,
-        code: "KH10248",
-        quantity: 10,
-        amount: 900000,
-        release_date: "01/01/2024",
-        start_date: "01/01/2024",
-        expiration_date: "31/12/2024"
-    },
-    {
-        id: 2,
-        code: "KH38242",
-        quantity: 15,
-        amount: 1350000,
-        release_date: "01/01/2024",
-        start_date: "01/01/2024",
-        expiration_date: "01/05/2025"
-    },
-    {
-        id: 3,
-        code: "KH10382",
-        quantity: 10,
-        amount: 950000,
-        release_date: "01/01/2024",
-        start_date: "01/01/2024",
-        expiration_date: "31/12/2024"
-    },
-    {
-        id: 4,
-        code: "KH33393",
-        quantity: 35,
-        amount: 1650000,
-        release_date: "01/01/2024",
-        start_date: "01/01/2024",
-        expiration_date: "01/05/2025"
-    },
-    {
-        id: 5,
-        code: "KH76543",
-        quantity: 20,
-        amount: 1800000,
-        release_date: "01/01/2024",
-        start_date: "01/01/2024",
-        expiration_date: "31/12/2024"
-    }
-];
+const NumberToCurrency = (money: any) => {
+    const formattedAmount = new Intl.NumberFormat('vi-VN').format(money);
+    return `${formattedAmount} VNĐ`;
+};
 export const Promotion = (props: any) => {
     const { setIsSpinning } = props;
     const [isModalCreateOpen, setIsModalCreateOpen] = useState<boolean>(false);
@@ -198,7 +154,7 @@ export const Promotion = (props: any) => {
                                     <td>{index + 1}</td>
                                     <td>{promotion.code}</td>
                                     <td>{promotion.quantity}</td>
-                                    <td>{promotion.amount}</td>
+                                    <td>{NumberToCurrency(promotion.amount)}</td>
                                     <td>{promotion.start_date}</td>
                                     <td>{promotion.expiration_date}</td>
                                     <td>

@@ -59,8 +59,7 @@ export const ModalCreate = (props: any) => {
 
     const handleCancelCreate = () => {
         setIsModalCreateOpen(false);
-        console.log({ code, quantity, startDate, expirationDate });
-        //resetModal();
+        resetModal();
     }
 
 
@@ -70,6 +69,7 @@ export const ModalCreate = (props: any) => {
                 open={isModalCreateOpen}
                 maskClosable={false}
                 okText="Create"
+                onCancel={handleCancelCreate}
                 footer={[
                     <Button key="back" onClick={handleCancelCreate}>
                         Cancel

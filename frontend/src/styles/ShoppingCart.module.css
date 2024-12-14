@@ -1,13 +1,13 @@
 /* Tổng thể giỏ hàng */
 .shoppingCart {
-  padding: 20px;
+  padding: 80px;
   max-width: 1240px;
   width: 100%;
-  
+
   font-family: Arial, sans-serif;
   margin: 0 auto;
   background-color: #f9f9f9;
-  margin-top: 80px;
+  /* margin-top: 80px; */
 }
 
 /* Tiêu đề của giỏ hàng */
@@ -29,8 +29,10 @@
 
 .productRow {
   display: flex;
-  justify-content: space-between; /* Chia đều các phần tử */
-  align-items: center; /* Căn giữa các phần tử theo chiều dọc */
+  justify-content: space-between;
+  /* Chia đều các phần tử */
+  align-items: center;
+  /* Căn giữa các phần tử theo chiều dọc */
   border-bottom: 1px solid #eee;
   padding-bottom: 10px;
 }
@@ -38,7 +40,8 @@
 .productInfo {
   display: flex;
   align-items: center;
-  flex: 2; /* Tăng độ rộng để chứa tên và hình ảnh */
+  flex: 2;
+  /* Tăng độ rộng để chứa tên và hình ảnh */
 }
 
 .productName {
@@ -47,7 +50,8 @@
   color: var(--text-color);
 }
 
-.productBrand, .productCategory {
+.productBrand,
+.productCategory {
   font-size: 14px;
   color: #666;
 }
@@ -59,25 +63,28 @@
 }
 
 .productImage {
-   /* Tăng kích thước hình ảnh để rõ hơn */
+  /* Tăng kích thước hình ảnh để rõ hơn */
   height: 60px;
   object-fit: cover;
   margin-right: 15px;
 }
 
 .productDetails {
-  flex-grow: 1; /* Chiếm không gian còn lại */
+  flex-grow: 1;
+  /* Chiếm không gian còn lại */
 }
 
 .productPricing {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  flex: 1; /* Đặt cố định độ rộng cho cột giá */
+  flex: 1;
+  /* Đặt cố định độ rộng cho cột giá */
 }
 
 .productPricing p {
-  margin: 5px 0; /* Tạo khoảng cách giữa các dòng giá */
+  margin: 5px 0;
+  /* Tạo khoảng cách giữa các dòng giá */
 }
 
 
@@ -131,38 +138,46 @@
   background-color: #ccc;
   cursor: not-allowed;
 }
+
 .productCheckbox {
   width: 25px;
   height: 25px;
-  appearance: none; /* Tắt kiểu mặc định */
-  border: 2px solid #333; /* Đặt viền cho checkbox */
-  border-radius: 5px; /* Bo góc của checkbox */
+  appearance: none;
+  /* Tắt kiểu mặc định */
+  border: 2px solid #333;
+  /* Đặt viền cho checkbox */
+  border-radius: 5px;
+  /* Bo góc của checkbox */
   cursor: pointer;
   position: relative;
   display: inline-block;
   transition: all 0.3s ease;
-  margin-right: 15px; /* Tạo khoảng cách giữa checkbox và hình ảnh */
+  margin-right: 15px;
+  /* Tạo khoảng cách giữa checkbox và hình ảnh */
 }
 
 .productCheckbox:checked {
-  background-color: #4260fc; /* Màu nền khi checkbox được chọn */
-  border-color: #4260fc; /* Màu viền khi checkbox được chọn */
+  background-color: #4260fc;
+  /* Màu nền khi checkbox được chọn */
+  border-color: #4260fc;
+  /* Màu viền khi checkbox được chọn */
 }
 
 .productCheckbox:checked::after {
-content: '';
-position: absolute;
-top: 50%;
-left: 50%;
-width: 10px;
-height: 5px;
-border: solid white;
-border-width: 0 0 2px 2px;
-transform: translate(-50%, -50%) rotate(-45deg);
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 5px;
+  border: solid white;
+  border-width: 0 0 2px 2px;
+  transform: translate(-50%, -50%) rotate(-45deg);
   transform-origin: center center;
   transition: transform 0.3s ease;
-  
+
 }
+
 .deleteButton {
   background-color: #4260fc;
   color: white;

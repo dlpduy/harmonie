@@ -53,18 +53,8 @@ export const Delivery = (props: any) => {
             if (response.statusCode === 200) {
                 setAllInfo(response.data);
             }
-            else {
-                notification.error({
-                    message: "Lỗi",
-                    description: "Lấy thông tin vận chuyển thất bại"
-                })
-            }
         }
         catch (error) {
-            notification.error({
-                message: "Lỗi",
-                description: "Có lỗi xảy ra khi lấy thông tin vận chuyển"
-            })
         }
         setIsSpinning(false);
     }
