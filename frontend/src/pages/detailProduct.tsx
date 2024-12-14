@@ -47,11 +47,18 @@ const ProductDetailPage = () => {
                 console.log('Fetched product data:', productData);
                 setProduct(productData);
 
-                // Fetch product images
                 const imagesData = await fetchProductImagesAPI(productData.id, productData.num_image);
-                const imageUrls = imagesData.map((image: Blob) => URL.createObjectURL(image));
-                console.log('Fetched image URLs:', imageUrls);
-                setImages(imageUrls);
+    const imageUrls = imagesData.map((image: Blob) => {
+        if (image instanceof Blob) {
+            console.log(URL.createObjectURL(image));
+            return URL.createObjectURL(image);
+        } else {
+            console.warn('Expected Blob but got:', image);
+            return ''; // Hoặc giá trị fallback khác
+        }
+    });
+    console.log('Fetched image URLs:', imageUrls);
+    setImages(imageUrls);
             } catch (error) {
                 console.error('Error fetching product details:', error);
             }

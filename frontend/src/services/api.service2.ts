@@ -1,9 +1,11 @@
 
 import axios from './axios.customize';
+import { notification } from "antd";
+import { useNavigate } from "react-router-dom";
     const accessToken = localStorage.getItem('access_token'); 
 
 const fetchCartItemsAPI = async () => {
-    const URL_BACKEND = "/api/v1/productincart/1";
+    const URL_BACKEND = "/api/v1/productincart";
 
     try {
         const response = await axios.get(URL_BACKEND, {
@@ -45,7 +47,7 @@ const fetchProductImagesAPI = async (productId: number, numImages: number) => {
     }
 };
 const deleteCartItemAPI = async (userId: number, productId: number) => {
-    const URL_BACKEND = `/api/v1/delete/${userId}/${productId}`;
+    const URL_BACKEND = `/api/v1/delete/${productId}`;
 
 
     try {
@@ -94,7 +96,7 @@ const fetchProductReviewsAPI = async (productId: number) => {
     }
 };
 const addProductToCartAPI = async (userId: number, productId: number) => {
-    const URL_BACKEND = `/api/v1/add/${userId}/${productId}`;
+    const URL_BACKEND = `/api/v1/add/${productId}`;
 
     try {
         const response = await axios.post(URL_BACKEND, {}, {
@@ -111,7 +113,7 @@ const addProductToCartAPI = async (userId: number, productId: number) => {
 };
 
 const fetchUserDeliveryAddressesAPI = async (userId: number) => {
-    const URL_BACKEND = `/api/v1/user/delivery/all/${userId}`;
+    const URL_BACKEND = `/api/v1/user/delivery/all`;
 
     try {
         const response = await axios.get(URL_BACKEND, {
@@ -159,7 +161,7 @@ const createOrderAPI = async (orderData: {
                 'Content-Type': 'application/json'
             }
         });
-        console.log('API response:', response.data);
+        console.log('API order response:', response.data);
         return response.data; // Return the data directly
     } catch (error) {
         console.error('API error:', error);
@@ -198,6 +200,148 @@ const fetchShippingDiscountAPI = async () => {
             throw error;
         }
     };
+    const fetchAllUsersAPI = async () => {
+        const URL_BACKEND = `/api/v1/admin/user`;
+
+        try {
+            const response = await axios.get(URL_BACKEND, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log('API response:', response.data);
+            return response.data; // Return the data directly
+        } catch (error) {
+            console.error('API error:', error);
+            throw error;
+        }
+    };
+    const fetchAllStoresAPI = async () => {
+        const URL_BACKEND = `/api/v1/admin/store`;
+        
+        try {
+            const response = await axios.get(URL_BACKEND, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log('API response:', response.data);
+            
+            return response.data; // Return the data directly
+        } catch (error) {
+            console.error('API error:', error);
+            throw error;
+        }
+    };
+    const fetchCategoriesAPI = async () => {
+        const URL_BACKEND = `/api/v1/categories`;
+
+        try {
+            const response = await axios.get(URL_BACKEND, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log('API response:', response.data);
+            return response.data; // Return the data directly
+        } catch (error) {
+            console.error('API error:', error);
+            throw error;
+        }
+    };
+    const addCategoryAPI = async (categoryData: { name: string }) => {
+        const URL_BACKEND = `/api/v1/categories`;
+        const response = await axios.post(URL_BACKEND, categoryData, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        try {
+            
+            console.log('API response:', response.data);
+            notification.success({
+                message: 'Category Added',
+                description: 'The category has been added successfully.',
+            });
+            return response.data; // Return the data directly
+        } catch (error) {
+            console.error('API error:', error);
+        
+        // Extract status code and message from the error response
+        const statusCode = response?.status;
+        const errorMessage = response?.data?.message || 'An error occurred';
+
+        notification.error({
+            message: `Error ${statusCode}`,
+            description: errorMessage,
+        });
+        throw error;
+        }
+    };
+    const updateCategoryAPI = async (categoryId: number, categoryData: { name: string }) => {
+        const URL_BACKEND = `/api/v1/categories/${categoryId}`;
+        
+        try {
+            const response = await axios.put(URL_BACKEND, categoryData, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            console.log('API response:', response.data);
+            notification.success({
+                message: 'Category Updated',
+                description: 'The category has been updated successfully.',
+            });
+            return response.data; // Return the data directly
+        } catch (error) {
+            console.error('API error:', error);
+
+            // Extract status code and message from the error response
+            
+
+            notification.error({
+                message: `Đã xảy ra lỗi `,
+                description: 'Cập nhật danh mục không thành công',
+            });
+            throw error;
+        }
+    };
+    const deleteCategoryAPI = async (categoryId: number) => {
+    const URL_BACKEND = `/api/v1/categories/${categoryId}`;
+
+    try {
+        const response = await axios.delete(URL_BACKEND, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        if(response.status === 200){
+        console.log('API response:', response.data);
+        notification.success({
+            message: 'Category Deleted',
+            description: 'The category has been deleted successfully.',
+        });}
+        else {
+            notification.error({
+                message: 'Error',
+                description: 'Failed to delete the category.',
+            });
+        }
+        return response.data; // Return the data directly
+    } catch (error) {
+        console.error('API error:', error);
+
+        
+
+        notification.error({
+            message: 'Error',
+            description: 'Failed to delete the category.',
+        });
+        throw error;
+    }
+};
 export {
     fetchCartItemsAPI,
     deleteCartItemAPI,
@@ -209,6 +353,12 @@ export {
     createOrderAPI,
     fetchShippingDiscountAPI,
     fetchSystemDiscountAPI,
-    fetchProductImagesAPI
+    fetchProductImagesAPI,
+    fetchAllUsersAPI,
+    fetchAllStoresAPI,
+    fetchCategoriesAPI,
+    addCategoryAPI,
+    updateCategoryAPI,
+    deleteCategoryAPI
 };
 

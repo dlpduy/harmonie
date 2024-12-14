@@ -107,12 +107,7 @@
 }
 
 /* Hàng phí vận chuyển */
-.shippingRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
+
 
 /* Hàng tổng tiền */
 .totalRow {
@@ -131,6 +126,15 @@
 .totalAmount {
   font-size: 18px;
   color: #4260fc;
+}
+.shippingRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  font-weight: bold;
+  border-top: 2px solid #ddd;
+  padding-top: 10px;
 }
 /* Hàng tổng chi phí giỏ hàng */
 .totalCostRow {
