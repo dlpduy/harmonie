@@ -115,4 +115,17 @@ public class UserController {
     public ResponseEntity<?> updatePasswordByCode(@Valid @RequestBody UpdatePasswordDTO updatePasswordDTO) {
         return ResponseEntity.ok(userService.updatePasswordByCode(updatePasswordDTO));
     }
+
+    @GetMapping("/expenses")
+    public ResponseEntity<?> getExpenses(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        if (token == null || !token.startsWith("Bearer ")) {
+            throw new AuthenticationException("Unauthorized") {};
+        }
+        token = token.substring(7);
+        return ResponseEntity.ok(userService.getUserExpenses(token));
+    }
+
+
+
 }

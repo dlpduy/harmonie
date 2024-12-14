@@ -4,11 +4,10 @@ import com.project.harmonie_e_commerce.dto.StoreDTO;
 import com.project.harmonie_e_commerce.exception.DataNotFoundException;
 import com.project.harmonie_e_commerce.model.*;
 import com.project.harmonie_e_commerce.repository.*;
-import com.project.harmonie_e_commerce.response.BoxResponse;
-import com.project.harmonie_e_commerce.response.ProductResponse;
-import com.project.harmonie_e_commerce.response.StatisticResponse;
-import com.project.harmonie_e_commerce.response.StoreDiscountRespone;
+import com.project.harmonie_e_commerce.response.*;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -28,6 +27,7 @@ public class StoreService implements IStoreService {
     private final BoxRepository boxRepository;
     private final StoreDiscountRepository storeDiscountRepository;
     private final ProductInBoxRepository productInBoxRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Store addNewStore(StoreDTO storeDTO, Integer userId) {
@@ -134,5 +134,44 @@ public class StoreService implements IStoreService {
                 .nb_of_boxes(numBox)
                 .totalPrice(sumPrice)
                 .build();
+    }
+
+    @Override
+    public List<Store> getAllStore() {
+        return storeRepository.findAll();
+    }
+
+    @Override
+    public Store updateStore(StoreDTO storeDTO, Integer store_id) {
+        Store store = storeRepository.findById(store_id).orElseThrow(
+                () -> new DataNotFoundException("Store not found by id " + store_id)
+        );
+        store.setAddress(storeDTO.getAddress());
+        store.setName(storeDTO.getName());
+        store.setDescription(storeDTO.getDescription());
+        store.setTax_id(storeDTO.getTax_id());
+
+        return storeRepository.save(store);
+    }
+
+    @Override
+    public StringResponse deleteStore(Integer store_id,String password) {
+        Store store = storeRepository.findById(store_id).orElseThrow(
+                () -> new DataNotFoundException("Store not found by id " + store_id)
+        );
+
+        if (!passwordEncoder.matches(password, store.getUser().getPassword())) {
+            throw new BadCredentialsException("Password is incorrect");
+        }
+
+        storeRepository.delete(store);
+        return new StringResponse("Delete successfully");
+    }
+
+    @Override
+    public Store getInfo(Integer store_id) {
+        return storeRepository.findById(store_id).orElseThrow(
+                () -> new DataNotFoundException("Store not found by id " + store_id)
+        );
     }
 }
