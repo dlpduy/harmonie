@@ -138,7 +138,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
     const storeTotalCost = storeProducts.reduce((acc, product) => acc + product.price * product.quantity, 0);
     const storeFinalCost = storeTotalCost - storeProducts.reduce((acc, product) => acc + (selectedVouchers[product.id] ?? voucherDiscount), 0);
     return acc + storeFinalCost  ;
-  }, 0) + shippingCost - (selectedShippingDiscount ? shippingDiscounts.find(discount => discount.id === selectedShippingDiscount)?.max_amount ?? 0 : 0);
+  }, 0)  - (selectedShippingDiscount ? shippingDiscounts.find(discount => discount.id === selectedShippingDiscount)?.max_amount ?? 0 : 0);
 
   const toggleModal = (productID: number) => {
     if (productID !== null) {
@@ -187,6 +187,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
       const response = await createOrderAPI(orderData);
       setOrderResponse(response);
       if (response?.url) {
+        //alert('Order created successfully!');
         window.location.href = response.url;
       }
     } catch (error) {
@@ -274,10 +275,10 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
           ))}
         </select>
       </div>
-      <div className={styles.shippingRow}>
+      {/* <div className={styles.shippingRow}>
               <span className={styles.totalCostText}>Phí vận chuyển</span>
               <span className={styles.totalCostAmount}>{shippingCost.toLocaleString()} VND</span>
-            </div>
+            </div> */}
       <div className={styles.totalCostRow}>
         
         <span className={styles.totalCostText}>Tổng chi phí giỏ hàng: </span>

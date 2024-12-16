@@ -49,7 +49,7 @@ const CustomerManagement = () => {
       <table className={styles.Table}>
         <thead className={styles.TableHeader}>
           <tr>
-            <th>ID</th>
+            <th>STT</th>
             <th>Tên</th>
             <th>Email</th>
             <th>Số điện thoại</th>
@@ -58,9 +58,9 @@ const CustomerManagement = () => {
           </tr>
         </thead>
         <tbody className={styles.TableBody}>
-          {currentCustomers.map((customer) => (
+          {currentCustomers.map((customer, index) => (
             <tr key={customer.id}>
-              <td>{customer.id}</td>
+              <td>{indexOfFirstCustomer + index + 1}</td>
               <td>{customer.fullName}</td>
               <td>{customer.email}</td>
               <td>{customer.phone}</td>

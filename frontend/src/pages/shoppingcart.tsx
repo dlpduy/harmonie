@@ -81,7 +81,8 @@
         const handleCheckout = () => {
             const selectedProducts = cartItems.filter(item => selectedItems.includes(item.id)).map(item => ({
                 ...item,
-                imageUrl: imageUrls[item.id] || item.productURL
+                imageUrl: imageUrls[item.id] || item.productURL,
+                price: item.price / item.quantity,
             }));
             navigate('/payment', { state: { selectedProducts } });
         };
@@ -89,7 +90,7 @@
         const selectedCartItems = cartItems.filter(item => selectedItems.includes(item.id));
 
         const totalAmount = useMemo(() => {
-            return selectedCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            return selectedCartItems.reduce((sum, item) => sum + (item.price), 0);
         }, [selectedCartItems]);
 
         const finalTotal = useMemo(() => {
@@ -127,9 +128,9 @@
                                     </div>
                                 </div>
                                 <div className={styles.productPricing}>
-                                    <p>{item.price.toLocaleString()} VNĐ</p>
-                                    <p>{item.quantity}</p>
-                                    <p>{(item.price * item.quantity).toLocaleString()} VNĐ</p>
+                                    <p>{(item.price / item.quantity).toLocaleString()} VNĐ</p>
+                                    <p>x{item.quantity}</p>
+                                    <p>{(item.price).toLocaleString()} VNĐ</p>
                                 </div>
                                 <button className={styles.deleteButton} onClick={() => handleDelete(item.id)}>Xóa</button>
                             </div>
