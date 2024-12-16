@@ -59,7 +59,7 @@ const StoreManagement = () => {
       <table className={styles.Table}>
         <thead className={styles.TableHeader}>
           <tr>
-            <th>#</th>
+            <th>STT</th>
             <th>Tên cửa hàng</th>
             <th>Email</th>
             <th>Số điện thoại</th>
@@ -68,9 +68,9 @@ const StoreManagement = () => {
           </tr>
         </thead>
         <tbody className={styles.TableBody}>
-          {currentStores.map((store) => (
+          {currentStores.map((store, index) => (
             <tr key={store.id}>
-              <td>{store.id}</td>
+              <td>{indexOfFirstStore + index + 1}</td>
               <td>{store.name}</td>
               <td>{store.email}</td>
               <td>{store.phone}</td>

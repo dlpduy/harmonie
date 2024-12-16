@@ -90,20 +90,17 @@ const CategoriesManagement = () => {
             <table className={styles.Table}>
                 <thead className={styles.TableHeader}>
                     <tr>
-                        <th>ID</th>
+                        <th>STT</th>
                         <th>Tên</th>
-                        <th>Mô tả</th>
-                        <th>Ngày tạo</th>
                         <th>Hành động</th>
                     </tr>
                 </thead>
                 <tbody className={styles.TableBody}>
-                    {currentCategories.map((category) => (
+                    {currentCategories.map((category, index) => (
                         <tr key={category.id}>
-                            <td>{category.id}</td>
+                            <td>{indexOfFirstCategory + index + 1}</td>
                             <td>{category.name}</td>
-                            <td>{category.description}</td>
-                            <td>{new Date(category.creation_date).toLocaleDateString()}</td>
+                        
                             <td>
                                 <button
                                     className={`${styles.actionButton} ${styles.deleteButton}`}

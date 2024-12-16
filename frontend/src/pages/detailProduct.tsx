@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/ProductDetailPage.css';
 import { useParams } from 'react-router-dom';
+import { notification } from "antd";
 import { fetchProductDetailAPI, fetchProductReviewsAPI, addProductToCartAPI, fetchProductImagesAPI } from '../services/api.service2.ts';
 
 const ProductDetailPage = () => {
@@ -106,6 +107,10 @@ const ProductDetailPage = () => {
         try {
             await addProductToCartAPI(1, product.id); // Replace 1 with the actual user ID
             console.log(`Added ${quantity} of ${product.name} to cart.`);
+            notification.success({
+                message: 'Thành công',
+                description: `Đã thêm ${quantity} sản phẩm ${product.name} vào giỏ hàng.`,
+            });
         } catch (error) {
             console.error('Error adding product to cart:', error);
         }

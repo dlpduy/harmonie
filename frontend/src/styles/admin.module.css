@@ -322,7 +322,7 @@ html, body, #root {
     justify-content: center;
     align-items: center;
     align-items: flex-start; /* Align items to the start of the container */
-    padding-top: 0px; /* Add padding to move the modal down */
+    padding-top: 200px; /* Add padding to move the modal down */
   }
   
   .modalContent {
