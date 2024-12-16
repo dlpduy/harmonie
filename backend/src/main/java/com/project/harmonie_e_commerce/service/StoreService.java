@@ -4,13 +4,16 @@ import com.project.harmonie_e_commerce.dto.StoreDTO;
 import com.project.harmonie_e_commerce.exception.DataNotFoundException;
 import com.project.harmonie_e_commerce.model.*;
 import com.project.harmonie_e_commerce.repository.*;
-import com.project.harmonie_e_commerce.response.BoxResponse;
-import com.project.harmonie_e_commerce.response.ProductResponse;
-import com.project.harmonie_e_commerce.response.StatisticResponse;
-import com.project.harmonie_e_commerce.response.StoreDiscountRespone;
+import com.project.harmonie_e_commerce.response.*;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +27,10 @@ public class StoreService implements IStoreService {
     private final BoxRepository boxRepository;
     private final StoreDiscountRepository storeDiscountRepository;
     private final ProductInBoxRepository productInBoxRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Store addNewStore(StoreDTO storeDTO, Integer userId) throws Exception {
+    public Store addNewStore(StoreDTO storeDTO, Integer userId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new DataNotFoundException("User not found")
         );
@@ -48,7 +52,7 @@ public class StoreService implements IStoreService {
     }
 
     @Override
-    public List<ProductResponse> showAllProductInStore(Integer storeId) throws Exception {
+    public List<ProductResponse> showAllProductInStore(Integer storeId){
         List<ProductResponse> productResponseList = new ArrayList<>();
         Store store = storeRepository.findById(storeId).orElseThrow(
                 () -> new DataNotFoundException("Store not found")
@@ -66,7 +70,7 @@ public class StoreService implements IStoreService {
     }
 
     @Override
-    public List<BoxResponse> showAllBoxInStore(Integer storeId) throws Exception {
+    public List<BoxResponse> showAllBoxInStore(Integer storeId) {
         List<BoxResponse> boxResponseList = new ArrayList<>();
 
         Store store = storeRepository.findById(storeId).orElseThrow(
@@ -84,7 +88,7 @@ public class StoreService implements IStoreService {
     }
 
     @Override
-    public List<StoreDiscountRespone> showAllStoreDiscountInStore(Integer storeId) throws Exception {
+    public List<StoreDiscountRespone> showAllStoreDiscountInStore(Integer storeId){
         List<StoreDiscountRespone> storeDiscountResponeList = new ArrayList<>();
 
         Store store = storeRepository.findById(storeId).orElseThrow(
@@ -101,7 +105,7 @@ public class StoreService implements IStoreService {
     }
 
     @Override
-    public StatisticResponse getStatisticOfStore(Integer storeId) throws Exception {
+    public StatisticResponse getStatisticOfStore(Integer storeId, Integer day, Integer month, Integer year) {
 
         Store store = storeRepository.findById(storeId).orElseThrow(
                 () -> new DataNotFoundException("Store not found")
@@ -109,15 +113,65 @@ public class StoreService implements IStoreService {
 
         List<Box> boxList = boxRepository.findAllByStore(store);
 
+        LocalDate date = LocalDate.of(year,month,day);
+
         Float sumPrice = 0F;
+        Integer numBox = 0;
 
         for(Box box:boxList){
-            sumPrice += box.getTotalPrice();
+            Timestamp timestamp = box.getPackingDate();
+            LocalDate dateFromTimestamp = timestamp.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            if (date.equals(dateFromTimestamp)) {
+                sumPrice += box.getTotalPrice();
+                numBox++;
+            }
         }
 
         return StatisticResponse.builder()
-                .nb_of_boxes(boxList.size())
+                .date(date)
+                .nb_of_boxes(numBox)
                 .totalPrice(sumPrice)
                 .build();
+    }
+
+    @Override
+    public List<Store> getAllStore() {
+        return storeRepository.findAll();
+    }
+
+    @Override
+    public Store updateStore(StoreDTO storeDTO, Integer store_id) {
+        Store store = storeRepository.findById(store_id).orElseThrow(
+                () -> new DataNotFoundException("Store not found by id " + store_id)
+        );
+        store.setAddress(storeDTO.getAddress());
+        store.setName(storeDTO.getName());
+        store.setDescription(storeDTO.getDescription());
+        store.setTax_id(storeDTO.getTax_id());
+
+        return storeRepository.save(store);
+    }
+
+    @Override
+    public StringResponse deleteStore(Integer store_id,String password) {
+        Store store = storeRepository.findById(store_id).orElseThrow(
+                () -> new DataNotFoundException("Store not found by id " + store_id)
+        );
+
+        if (!passwordEncoder.matches(password, store.getUser().getPassword())) {
+            throw new BadCredentialsException("Password is incorrect");
+        }
+
+        storeRepository.delete(store);
+        return new StringResponse("Delete successfully");
+    }
+
+    @Override
+    public Store getInfo(Integer store_id) {
+        return storeRepository.findById(store_id).orElseThrow(
+                () -> new DataNotFoundException("Store not found by id " + store_id)
+        );
     }
 }

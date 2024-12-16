@@ -33,11 +33,17 @@ public class ProductResponse {
     @JsonProperty("avg_rating")
     private Float avgRating;
 
+    @JsonProperty("num_image")
+    private Integer numImage;
+
     @JsonProperty("status")
     private String productStatus;
 
     @JsonProperty("category_id")
     private Integer categoryId;
+
+    @JsonProperty("category_name")
+    private String categoryName;
 
     public static ProductResponse fromProduct(Product product) {
         return ProductResponse.builder()
@@ -51,8 +57,10 @@ public class ProductResponse {
             .description(product.getDescription())
             .ratingCount(product.getRatingCount())
             .avgRating(product.getAvgRating())
+            .numImage(product.getNumImage())
             .productStatus(product.getProductStatus().name())
             .categoryId(product.getCategory().getId())
+            .categoryName(product.getCategory().getName())
             .build();
     }
 }

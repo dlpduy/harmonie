@@ -1,82 +1,82 @@
-    import React, { useState, useEffect, useMemo } from 'react';
-    import axios from 'axios';
-    import { useNavigate } from 'react-router-dom';
-    import styles from '../styles/ShoppingCart.module.css';
-    import { fetchCartItemsAPI, deleteCartItemAPI } from '../services/api.service2.ts';
+import React, { useState, useEffect, useMemo } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import styles from '../styles/ShoppingCart.module.css';
+import { fetchCartItemsAPI, deleteCartItemAPI } from '../services/api.service2.ts';
 
-    interface CartItem {
-        id: number;
-        name: string;
-        brand: string;
-        catogoryName: string;
-        price: number;
-        quantity: number;
-        productURL: string;
-        store_id: number;
-        store_name: string;
-    }
+interface CartItem {
+    id: number;
+    name: string;
+    brand: string;
+    catogoryName: string;
+    price: number;
+    quantity: number;
+    productURL: string;
+    store_id: number;
+    store_name: string;
+}
 
-    const ShoppingCart: React.FC = () => {
-        const [cartItems, setCartItems] = useState<CartItem[]>([]);
-        const [selectedItems, setSelectedItems] = useState<number[]>([]);
-        const [imageUrls, setImageUrls] = useState<{ [key: number]: string }>({});
-        const navigate = useNavigate();
-        const [error, setError] = useState<string | null>(null);
+const ShoppingCart: React.FC = () => {
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [selectedItems, setSelectedItems] = useState<number[]>([]);
+    const [imageUrls, setImageUrls] = useState<{ [key: number]: string }>({});
+    const navigate = useNavigate();
+    const [error, setError] = useState<string | null>(null);
 
-        useEffect(() => {
-            const fetchCartItems = async () => {
-                try {
-                    const response = await fetchCartItemsAPI();
-                    setCartItems(response.data || []);
-                } catch (error: any) {
-                    setError('Error fetching cart items. Please try again later.');
-                    console.error('Error fetching cart items:', error);
-                }
-            };
-
-            fetchCartItems();
-        }, []);
-
-        useEffect(() => {
-            const fetchImageUrls = async () => {
-                const urls: { [key: number]: string } = {};
-                for (const item of cartItems) {
-                    try {
-                        const response = await axios.get(`http://localhost:9091/images/${item.id}/1.jpg`, {
-                            responseType: 'blob',
-                        });
-                        const imageUrl = URL.createObjectURL(response.data);
-                        urls[item.id] = imageUrl;
-                    } catch (error) {
-                        console.error('Error fetching image URL:', error);
-                    }
-                }
-                setImageUrls(urls);
-            };
-
-            if (cartItems.length > 0) {
-                fetchImageUrls();
-            }
-        }, [cartItems]);
-
-        const handleCheckboxChange = (id: number) => {
-            setSelectedItems(prevSelectedItems =>
-                prevSelectedItems.includes(id)
-                    ? prevSelectedItems.filter(item => item !== id)
-                    : [...prevSelectedItems, id]
-            );
-        };
-
-        const handleDelete = async (id: number) => {
+    useEffect(() => {
+        const fetchCartItems = async () => {
             try {
-                await deleteCartItemAPI(1, id); // Assuming user ID is 1, replace with actual user ID if needed
-                setCartItems(prevCartItems => prevCartItems.filter(item => item.id !== id));
-                setSelectedItems(prevSelectedItems => prevSelectedItems.filter(item => item !== id));
+                const response = await fetchCartItemsAPI();
+                setCartItems(response.data || []);
             } catch (error: any) {
-                setError('Error deleting cart item. Please try again later.');
-                console.error('Error deleting cart item:', error);
+                setError('Error fetching cart items. Please try again later.');
+                console.error('Error fetching cart items:', error);
             }
         };
+
+        fetchCartItems();
+    }, []);
+
+    useEffect(() => {
+        const fetchImageUrls = async () => {
+            const urls: { [key: number]: string } = {};
+            for (const item of cartItems) {
+                try {
+                    const response = await axios.get(`http://localhost:9091/images/${item.id}/1.jpg`, {
+                        responseType: 'blob',
+                    });
+                    const imageUrl = URL.createObjectURL(response.data);
+                    urls[item.id] = imageUrl;
+                } catch (error) {
+                    console.error('Error fetching image URL:', error);
+                }
+            }
+            setImageUrls(urls);
+        };
+
+        if (cartItems.length > 0) {
+            fetchImageUrls();
+        }
+    }, [cartItems]);
+
+    const handleCheckboxChange = (id: number) => {
+        setSelectedItems(prevSelectedItems =>
+            prevSelectedItems.includes(id)
+                ? prevSelectedItems.filter(item => item !== id)
+                : [...prevSelectedItems, id]
+        );
+    };
+
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteCartItemAPI(1, id); // Assuming user ID is 1, replace with actual user ID if needed
+            setCartItems(prevCartItems => prevCartItems.filter(item => item.id !== id));
+            setSelectedItems(prevSelectedItems => prevSelectedItems.filter(item => item !== id));
+        } catch (error: any) {
+            setError('Error deleting cart item. Please try again later.');
+            console.error('Error deleting cart item:', error);
+        }
+    };
 
         const handleCheckout = () => {
             const selectedProducts = cartItems.filter(item => selectedItems.includes(item.id)).map(item => ({
@@ -87,19 +87,19 @@
             navigate('/payment', { state: { selectedProducts } });
         };
 
-        const selectedCartItems = cartItems.filter(item => selectedItems.includes(item.id));
+    const selectedCartItems = cartItems.filter(item => selectedItems.includes(item.id));
 
         const totalAmount = useMemo(() => {
             return selectedCartItems.reduce((sum, item) => sum + (item.price), 0);
         }, [selectedCartItems]);
 
-        const finalTotal = useMemo(() => {
-            return totalAmount;
-        }, [totalAmount]);
+    const finalTotal = useMemo(() => {
+        return totalAmount;
+    }, [totalAmount]);
 
-        if (error) {
-            return <div>{error}</div>;
-        }
+    if (error) {
+        return <div>{error}</div>;
+    }
 
         return (
             <div className={styles.shoppingCart}>
@@ -153,4 +153,4 @@
         );
     };
 
-    export default ShoppingCart;
+export default ShoppingCart;

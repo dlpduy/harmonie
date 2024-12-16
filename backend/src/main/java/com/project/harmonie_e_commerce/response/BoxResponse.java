@@ -20,6 +20,10 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @Builder
 public class BoxResponse {
+    @JsonProperty("id")
+    private Integer id;
+    @JsonProperty("order_id")
+    private Integer orderId;
     @JsonProperty("store_discount")
     private StoreDiscountRespone storeDiscount;
     @JsonProperty("shipping_discount")
@@ -46,6 +50,8 @@ public class BoxResponse {
     public static BoxResponse fromBox(Box box, ProductInBoxRepository productInBoxRepository) {
 
         return BoxResponse.builder()
+                .id(box.getId())
+                .orderId(box.getOrder().getId())
                 .storeDiscount(StoreDiscountRespone.fromStoreDiscount(box.getStoreDiscount()))
                 .shippingDiscount(ShippingDiscountRespone.fromShippingDiscount(box.getShippingDiscount()))
                 .store(StoreResponse.fromStore(box.getStore()))

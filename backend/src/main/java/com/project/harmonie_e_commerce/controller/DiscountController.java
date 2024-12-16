@@ -5,6 +5,8 @@ import com.project.harmonie_e_commerce.dto.StoreDiscountDTO;
 import com.project.harmonie_e_commerce.dto.SystemDiscountDTO;
 import com.project.harmonie_e_commerce.service.CartService;
 import com.project.harmonie_e_commerce.service.DiscountService;
+import com.project.harmonie_e_commerce.service.ExtractToken;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +21,11 @@ public class DiscountController {
 
     private final DiscountService discountService;
 
+    private final ExtractToken extractToken;
+
     @GetMapping("shipping_discount")
     public ResponseEntity<?> getAllShippingDiscount(){
-        try {
             return new ResponseEntity<>(discountService.getAllShippingDiscount(), HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @GetMapping("store_discount/{storeId}")
@@ -33,53 +33,58 @@ public class DiscountController {
         @PathVariable Integer storeId
     )
     {
-        try {
             return new ResponseEntity<>(discountService.getAllStoreDiscount(storeId), HttpStatus.OK);
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @GetMapping("system_discount")
     public ResponseEntity<?> getAllSystemDiscount(){
-        try {
             return new ResponseEntity<>(discountService.getAllSystemDiscount(), HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @PostMapping("add/system_discount")
     public ResponseEntity<?> createSystemDiscount(
             @RequestBody SystemDiscountDTO systemDiscountDTO
             ){
-        try {
             return new ResponseEntity<>(discountService.createSystemDiscount(systemDiscountDTO), HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @PostMapping("add/shipping_discount")
     public ResponseEntity<?> createShippingDiscount(
             @RequestBody ShippingDiscountDTO shippingDiscountDTO
             ){
-        try {
             return new ResponseEntity<>(discountService.createShippingDiscount(shippingDiscountDTO), HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
-    @PostMapping("add/store_discount/{store_id}")
+    @PostMapping("add/store_discount")
     public ResponseEntity<?> createStoreDiscount(
             @RequestBody StoreDiscountDTO dto,
-            @PathVariable Integer store_id
-            ){
-        try {
+            HttpServletRequest request
+    ){
+            Integer store_id = extractToken.getIdFromToken(request);
             return new ResponseEntity<>(discountService.createStoreDiscount(store_id,dto), HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
+
+    @GetMapping("store_discount")
+    public ResponseEntity<?> getStoreDiscount(
+            HttpServletRequest request
+    ){
+        Integer store_id = extractToken.getIdFromToken(request);
+        return new ResponseEntity<>(discountService.getAllStoreDiscount(store_id), HttpStatus.OK);
+    }
+
+    @PutMapping("store_discount/{id}")
+    public ResponseEntity<?> updateStoreDiscount(
+            @RequestBody StoreDiscountDTO dto,
+            @PathVariable Integer id
+    ){
+        return new ResponseEntity<>(discountService.updateStoreDiscount(id,dto), HttpStatus.OK);
+    }
+
+    @DeleteMapping("store_discount/{id}")
+    public ResponseEntity<?> deleteStoreDiscount(
+            @PathVariable Integer id
+    ){
+        return new ResponseEntity<>(discountService.deleteStoreDiscount(id), HttpStatus.OK);
+    }
+
 }

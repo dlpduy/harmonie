@@ -2,6 +2,8 @@ package com.project.harmonie_e_commerce.controller;
 
 import com.project.harmonie_e_commerce.dto.DeliveryInformationDTO;
 import com.project.harmonie_e_commerce.service.DeliveryInfoService;
+import com.project.harmonie_e_commerce.service.ExtractToken;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,17 +15,15 @@ import org.springframework.web.bind.annotation.*;
 public class DeliInfoController {
 
     private final DeliveryInfoService deliveryInfoService;
+    private final ExtractToken extractToken;
 
-    @PostMapping("/create/{user_id}")
+    @PostMapping("/create")
     public ResponseEntity<?> createDeliInfo(
-            @PathVariable Integer user_id,
-            @RequestBody DeliveryInformationDTO dto
+            @RequestBody DeliveryInformationDTO dto,
+            HttpServletRequest request
     ){
-        try {
+            Integer user_id = extractToken.getIdFromToken(request);
             return new ResponseEntity<>(deliveryInfoService.createDeliveryInfo(user_id,dto), HttpStatus.OK);
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @PutMapping("/update/{deli_id}")
@@ -31,33 +31,22 @@ public class DeliInfoController {
             @PathVariable Integer deli_id,
             @RequestBody DeliveryInformationDTO dto
     ){
-        try {
             return new ResponseEntity<>(deliveryInfoService.updateDeliveryInfo(deli_id,dto), HttpStatus.OK);
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
-    @GetMapping("/all/{user_id}")
+    @GetMapping("/all")
     public ResponseEntity<?> updateDeliInfo(
-            @PathVariable Integer user_id
+            HttpServletRequest request
     ){
-        try {
+            Integer user_id = extractToken.getIdFromToken(request);
             return new ResponseEntity<>(deliveryInfoService.showAllDeliInfo(user_id), HttpStatus.OK);
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @DeleteMapping("/delete/{deli_id}")
     public ResponseEntity<?> deleteDeliInfo(
             @PathVariable Integer deli_id
     ){
-        try {
             deliveryInfoService.deleteDeliInfo(deli_id);
             return new ResponseEntity<>("Delete successfully", HttpStatus.OK);
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 }

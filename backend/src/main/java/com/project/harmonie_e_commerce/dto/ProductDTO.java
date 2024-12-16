@@ -11,8 +11,8 @@ import lombok.Data;
 @Data
 @Builder
 public class ProductDTO {
-    @JsonProperty("store_id")
-    private Integer storeId;
+//    @JsonProperty("store_id")
+//    private Integer storeId;
 
     @NotBlank(message = "Title is required")
     @Size(min = 3, max = 200, message = "Title must be between 3 and 200 characters")
@@ -21,7 +21,6 @@ public class ProductDTO {
     private String brand;
 
     @Min(value = 0, message = "Price must be greater or equal than 0")
-    @Max(value = 10000000, message = "Price must be less or equal than 10000000")
     private Float price;
 
     private Integer quantity;

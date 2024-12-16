@@ -41,7 +41,7 @@ export const ModalDetail = (props: any) => {
             confirmLoading={loading}  // Bật trạng thái loading cho nút OK
             okText="Xác nhận"
             cancelText="Hủy"
-            width={900}
+            width={1000}
         >
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '8px', border: '1px solid #ddd' }}>
                 <div style={{ flex: 1 }}>
@@ -115,7 +115,7 @@ export const ModalDetail = (props: any) => {
                                             {box.shipper_phone}
                                         </td>
                                         <td style={{ padding: '10px', borderBottom: '1px solid #ddd', fontWeight: 'bold' }}>
-                                            {NumberToCurrency(box.shipping_discount ? box.shipping_discount : 0)}
+                                            {NumberToCurrency(box.fee_ship ? Math.round(box.fee_ship) : 0)}
                                         </td>
                                         <td style={{ padding: '10px', borderBottom: '1px solid #ddd', fontWeight: 'bold' }}>
                                             {NumberToCurrency(Math.round(box.total_price))}
