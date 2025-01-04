@@ -61,7 +61,7 @@ export const Product = (props: any) => {
                 uid: `-${i}`,
                 name: `${i}.jpg`,
                 status: 'done',
-                url: `http://localhost:9091/images/${product.id}/${i}.jpg`
+                url: `${import.meta.env.VITE_BACKEND_URL}/images/${product.id}/${i}.jpg`
             })
         }
 
@@ -151,7 +151,7 @@ export const Product = (props: any) => {
                                                 />
                                             ))} */}
                                             <img
-                                                src={`http://localhost:9091/images/${product.id}/1.jpg`} // Đảm bảo index bắt đầu từ 1
+                                                src={`${import.meta.env.VITE_BACKEND_URL}/images/${product.id}/1.jpg`} // Đảm bảo index bắt đầu từ 1
                                                 alt={`Image`}
                                                 className={styles.productImage}
                                             />

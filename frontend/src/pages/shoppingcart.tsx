@@ -42,7 +42,7 @@ const ShoppingCart: React.FC = () => {
             const urls: { [key: number]: string } = {};
             for (const item of cartItems) {
                 try {
-                    const response = await axios.get(`http://localhost:9091/images/${item.id}/1.jpg`, {
+                    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/images/${item.id}/1.jpg`, {
                         responseType: 'blob',
                     });
                     const imageUrl = URL.createObjectURL(response.data);
@@ -78,20 +78,20 @@ const ShoppingCart: React.FC = () => {
         }
     };
 
-        const handleCheckout = () => {
-            const selectedProducts = cartItems.filter(item => selectedItems.includes(item.id)).map(item => ({
-                ...item,
-                imageUrl: imageUrls[item.id] || item.productURL,
-                price: item.price / item.quantity,
-            }));
-            navigate('/payment', { state: { selectedProducts } });
-        };
+    const handleCheckout = () => {
+        const selectedProducts = cartItems.filter(item => selectedItems.includes(item.id)).map(item => ({
+            ...item,
+            imageUrl: imageUrls[item.id] || item.productURL,
+            price: item.price / item.quantity,
+        }));
+        navigate('/payment', { state: { selectedProducts } });
+    };
 
     const selectedCartItems = cartItems.filter(item => selectedItems.includes(item.id));
 
-        const totalAmount = useMemo(() => {
-            return selectedCartItems.reduce((sum, item) => sum + (item.price), 0);
-        }, [selectedCartItems]);
+    const totalAmount = useMemo(() => {
+        return selectedCartItems.reduce((sum, item) => sum + (item.price), 0);
+    }, [selectedCartItems]);
 
     const finalTotal = useMemo(() => {
         return totalAmount;
@@ -101,56 +101,56 @@ const ShoppingCart: React.FC = () => {
         return <div>{error}</div>;
     }
 
-        return (
-            <div className={styles.shoppingCart}>
-                <h1 className={styles.sectionTitle}>Giỏ Hàng</h1>
-                <div className={styles.productSection}>
-                    {cartItems.map(item => (
-                        <div key={item.id} className={styles.productContainer}>
-                            <div className={styles.productRow}>
-                                <input
-                                    type="checkbox"
-                                    checked={selectedItems.includes(item.id)}
-                                    onChange={() => handleCheckboxChange(item.id)}
-                                    className={styles.productCheckbox}
+    return (
+        <div className={styles.shoppingCart}>
+            <h1 className={styles.sectionTitle}>Giỏ Hàng</h1>
+            <div className={styles.productSection}>
+                {cartItems.map(item => (
+                    <div key={item.id} className={styles.productContainer}>
+                        <div className={styles.productRow}>
+                            <input
+                                type="checkbox"
+                                checked={selectedItems.includes(item.id)}
+                                onChange={() => handleCheckboxChange(item.id)}
+                                className={styles.productCheckbox}
+                            />
+                            <div className={styles.productInfo}>
+                                <img
+                                    src={imageUrls[item.id] || item.productURL}
+                                    alt={item.name}
+                                    className={styles.productImage}
                                 />
-                                <div className={styles.productInfo}>
-                                    <img
-                                        src={imageUrls[item.id] || item.productURL}
-                                        alt={item.name}
-                                        className={styles.productImage}
-                                    />
-                                    <div className={styles.productDetails}>
-                                        <p className={styles.productName}>{item.name}</p>
-                                        <p className={styles.productBrand}>{item.brand}</p>
-                                        <p className={styles.productCategory}>{item.catogoryName}</p>
-                                        <p className={styles.storeName}>{item.store_name}</p>
-                                    </div>
+                                <div className={styles.productDetails}>
+                                    <p className={styles.productName}>{item.name}</p>
+                                    <p className={styles.productBrand}>{item.brand}</p>
+                                    <p className={styles.productCategory}>{item.catogoryName}</p>
+                                    <p className={styles.storeName}>{item.store_name}</p>
                                 </div>
-                                <div className={styles.productPricing}>
-                                    <p>{(item.price / item.quantity).toLocaleString()} VNĐ</p>
-                                    <p>x{item.quantity}</p>
-                                    <p>{(item.price).toLocaleString()} VNĐ</p>
-                                </div>
-                                <button className={styles.deleteButton} onClick={() => handleDelete(item.id)}>Xóa</button>
                             </div>
+                            <div className={styles.productPricing}>
+                                <p>{(item.price / item.quantity).toLocaleString()} VNĐ</p>
+                                <p>x{item.quantity}</p>
+                                <p>{(item.price).toLocaleString()} VNĐ</p>
+                            </div>
+                            <button className={styles.deleteButton} onClick={() => handleDelete(item.id)}>Xóa</button>
                         </div>
-                    ))}
-                </div>
-                <div className={styles.container}>
-                    <div>
-                        <h4 className={styles.finalTotal}>Tổng thanh toán: <span>{finalTotal.toLocaleString()} VNĐ</span></h4>
                     </div>
-                    <button
-                        className={styles.checkoutButton}
-                        onClick={handleCheckout}
-                        disabled={selectedItems.length === 0}
-                    >
-                        ĐẶT HÀNG
-                    </button>
-                </div>
+                ))}
             </div>
-        );
-    };
+            <div className={styles.container}>
+                <div>
+                    <h4 className={styles.finalTotal}>Tổng thanh toán: <span>{finalTotal.toLocaleString()} VNĐ</span></h4>
+                </div>
+                <button
+                    className={styles.checkoutButton}
+                    onClick={handleCheckout}
+                    disabled={selectedItems.length === 0}
+                >
+                    ĐẶT HÀNG
+                </button>
+            </div>
+        </div>
+    );
+};
 
 export default ShoppingCart;

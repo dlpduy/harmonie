@@ -60,7 +60,7 @@ export const ProductGird = (props: any) => {
             <ProductCard
               key={index + 1}
               id={product.id}
-              imageUrl={`http://localhost:9091/images/${product.id}/1.jpg`}
+              imageUrl={`${import.meta.env.VITE_BACKEND_URL}/images/${product.id}/1.jpg`}
               title={product.name}
               price={NumberToCurrency(product.price)}
               altText={product.description}
