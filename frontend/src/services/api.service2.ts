@@ -45,7 +45,8 @@ const fetchProductImagesAPI = async (productId: number, numImages: number) => {
         throw error;
     }
 };
-const deleteCartItemAPI = async (productId: number) => {
+const deleteCartItemAPI = async (userId: number, productId: number) => {
+    userId = userId;
     const URL_BACKEND = `/api/v1/delete/${productId}`;
 
 
@@ -94,7 +95,8 @@ const fetchProductReviewsAPI = async (productId: number) => {
         throw error;
     }
 };
-const addProductToCartAPI = async (productId: number) => {
+const addProductToCartAPI = async (userId: number, productId: number) => {
+    userId = userId;
     const URL_BACKEND = `/api/v1/add/${productId}`;
 
     try {
@@ -111,7 +113,8 @@ const addProductToCartAPI = async (productId: number) => {
     }
 };
 
-const fetchUserDeliveryAddressesAPI = async () => {
+const fetchUserDeliveryAddressesAPI = async (userId: number) => {
+    userId = userId;
     const URL_BACKEND = `/api/v1/user/delivery/all`;
 
     try {
