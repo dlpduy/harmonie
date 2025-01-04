@@ -1,5 +1,5 @@
 
-import { Button, DatePicker, Form, Input, notification, Spin } from 'antd';
+import { Button, DatePicker, Form, Input, notification } from 'antd';
 import styles from '../../../styles/Management.module.css';
 import { useEffect, useState } from 'react';
 import TextArea from 'antd/es/input/TextArea';
@@ -140,7 +140,7 @@ export const InforStore = (props: any) => {
                     >
                         <DatePicker
                             format="YYYY-MM-DD" // Đảm bảo định dạng đúng
-                            onChange={(date, dateString: any) => setCreationDate(dateString)}
+                            onChange={(dateString: any) => setCreationDate(dateString)}
                             disabled
                         />
                     </Form.Item>

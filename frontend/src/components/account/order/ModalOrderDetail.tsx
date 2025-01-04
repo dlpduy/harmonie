@@ -12,7 +12,7 @@ export const ModalDetail = (props: any) => {
 
     const { isModalDetailOpen, setIsModalDetailOpen, dataOrder } = props;
 
-    const [loading, setLoading] = useState(false);
+    const [loading] = useState(false);
 
     const handleOk = () => {
         setIsModalDetailOpen(false);

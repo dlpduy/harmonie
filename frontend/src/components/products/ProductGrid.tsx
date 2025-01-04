@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ProductCard } from './ProductCard';
 import styles from '../../styles/ProductGird.module.css';
 import ipad from '../../assets/images/ipad.png';

@@ -7,7 +7,7 @@ import { getProfileAPI, updateProfileAPI } from '../../services/api.service1';
 
 
 export const InformationAccount = (props: any) => {
-    const { user, setUser, setIsSpinning } = props;
+    const { setUser, setIsSpinning } = props;
     const [form] = Form.useForm();
     const [fullName, setFullName] = useState<string>('');
     const [birthdate, setBirthdate] = useState<string>('');
@@ -130,7 +130,7 @@ export const InformationAccount = (props: any) => {
                     >
                         <DatePicker
                             format="YYYY-MM-DD" // Đảm bảo định dạng đúng
-                            onChange={(date, dateString: any) => setBirthdate(dateString)}
+                            onChange={(dateString: any) => setBirthdate(dateString)}
 
                         />
                     </Form.Item>

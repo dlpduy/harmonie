@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '../styles/Form.module.css';
 import backgroungImage from '../assets/images/background.jpg';
-import { Button, Col, DatePicker, Form, Input, notification, Radio, Row } from 'antd';
+import { Button, Form, Input, notification } from 'antd';
 import { loginAPI, loginGoogleAPI } from '../services/api.service1';
 import { Link, useNavigate } from 'react-router-dom';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';

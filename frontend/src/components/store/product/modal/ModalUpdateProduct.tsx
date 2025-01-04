@@ -13,7 +13,7 @@ export const ModalUpdate = (props: any) => {
     const [quantity, setQuantity] = useState<number>(0);
     const [description, setDescription] = useState<string>('');
     const [category_id, setCategoryId] = useState<number>(0);
-    const [category_name, setCategoryName] = useState<string>('');
+    const [, setCategoryName] = useState<string>('');
     const [fileList, setFileList] = useState<any[]>([]);
     const [status, setStatus] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);

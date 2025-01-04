@@ -1,7 +1,7 @@
 import { UploadOutlined } from "@ant-design/icons";
-import { Button, Input, message, Modal, notification, Select, Upload } from "antd"
-import { useEffect, useState } from "react";
-import { createProductAPI, getAllCategoryAPI, uploadImageAPI } from "../../../../services/api.service1";
+import { Button, Input, Modal, notification, Select, Upload } from "antd"
+import { useState } from "react";
+import { createProductAPI, uploadImageAPI } from "../../../../services/api.service1";
 
 export const ModalCreate = (props: any) => {
 

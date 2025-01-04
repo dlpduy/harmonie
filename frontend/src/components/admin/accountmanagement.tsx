@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../../styles/admin.module.css";
 import { fetchAllUsersAPI } from "../../services/api.service2.ts";
 

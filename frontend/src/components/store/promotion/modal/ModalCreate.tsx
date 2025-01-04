@@ -1,5 +1,5 @@
 
-import { Button, DatePicker, Form, Input, message, Modal, notification, Upload } from "antd"
+import { Button, DatePicker, Form, Input, Modal, notification } from "antd"
 import { useState } from "react";
 import { createStoreDiscountAPI } from "../../../../services/api.service1";
 
@@ -127,7 +127,7 @@ export const ModalCreate = (props: any) => {
                     >
                         <DatePicker
                             format="YYYY-MM-DD" // Đảm bảo định dạng đúng
-                            onChange={(date, dateString: any) => setStartDate(dateString)}
+                            onChange={(dateString: any) => setStartDate(dateString)}
                         />
                     </Form.Item>
 
@@ -138,7 +138,7 @@ export const ModalCreate = (props: any) => {
                     >
                         <DatePicker
                             format="YYYY-MM-DD" // Đảm bảo định dạng đúng
-                            onChange={(date, dateString: any) => setExpirationDate(dateString)}
+                            onChange={(dateString: any) => setExpirationDate(dateString)}
                         />
                     </Form.Item>
                 </Form>

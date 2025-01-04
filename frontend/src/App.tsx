@@ -1,7 +1,6 @@
 import { Spin } from 'antd';
 import Header from './components/layout/header'
 import { Outlet } from 'react-router-dom'
-import { useState } from 'react';
 
 const App = (props: any) => {
   const { user, setUser, isSpinning, setIsSpinning } = props;

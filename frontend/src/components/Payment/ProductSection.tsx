@@ -47,14 +47,13 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
   const [selectedVouchers, setSelectedVouchers] = useState<{ [productID: number]: number | null }>({});
   const [activeProductID, setActiveProductID] = useState<number | null>(null);
   const [productVouchers, setProductVouchers] = useState<{ [productID: number]: Voucher[] }>({});
-  const [orderResponse, setOrderResponse] = useState(null);
+  const [, setOrderResponse] = useState(null);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<number>(1);
   const [selectedShippingDiscount, setSelectedShippingDiscount] = useState<number | null>(null);
   const [shippingDiscounts, setShippingDiscounts] = useState<Discount[]>([]);
   const [selectedSystemDiscount, setSelectedSystemDiscount] = useState<number | null>(null);
   const [systemDiscounts, setSystemDiscounts] = useState<Discount[]>([]);
   const [productImages, setProductImages] = useState<{ [productID: number]: string }>({});
-  const shippingCost = 15000;
   const voucherDiscount = 0;
 
   useEffect(() => {
@@ -137,8 +136,8 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
     const storeProducts = groupedProducts[store_id];
     const storeTotalCost = storeProducts.reduce((acc, product) => acc + product.price * product.quantity, 0);
     const storeFinalCost = storeTotalCost - storeProducts.reduce((acc, product) => acc + (selectedVouchers[product.id] ?? voucherDiscount), 0);
-    return acc + storeFinalCost  ;
-  }, 0)  - (selectedShippingDiscount ? shippingDiscounts.find(discount => discount.id === selectedShippingDiscount)?.max_amount ?? 0 : 0);
+    return acc + storeFinalCost;
+  }, 0) - (selectedShippingDiscount ? shippingDiscounts.find(discount => discount.id === selectedShippingDiscount)?.max_amount ?? 0 : 0);
 
   const toggleModal = (productID: number) => {
     if (productID !== null) {
@@ -148,6 +147,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
   };
 
   const handleVoucherSelect = (voucherDiscount: number, voucherId: number) => {
+    voucherDiscount = voucherDiscount;
     if (activeProductID !== null) {
       setSelectedVouchers(prev => ({ ...prev, [activeProductID]: voucherId }));
       toggleModal(activeProductID);
@@ -175,7 +175,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
 
     const orderData = {
       consignee_information_id: selectedAddressId, // Use the selected address ID
-      system_discount_id: selectedSystemDiscount?? null, // Use the selected system discount ID
+      system_discount_id: selectedSystemDiscount ?? null, // Use the selected system discount ID
       pay_method: selectedPaymentMethod === 1 ? "Credit" : "Cash",
       products: products.map(product => ({ id: product.id, quantity: product.quantity })),
       store_discounts_ids: selectedVoucherIds,
@@ -280,7 +280,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
               <span className={styles.totalCostAmount}>{shippingCost.toLocaleString()} VND</span>
             </div> */}
       <div className={styles.totalCostRow}>
-        
+
         <span className={styles.totalCostText}>Tổng chi phí giỏ hàng: </span>
         <span className={styles.totalCostAmount}>{totalCost.toLocaleString()} VND</span>
       </div>
@@ -304,7 +304,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({ products, selectedAddre
           </div>
         </div>
       )}
-      
+
     </section>
   );
 };

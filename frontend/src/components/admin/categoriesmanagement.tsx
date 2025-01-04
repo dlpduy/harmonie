@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../../styles/admin.module.css";
 import { fetchCategoriesAPI, addCategoryAPI, updateCategoryAPI, deleteCategoryAPI } from "../../services/api.service2.ts";
 
@@ -35,20 +35,20 @@ const CategoriesManagement = () => {
     }, []);
     const handleAddCategory = async () => {
         try {
-          await addCategoryAPI({ name: newCategoryName });
-          setIsModalOpen(false);
-          setNewCategoryName("");
-          
-          const response = await fetchCategoriesAPI();
-          if (response) {
-              setCategories(response);
-          }
+            await addCategoryAPI({ name: newCategoryName });
+            setIsModalOpen(false);
+            setNewCategoryName("");
+
+            const response = await fetchCategoriesAPI();
+            if (response) {
+                setCategories(response);
+            }
         } catch (error) {
-          console.error('Error adding category:', error);
+            console.error('Error adding category:', error);
         }
-      };
-    
-      const handleEditCategory = async () => {
+    };
+
+    const handleEditCategory = async () => {
         if (editCategory) {
             try {
                 await updateCategoryAPI(editCategory.id, { name: editCategory.name });
@@ -63,12 +63,13 @@ const CategoriesManagement = () => {
             }
         }
     };
-    
+
     const handleDelete = async (id: number) => {
         try {
-            const response =await deleteCategoryAPI(id);
-            if(response){
-            setCategories(categories.filter((category) => category.id !== id));}
+            const response = await deleteCategoryAPI(id);
+            if (response) {
+                setCategories(categories.filter((category) => category.id !== id));
+            }
         } catch (error) {
             console.error('Error deleting category:', error);
         }
@@ -100,7 +101,7 @@ const CategoriesManagement = () => {
                         <tr key={category.id}>
                             <td>{indexOfFirstCategory + index + 1}</td>
                             <td>{category.name}</td>
-                        
+
                             <td>
                                 <button
                                     className={`${styles.actionButton} ${styles.deleteButton}`}
@@ -109,14 +110,14 @@ const CategoriesManagement = () => {
                                     Xóa
                                 </button>
                                 <button
-                  className={`${styles.actionButton} ${styles.editButton}`}
-                  onClick={() => {
-                    setEditCategory(category);
-                    setIsEditModalOpen(true);
-                }}
-                >
-                  Sửa
-                </button>
+                                    className={`${styles.actionButton} ${styles.editButton}`}
+                                    onClick={() => {
+                                        setEditCategory(category);
+                                        setIsEditModalOpen(true);
+                                    }}
+                                >
+                                    Sửa
+                                </button>
                             </td>
                         </tr>
                     ))}
@@ -134,40 +135,40 @@ const CategoriesManagement = () => {
                 ))}
             </div>
             <button
-        className={styles.submitButton}
-        onClick={() => setIsModalOpen(true)}
-      >
-        Thêm Danh Mục
-      </button>
+                className={styles.submitButton}
+                onClick={() => setIsModalOpen(true)}
+            >
+                Thêm Danh Mục
+            </button>
 
-      {isModalOpen && (
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
-            <h2>Thêm Tên Danh Mục</h2>
-            <input
-              type="text"
-              value={newCategoryName}
-              onChange={(e) => setNewCategoryName(e.target.value)}
-              placeholder="Tên danh mục"
-              className="input"
-            />
-            <button
-              className={styles.submitButton}
-              onClick={handleAddCategory}
-              disabled={!newCategoryName.trim()}
-            >
-              Thêm
-            </button>
-            <button
-              className={styles.cancelButton}
-              onClick={() => setIsModalOpen(false)}
-            >
-              Hủy
-            </button>
-          </div>
-        </div>
-      )}
-       {isEditModalOpen && editCategory && (
+            {isModalOpen && (
+                <div className={styles.modal}>
+                    <div className={styles.modalContent}>
+                        <h2>Thêm Tên Danh Mục</h2>
+                        <input
+                            type="text"
+                            value={newCategoryName}
+                            onChange={(e) => setNewCategoryName(e.target.value)}
+                            placeholder="Tên danh mục"
+                            className="input"
+                        />
+                        <button
+                            className={styles.submitButton}
+                            onClick={handleAddCategory}
+                            disabled={!newCategoryName.trim()}
+                        >
+                            Thêm
+                        </button>
+                        <button
+                            className={styles.cancelButton}
+                            onClick={() => setIsModalOpen(false)}
+                        >
+                            Hủy
+                        </button>
+                    </div>
+                </div>
+            )}
+            {isEditModalOpen && editCategory && (
                 <div className={styles.modal}>
                     <div className={styles.modalContent}>
                         <h2>Chỉnh Sửa Danh Mục</h2>

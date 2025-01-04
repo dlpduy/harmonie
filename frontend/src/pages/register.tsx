@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '../styles/Form.module.css';
 import backgroungImage from '../assets/images/background.jpg';
-import { Button, Checkbox, DatePicker, Form, Input, notification, Radio } from 'antd';
+import { Button, DatePicker, Form, Input, notification, Radio } from 'antd';
 import moment from 'moment';
 import { registerAPI } from '../services/api.service1';
 import { Link, useNavigate } from 'react-router-dom';
@@ -114,7 +114,7 @@ const RegisterPage = (props: any) => {
                         >
                             <DatePicker
                                 value={birthdate ? moment(birthdate) : null}
-                                onChange={(date, dateString) => setBirthdate(date.format('YYYY-MM-DD'))}
+                                onChange={(date) => setBirthdate(date.format('YYYY-MM-DD'))}
                                 style={{ width: '100%' }} />
                         </Form.Item>
 

@@ -1,7 +1,6 @@
 
 import axios from './axios.customize';
 import { notification } from "antd";
-import { useNavigate } from "react-router-dom";
 const accessToken = localStorage.getItem('access_token');
 
 const fetchCartItemsAPI = async () => {
@@ -46,7 +45,7 @@ const fetchProductImagesAPI = async (productId: number, numImages: number) => {
         throw error;
     }
 };
-const deleteCartItemAPI = async (userId: number, productId: number) => {
+const deleteCartItemAPI = async (productId: number) => {
     const URL_BACKEND = `/api/v1/delete/${productId}`;
 
 
@@ -95,7 +94,7 @@ const fetchProductReviewsAPI = async (productId: number) => {
         throw error;
     }
 };
-const addProductToCartAPI = async (userId: number, productId: number) => {
+const addProductToCartAPI = async (productId: number) => {
     const URL_BACKEND = `/api/v1/add/${productId}`;
 
     try {
@@ -112,7 +111,7 @@ const addProductToCartAPI = async (userId: number, productId: number) => {
     }
 };
 
-const fetchUserDeliveryAddressesAPI = async (userId: number) => {
+const fetchUserDeliveryAddressesAPI = async () => {
     const URL_BACKEND = `/api/v1/user/delivery/all`;
 
     try {

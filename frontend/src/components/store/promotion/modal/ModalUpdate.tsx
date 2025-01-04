@@ -1,4 +1,4 @@
-import { Button, DatePicker, Input, message, Modal, notification, Upload } from "antd"
+import { Button, DatePicker, Input, Modal, notification } from "antd"
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { updateStoreDiscountAPI } from "../../../../services/api.service1";
@@ -119,7 +119,7 @@ export const ModalUpdate = (props: any) => {
                             style={{ width: '100%' }}
                             value={releaseDate?.length > 0 ? moment(releaseDate) : undefined}
                             format="YYYY-MM-DD" // Đảm bảo định dạng đúng
-                            onChange={(date, dateString: any) => setReleaseDate(dateString)}
+                            onChange={(dateString: any) => setReleaseDate(dateString)}
                             disabled
                         />
                     </div>
@@ -129,7 +129,7 @@ export const ModalUpdate = (props: any) => {
                             style={{ width: '100%' }}
                             value={startDate?.length > 0 ? moment(startDate) : undefined}
                             format="YYYY-MM-DD" // Đảm bảo định dạng đúng
-                            onChange={(date, dateString: any) => setStartDate(dateString)}
+                            onChange={(dateString: any) => setStartDate(dateString)}
 
                         />
                     </div>
@@ -140,7 +140,7 @@ export const ModalUpdate = (props: any) => {
                             style={{ width: '100%' }}
                             value={expirationDate?.length > 0 ? moment(expirationDate) : undefined}
                             format="YYYY-MM-DD" // Đảm bảo định dạng đúng
-                            onChange={(date, dateString: any) => setExpirationDate(dateString)}
+                            onChange={(dateString: any) => setExpirationDate(dateString)}
                         />
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styles from '../styles/Management.module.css';
 import Sidebar from '../components/account/Sidebar';
 import { Information } from '../components/account/Detail';

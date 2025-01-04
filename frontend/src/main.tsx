@@ -5,7 +5,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import './styles/global.css'
 import LoginPage from './pages/login'
-import Header from './components/layout/header'
 import RegisterPage from './pages/register'
 import ForgotPassWordPage from './pages/forgotpassword'
 import HomePage from './pages/home'

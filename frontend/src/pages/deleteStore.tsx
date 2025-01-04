@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/Management.module.css';
-import { Information } from '../components/store/Information';
 import { Button, Form, Input, Modal, notification } from 'antd';
 import { deleteStoreAPI, getInforStoreAPI } from '../services/api.service1';
 import { useNavigate } from 'react-router-dom';

@@ -1,5 +1,5 @@
 import styles from '../../../styles/Management.module.css';
-import { Button, message, notification, Popconfirm, PopconfirmProps } from "antd";
+import { Button, notification, Popconfirm, PopconfirmProps } from "antd";
 import { ModalUpdate } from "./ModalUpdate";
 import { useEffect, useState } from "react";
 import { ModalCreate } from './ModalCreate';

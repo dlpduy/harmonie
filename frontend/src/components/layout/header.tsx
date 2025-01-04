@@ -1,8 +1,8 @@
-import { Menu, MenuProps, notification } from "antd";
-import { AppstoreOutlined, BellOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, MenuOutlined, SettingOutlined, ShopOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
+import { Menu, MenuProps } from "antd";
+import { AppstoreOutlined, BellOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, SettingOutlined, ShopOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import './header.css'
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getUserLoginAPI } from "../../services/api.service1";
 
 import logo from '../../assets/images/logo2.jpg';

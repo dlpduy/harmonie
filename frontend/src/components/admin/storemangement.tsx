@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../../styles/admin.module.css";
 import { fetchAllStoresAPI } from "../../services/api.service2.ts";
 import { useNavigate } from "react-router-dom";
@@ -39,9 +39,6 @@ const StoreManagement = () => {
     fetchStores();
   }, []);
 
-  const handleDelete = (id: number) => {
-    setStores(stores.filter((store) => store.id !== id));
-  };
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
