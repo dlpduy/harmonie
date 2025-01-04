@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -26,38 +27,42 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//         Tắt tính năng CSRF (Cross-Site Request Forgery) trong Spring Security.
+        // Tắt tính năng CSRF (Cross-Site Request Forgery) trong Spring Security.
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                //add a filter before the UsernamePasswordAuthenticationFilter
+                // add a filter before the UsernamePasswordAuthenticationFilter
+                .cors(Customizer.withDefaults())
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                //config rules for authorize requests
+                // config rules for authorize requests
                 .authorizeHttpRequests(requests -> {
                     requests.requestMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN")
                             .requestMatchers("/api/v1/**").permitAll()
 
-//                            .requestMatchers("/api/v1/users/**").permitAll()
-//                            .requestMatchers("/api/v1/**").hasAuthority("ROLE_USER")
-//                            .requestMatchers(HttpMethod.PUT, "/api/v1/categories/**").hasAuthority("ROLE_ADMIN")
-//                            .requestMatchers(HttpMethod.POST, "/api/v1/categories").hasAuthority("ROLE_ADMIN")
-//                            .requestMatchers(HttpMethod.DELETE, "/api/v1/categories/**").hasAuthority("ROLE_ADMIN")
-//                            .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
-//                            .requestMatchers("/api/v1/products/**").permitAll()
-                            //image
+                            // .requestMatchers("/api/v1/users/**").permitAll()
+                            // .requestMatchers("/api/v1/**").hasAuthority("ROLE_USER")
+                            // .requestMatchers(HttpMethod.PUT,
+                            // "/api/v1/categories/**").hasAuthority("ROLE_ADMIN")
+                            // .requestMatchers(HttpMethod.POST,
+                            // "/api/v1/categories").hasAuthority("ROLE_ADMIN")
+                            // .requestMatchers(HttpMethod.DELETE,
+                            // "/api/v1/categories/**").hasAuthority("ROLE_ADMIN")
+                            // .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
+                            // .requestMatchers("/api/v1/products/**").permitAll()
+                            // image
                             .requestMatchers(HttpMethod.GET, "/images/**").permitAll()
-//                            .requestMatchers(HttpMethod.GET, "/api/v1/payment/**").hasAuthority("ROLE_USER")
-//                            .requestMatchers("**").permitAll();
+                            // .requestMatchers(HttpMethod.GET,
+                            // "/api/v1/payment/**").hasAuthority("ROLE_USER")
+                            // .requestMatchers("**").permitAll();
                             .anyRequest().authenticated();
-                    //allow all requests without authentication
-
+                    // allow all requests without authentication
 
                 });
-//                .exceptionHandling(
-//                        exceptions -> exceptions
-//                                .authenticationEntryPoint(customAuthenticationEntryPoint) // 401
-//                                .accessDeniedHandler(customAccessDeniedHandler)
-//                );
-        //build the http security configuration and return it
+        // .exceptionHandling(
+        // exceptions -> exceptions
+        // .authenticationEntryPoint(customAuthenticationEntryPoint) // 401
+        // .accessDeniedHandler(customAccessDeniedHandler)
+        // );
+        // build the http security configuration and return it
         return http.build();
     }
 }
